@@ -1,73 +1,64 @@
-import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
-import getWeb3 from "./getWeb3";
+import React, { useState, useEffect } from "react";
+import { Button, TextField } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import { load } from './scripts/loader'
+import { tokensToWei, tokensFromWei } from './scripts/converter'
 
 import "./App.css";
 
-class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+const App = () => {
+  const [inputTicket, setInputTicket] = useState('');
+  const [inputFeedback, setInputFeedback] = useState('');
+  const [refresh, setRefresh] = useState(true);
+  const [account, setAccount] = useState(null);
+  const [accountBalance, setAccountBalance] = useState(0);
+  const [transactor, setTransactor] = useState(null);
+  const [bhuToken, setBHUToken] = useState(null);
 
-  componentDidMount = async () => {
-    try {
-      // Get network provider and web3 instance.
-      const web3 = await getWeb3();
+  const tickets = ['apple', 'ball']
 
-      // Use web3 to get the user's accounts.
-      const accounts = await web3.eth.getAccounts();
 
-      // Get the contract instance.
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
-      const instance = new web3.eth.Contract(
-        SimpleStorageContract.abi,
-        deployedNetwork && deployedNetwork.address,
-      );
-
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, this.runExample);
-    } catch (error) {
-      // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`,
-      );
-      console.error(error);
-    }
-  };
-
-  runExample = async () => {
-    const { accounts, contract } = this.state;
-
-    // Stores a given value, 5 by default.
-    await contract.methods.set(5).send({ from: accounts[0] });
-
-    // Get the value from the contract to prove it worked.
-    const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    this.setState({ storageValue: response });
-  };
-
-  render() {
-    if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
-    }
-    return (
-      <div className="App">
-        <h1>Good to Go!</h1>
-        <p>Your Truffle Box is installed and ready.</p>
-        <h2>Smart Contract Example</h2>
-        <p>
-          If your contracts compiled and migrated successfully, below will show
-          a stored value of 5 (by default).
-        </p>
-        <p>
-          Try changing the value stored on <strong>line 42</strong> of App.js.
-        </p>
-        <div>The stored value is: {this.state.storageValue}</div>
-      </div>
-    );
+  // Handlers
+  const handleSetTickets = async () => await transactor.setTickets(tickets, { from: account });
+  const handleInputTicketChange = (e) => setInputTicket(e.currentTarget.value);
+  const handleInputFeedbackChange = (e) => setInputFeedback(e.currentTarget.value);
+  const handleRedeemTokens = async () => {
+    await transactor.redeemTokens(inputTicket, { from: account });
+    setInputTicket('');
+    setRefresh(true);
   }
+  const handleFeedbackSubmit = async() => {
+    await bhuToken.approve(transactor.address, tokensToWei('1'), { from: account })
+    await transactor.submitFeedback(inputFeedback, { from: account });
+    setRefresh(true);
+  }
+
+
+  // React useEffect
+  useEffect(() => {
+    if (!refresh) return;
+    setRefresh(false);
+    load().then((e) => {
+      setAccount(e.accountAddress);
+      setTransactor(e.transactorContract);
+      setBHUToken(e.bhuTokenContract);
+      setAccountBalance(tokensFromWei(e.accountBalance));
+    });
+  });
+
+  
+
+  return (
+    <div className="App">
+      <h1>Good to Go!</h1>
+      <Button variant="outlined" onClick={handleSetTickets}>Set Tickets</Button>
+      <TextField id="outlined-basic" label="Ticket" variant="outlined" onChange={handleInputTicketChange} />
+      <Button variant="outlined" onClick={handleRedeemTokens}>Redeem Tokens</Button>
+      <TextField id="outlined-multiline-flexible" label="Feedback" multiline maxRows={4} onChange={handleInputFeedbackChange}/>
+      <Button variant="outlined" onClick={handleFeedbackSubmit} endIcon={<SendIcon />}>Submit Feedback</Button>
+      <TextField id="outlined-basic" label="Tokens" variant="outlined" value={accountBalance} />
+    </div>
+  );
 }
 
 export default App;
