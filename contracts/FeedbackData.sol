@@ -3,7 +3,6 @@ pragma solidity >=0.4.21 <8.10.0;
 
 import "./utils.sol";
 
-
 contract FeedbackData {
 
     string[] public facultySkills = ["Diversity","Communication","Procedures","Philosophy","StudentLearning"];
@@ -48,7 +47,10 @@ contract FeedbackData {
     string[] public professorEmails;
     
     mapping(string=>Professor) public professorDetail;
-    mapping(string=>SkillsUpvoteCount[]) public professorSkillsUpvoteCount;
+    mapping(string=>uint256) public professorSkillsUpvote; // email+skill
+    
+    //TODO change formate of prof skill upvotes
+    
     mapping(string=>Course[]) public professorYearsCourses;  // email+year+sem
     mapping(string=>Feedback[]) public professorCourseFeedback;  // email+year+sem+course_code
    
@@ -131,7 +133,16 @@ contract FeedbackData {
             _feedbacks[i]=professorCourseFeedback[profCredKeys[email].professorCourseFeedback[i]];
         }
 
-        return (professorSkillsUpvoteCount[email],_courses,_feedbacks);
+        SkillsUpvoteCount[] memory skillUpvotes = new SkillsUpvoteCount[](facultySkills.length);
+        for (uint256 i = 0; i < facultySkills.length; i++) {
+            string memory key = string(abi.encodePacked(email,facultySkills[i]));
+            skillUpvotes[i] = SkillsUpvoteCount({
+                name:facultySkills[i],
+                count:professorSkillsUpvote[key]
+            });
+        }
+
+        return (skillUpvotes,_courses,_feedbacks);
     }
 
     function addCourse(uint _year,string calldata _email,string calldata _name,string calldata _code,uint _sem,uint256 _studentCount) public {
@@ -197,7 +208,7 @@ contract FeedbackData {
         emit ticketGenerated(_email, _year, _sem, _code, professorYearsCourses[key][pos].tickets);
     }
 
-    function compareStrings(string memory a, string memory b) public pure returns (bool) 
+    function compareStrings(string memory a, string memory b) private pure returns (bool) 
     {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
