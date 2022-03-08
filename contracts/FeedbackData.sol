@@ -6,15 +6,9 @@ import "./utils.sol";
 
 contract FeedbackData {
 
-    string[] facultySkills = ["Diversity","Communication","Procedures","Philosophy","StudentLearning"];
+    string[] public facultySkills = ["Diversity","Communication","Procedures","Philosophy","StudentLearning"];
     DateTime public dateTime;
-
-    constructor(){
-
-    }
     
-    enum Semester {EVEN,ODD}
-
     struct Feedback{
         string content;
         string[] goodSklls;
@@ -28,11 +22,10 @@ contract FeedbackData {
     struct Course{
         string name;
         string code;
-        Semester semester;
+        uint semester;      // 0 for even and 1 for odd
         uint256 studentCount;
         bool ticketGenerated;
         bytes32[] tickets;
-        Feedback[] feedbacks;
     }
 
     struct SkillsUpvoteCount{
@@ -40,28 +33,53 @@ contract FeedbackData {
         uint count;
     }
 
-    struct YearWiseCourse{
-        uint year;
-        Course[] courses;
-    }
-
     struct Professor{
         string name;
         string email;
         address addressId;
         Float rating;
-        SkillsUpvoteCount[] skillsUpvoteCount; 
-        YearWiseCourse[] yearWiseCourse;
+    }
+
+    struct ProfessorCredsKey{
+        string[] professorYearsCourses;
+        string[] professorCourseFeedback;
     }
 
     string[] public professorEmails;
-    mapping(string=>Professor) public professors;
-    string blankString = "";
+    
+    mapping(string=>Professor) public professorDetail;
+    mapping(string=>SkillsUpvoteCount[]) public professorSkillsUpvoteCount;
+    mapping(string=>Course[]) public professorYearsCourses;  // email+year+sem
+    mapping(string=>Feedback[]) public professorCourseFeedback;  // email+year+sem+course_code
+   
+    mapping(string=>ProfessorCredsKey) private profCredKeys;
+    mapping(bytes32=>bool) public keysForProfReg;  
+
+    uint256 private counterForProfReg ;
+
+    constructor () {
+        counterForProfReg = uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp)));
+    }
 
     event professorCreated(Professor professor);
-    event courseUpdated(uint year,Course course);
+    event courseUpdated(string email,uint year,Course course);
+    event tokenGenerated(bytes32 token);
+    event ticketGenerated(string email,uint year,uint sem,string code,bytes32[] tickets);
+
+    function generateTokenForProfReg() public 
+    {
+        counterForProfReg++;
+        bytes32 id = keccak256(abi.encodePacked(block.timestamp, counterForProfReg));
+        keysForProfReg[id]=true;
+        emit tokenGenerated(id);
+    }
+
+    function getFacultySkills() public view returns(string[] memory)
+    {
+        return facultySkills;
+    }
     
-    function createProfessor(string memory name, string memory email) public  {
+    function createProfessor(string calldata name, string calldata email,bytes32 secret) public  {
         require(
           bytes(name).length > 0,
           "Name can not be blank during professor creation"
@@ -71,67 +89,117 @@ contract FeedbackData {
           "Email can not be blank during professor creation"
         );
         require(msg.sender != address(0 * 0), "user address should exist");
+        require(keysForProfReg[secret]==true, "provide valid secret");
 
-        Professor memory professor = professors[email];
-        professor.addressId = msg.sender;
-        professor.name = name;
-        professor.email = email;
-        professor.rating.postDecimal = 0;
-        professor.rating.preDecimal = 0;
+        professorDetail[email] = Professor({
+            name:name,
+            email:email,
+            addressId:msg.sender,
+            rating: Float(0,0)
+        });
 
-        professorEmails.push(professor.email);
+        professorEmails.push(email);
 
-        emit professorCreated(professor);
+        keysForProfReg[secret] = false;
+
+        emit professorCreated(professorDetail[email]);
     }
 
     function getProfessorIds() public view returns (string[] memory) {
         return professorEmails;
     }
 
-    function getProfessorsByIds(string[] memory ids) public view returns (Professor[] memory) {
-        Professor[] memory professorList = new Professor[](ids.length);
+    function getProfessorsDetailsByIds(string[] calldata ids) public view returns (Professor[] memory) {
+        Professor[] memory _professorList = new Professor[](ids.length);
+
         for (uint256 i = 0; i < ids.length; i++) {
-          professorList[i] = professors[ids[i]];
+          _professorList[i] = professorDetail[ids[i]];
         }
-        return professorList;
+
+        return _professorList;
     }
 
-    function addCourse(uint _year,string memory _professorEmail,string memory _name,string memory _code,Semester _semester,uint256 _studentCount) public {
-        bytes32[] memory _tickets;
-        Feedback[] memory _feedbacks;
+    function getProfesssorAllDetails(string calldata email) public view returns(SkillsUpvoteCount[] memory,Course[][] memory,Feedback[][] memory) 
+    {
+        Course[][] memory _courses = new Course[][](profCredKeys[email].professorYearsCourses.length);
+        for (uint256 i = 0; i < profCredKeys[email].professorYearsCourses.length; i++) {
+            _courses[i]=professorYearsCourses[profCredKeys[email].professorYearsCourses[i]];
+        }
+
+        Feedback[][] memory _feedbacks = new Feedback[][](profCredKeys[email].professorCourseFeedback.length);
+        for (uint256 i = 0; i < profCredKeys[email].professorCourseFeedback.length; i++) {
+            _feedbacks[i]=professorCourseFeedback[profCredKeys[email].professorCourseFeedback[i]];
+        }
+
+        return (professorSkillsUpvoteCount[email],_courses,_feedbacks);
+    }
+
+    function addCourse(uint _year,string calldata _email,string calldata _name,string calldata _code,uint _sem,uint256 _studentCount) public {
         // uint _year = dateTime.getYear(block.timestamp);
-        YearWiseCourse[] memory _yearWiseCourse = professors[_professorEmail].yearWiseCourse;
-        
-        Course memory _course = Course({
-            name:_name,
-            code:_code,
-            semester:_semester,
-            studentCount:_studentCount,
-            ticketGenerated:false,
-            tickets:_tickets,
-            feedbacks:_feedbacks
-        });
 
-        uint256 i = 0;
+        Course memory _course = Course(
+            {
+                name : _name,
+                code : _code,
+                semester : _sem,
+                studentCount : _studentCount, 
+                ticketGenerated : false,
+                tickets : new bytes32[](0)
+            }
+        );   
 
-        for (; i < _yearWiseCourse.length; i++) {
-            if(_yearWiseCourse[i].year == _year){
-                break;
+        string memory _key = string(abi.encodePacked(_email,",", _year,",",_sem));
+        updateProfessorYearsCoursesKey(_email,_key);
+        updateProfessorCourseFeedback(_email, _year, _sem, _code);
+
+        professorYearsCourses[_key].push(_course);    
+        emit courseUpdated(_email, _year, professorYearsCourses[_key][professorYearsCourses[_key].length-1]);
+    }  
+
+    function updateProfessorYearsCoursesKey(string calldata email,string memory _key) private 
+    {
+       if(professorYearsCourses[email].length==0)
+       {
+           profCredKeys[email].professorYearsCourses.push(_key);
+       }
+    }
+
+    function updateProfessorCourseFeedback(string calldata _email, uint256 _year, uint _sem, string calldata _code) private
+    {
+        string memory _key = string(abi.encodePacked(_email,",", _year,",",_sem,",",_code));
+        profCredKeys[_email].professorCourseFeedback.push(_key);
+    }
+
+    function generateTickets(string calldata _email,uint _year,uint _sem,string calldata _code,string calldata _seed) public
+    {
+        uint pos = 0;
+        string memory key = string(abi.encodePacked(_email,",", _year,",",_sem));
+        for (uint256 i = 0; i < professorYearsCourses[key].length; i++) {
+            if(compareStrings(professorYearsCourses[key][i].code,_code))
+            {
+                pos = i+1;
             }
         }
 
-        if (i!=_yearWiseCourse.length) {
-            _yearWiseCourse[i].courses[_yearWiseCourse[i].courses.length-1] =_course;
-        } else {
-            Course[] memory _courses;
-            _courses[0]=_course;
+        require(pos!=0,"wrong credentials, course not found");
+        pos--;
+        require(pos!=professorYearsCourses[key].length,"wrong credentials, course not found");
+        require(professorYearsCourses[key][pos].ticketGenerated==false,"tickets are already generated");
 
-            _yearWiseCourse[i]=YearWiseCourse({
-                year:_year,
-                courses: _courses
-            });
+        professorYearsCourses[key][pos].ticketGenerated=true;
+
+        for (uint256 i = 0; i < professorYearsCourses[key][pos].studentCount; i++) {
+            bytes32 ticket = keccak256(abi.encodePacked(block.timestamp, _seed,counterForProfReg,block.difficulty));
+            counterForProfReg++;
+            professorYearsCourses[key][pos].tickets.push(ticket);
         }
+
+        emit ticketGenerated(_email, _year, _sem, _code, professorYearsCourses[key][pos].tickets);
     }
-    
+
+    function compareStrings(string memory a, string memory b) public pure returns (bool) 
+    {
+        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
+    }
     
 }
