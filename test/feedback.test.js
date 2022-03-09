@@ -5,6 +5,10 @@ const FeedbackData = artifacts.require("FeedbackData");
 
 require("chai").use(require("chai-as-promised")).should();
 
+function parseEvent(result, args) {
+  return result.logs[0].args;
+}
+
 contract("FeedbackData", ([]) => {
   let feedbackData;
   let profData = {};
@@ -94,10 +98,10 @@ contract("FeedbackData", ([]) => {
 
   describe("Course creation check", async () => {
     it("creating new course", async () => {
-      let year = 2023;
+      let year = 2024;
       let profEmail = profEmails[0];
-      let name = "network security";
-      let code = "SB124";
+      let name = "hjhk";
+      let code = "hjk";
       let sem = 0;
       let studentCount = 21;
       let result = await feedbackData.addCourse(
@@ -108,25 +112,25 @@ contract("FeedbackData", ([]) => {
         sem,
         studentCount
       );
-      console.log(result.logs[0].args["course"]);
+
+      expect(result.logs[0].args["course"]).to.not.be.undefined;
     });
   });
 
   describe("Getting Professors data", async () => {
     it("fetched prof course detail count", async () => {
-      let result = await feedbackData.getProfesssorAllDetails(profEmails[0]);
-      console.log(result);
+      let result = await feedbackData.getCourses(profEmails[0]);
+      expect(result).to.have.lengthOf(1);
     });
   });
 
   describe("Course creation check", async () => {
-    ["just", "one", "just"].forEach(async (code) => {
+    [2001, 2005, 2007].forEach(async (year) => {
       it("creating new multiple course", async () => {
-        let year = 2023;
-        let profEmail = profEmails[0];
+        let profEmail = profEmails[1];
         let name = "network security";
-        let code = "SB124";
         let sem = 0;
+        let code = "hkjhk";
         let studentCount = 21;
         let result = await feedbackData.addCourse(
           year,
@@ -136,14 +140,143 @@ contract("FeedbackData", ([]) => {
           sem,
           studentCount
         );
+
+        expect(result.logs[0].args["course"]).to.not.be.undefined;
       });
     });
   });
+
   describe("Getting Professors data", async () => {
     it("fetched prof course detail count", async () => {
-      let result = await feedbackData.getProfesssorAllDetails(profEmails[0]);
-      console.log(result);
+      // let result = await feedbackData.getProfesssorAllDetails(profEmails[1]);
+      // let {
+      //   name,
+      //   code,
+      //   semester,
+      //   year,
+      //   studentCount,
+      //   ticketGenerated,
+      //   tickets,
+      // } = result[1][0][0];
+      // console.log(
+      //   name,
+      //   code,
+      //   semester,
+      //   year,
+      //   studentCount,
+      //   ticketGenerated,
+      //   tickets
+      // );
+      // console.log(result[1]);
     });
   });
 
+  describe("ticket generation", async () => {
+    const email = "7878@gmail.com";
+    const year = 2024;
+    const code = "hjk";
+    const sem = 0;
+    const studentCount = 15;
+
+    it("is creating professor", async () => {
+      let name = "kk sir";
+      let key = await feedbackData.generateTokenForProfReg();
+      key = key.logs[0].args["token"];
+
+      let result = await feedbackData.createProfessor(name, email, key);
+      result = result.logs[0].args["professor"];
+      expect(result).to.not.be.undefined;
+    });
+
+    it("creating new course", async () => {
+      let name = "hjhk";
+      let result = await feedbackData.addCourse(
+        year,
+        email,
+        name,
+        code,
+        sem,
+        studentCount
+      );
+      expect(result.logs[0].args["course"]).to.not.be.undefined;
+    });
+
+    it(`is generating ticket for email : ${email}, year : ${year}, code : ${code}`, async () => {
+      let seed = "just one";
+      let result = await feedbackData.generateTickets(
+        email,
+        year,
+        sem,
+        code,
+        seed
+      );
+      expect(result.logs[0].args["tickets"]).to.have.lengthOf(studentCount);
+    });
+  });
+
+  describe("feedbacks", async () => {
+    const email = "78";
+    const year = 202;
+    const code = "hjfgk";
+    const sem = 1;
+    const studentCount = 15;
+
+    it("is creating professor", async () => {
+      let name = "kk sir";
+      let key = await feedbackData.generateTokenForProfReg();
+      key = key.logs[0].args["token"];
+
+      let result = await feedbackData.createProfessor(name, email, key);
+      result = result.logs[0].args["professor"];
+      expect(result).to.not.be.undefined;
+    });
+
+    it("creating new course", async () => {
+      let name = "hjhk";
+      let result = await feedbackData.addCourse(
+        year,
+        email,
+        name,
+        code,
+        sem,
+        studentCount
+      );
+      expect(result.logs[0].args["course"]).to.not.be.undefined;
+    });
+
+    it("generating tickets and feedback submission", async () => {
+      let seed = "just one";
+
+      let result = await feedbackData.generateTickets(
+        email,
+        year,
+        sem,
+        code,
+        seed
+      );
+      expect(result.logs[0].args["tickets"]).to.have.lengthOf(studentCount);
+      let tickets = result.logs[0].args["tickets"];
+
+      result = await feedbackData.getFacultySkills();
+      let skills = result;
+
+      for (let i = 0; i < studentCount; i++) {
+        let ticket = tickets[i];
+        let feedback = {
+          code,
+          semester: sem,
+          year,
+          content: "best prof in the world",
+          skills,
+        };
+
+        let result = await feedbackData.submitFeedback(email, ticket, feedback);
+        console.log(result.logs[0],result.logs[1]);
+        // expect(result.logs[0].args["skills"])
+        //   .to.be.an("array")
+        //   .include.all.members(skills);
+        // expect(result.logs[0].args["content"]).to.equal(feedback.content);
+      }
+    });
+  });
 });
