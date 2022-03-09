@@ -1,35 +1,61 @@
 import TransactorJSON from '../contracts/Transactor.json';
-import BHUToken from '../contracts/BHUToken.json';
+import BHUTokenJSON from '../contracts/BHUToken.json';
+//import ProfessorDataJSON from '../contracts/ProfessorData.json';
 import Web3 from 'web3';
 
 export let web3
 var contract = require('@truffle/contract');
 
-export const load = async () => {
+export const loadAll = async () => {
     web3 = await loadWeb3();
     const accountAddress = await loadAccount();
-    const { transactorContract, bhuTokenContract, accountBalance } = await loadContract(accountAddress);
+    const { transactorContract, bhuTokenContract, professorDataContract } = await loadContracts();
+    const accountBalance = loadBalance(transactorContract, accountAddress)
 
-    return { accountAddress, transactorContract, bhuTokenContract, accountBalance };
+    return { accountAddress, transactorContract, bhuTokenContract, professorDataContract, accountBalance };
 };
 
-const loadContract = async (addressAccount) => {
+const loadContracts = async () => {
     let theContract = contract(TransactorJSON);
     theContract.setProvider(web3.eth.currentProvider);
     const transactorContract = await theContract.deployed();
-    theContract = contract(BHUToken);
+
+    theContract = contract(BHUTokenJSON);
     theContract.setProvider(web3.eth.currentProvider);
     const bhuTokenContract = await theContract.deployed();
-    const accountBalance = await transactorContract.checkBalance(addressAccount);
-    return { transactorContract, bhuTokenContract, accountBalance }
+
+    // theContract = contract(ProfessorDataJSON);
+    // theContract.setProvider(web3.eth.currentProvider);
+    // const professorDataContract = await theContract.deployed();
+    const professorDataContract = null
+
+    return { transactorContract, bhuTokenContract, professorDataContract }
 };
 
-const loadAccount = async () => {
+export const loadAccount = async () => {
     const addressAccount = await web3.eth.getCoinbase();
     return addressAccount;
 };
 
-const loadWeb3 = async () => {
+export const loadBalance = async (transactorContract, accountAddress) => {
+    const accountBalance = await transactorContract.checkBalance(accountAddress);
+    return accountBalance;
+}
+
+export const loadProfessorData = async (transactorContract, accountAddress) => {
+    const accountBalance = await transactorContract.checkBalance(accountAddress);
+    return accountBalance;
+}
+
+// export const loadAccountChange = async () => {
+//     const web3 = await loadWeb3();
+//     const addressAccount = await web3.eth.getCoinbase();
+//     const accountBalance = await transactorContract.checkBalance(accountAddress);
+//     return {web3, addressAccount, accountBalance};
+// }
+
+// Web3 loading needs to be updated
+export const loadWeb3 = async () => {
     // Modern dapp browsers...
     if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
