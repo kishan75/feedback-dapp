@@ -1,7 +1,12 @@
 const BHUToken = artifacts.require('BHUToken')
 const Transactor = artifacts.require('Transactor')
+const FeedbackData = artifacts.require('FeedbackData')
 
-module.exports = async function(deployer) {
+module.exports = async function (deployer) {
+  
+  await deployer.deploy(FeedbackData)
+  const feedbackData = await FeedbackData.deployed()
+
   // Deploy BHUI Token
   await deployer.deploy(BHUToken)
   const bhuToken = await BHUToken.deployed()
@@ -12,4 +17,5 @@ module.exports = async function(deployer) {
 
   // Transfer all tokens to Transactor (1 Mil)
   await bhuToken.transfer(transactor.address, web3.utils.toWei('1000000', 'ether'))
+
 }
