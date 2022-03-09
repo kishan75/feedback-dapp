@@ -4,5 +4,8 @@
     "chai-as-promised": "^7.1.1",
     "web3-utils": "^1.7.1",
     "publish": "truffle compile && truffle migrate --reset"
+  },
+  "scripts": {
+    "publish": "truffle compile && truffle migrate --reset"
   }
 }
