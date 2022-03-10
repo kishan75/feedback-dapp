@@ -1,0 +1,32 @@
+.fbox{
+    border-radius: 15px;
+    border: 1px solid #ce3333;
+    padding: 2rem;
+    color: white;
+    transform: scale(.6);
+
+    .MuiFormControl-root{
+        margin: 0.5rem;
+    }
+
+    .MuiSvgIcon-root{
+        color: white;
+    }
+
+    .MuiFormLabel-root{
+        color: white;
+    }
+
+    .MuiFormLabel-root.Mui-focused{
+        color: #ce3333;
+    }
+
+    .MuiFormHelperText-root.Mui-error{
+        color: #ffdd00;
+        font-size: 0.7rem;
+    }
+
+    h3 {
+        margin: 1rem;
+    }
+}

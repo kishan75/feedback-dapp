@@ -1,0 +1,43 @@
+.fbox{
+    width: 100%;
+    border-radius: 15px;
+    border: 1px solid #ce3333;
+    padding: 2rem;
+    color: white;
+    transform: scale(.75);
+    text-align: center;
+
+    .MuiFormControl-root{
+        margin: 0.5rem;
+    }
+
+    .MuiSvgIcon-root{
+        color: white;
+    }
+
+    .MuiFormLabel-root{
+        color: white;
+    }
+
+    .MuiFormLabel-root.Mui-focused{
+        color: #ce3333;
+    }
+
+    .MuiFormHelperText-root.Mui-error{
+        color: #ffdd00;
+        font-size: 0.7rem;
+    }
+
+    .MuiOutlinedInput-input.Mui-disabled{
+        color: #888888;
+        -webkit-text-fill-color: #888888;
+    }
+
+    h3 {
+        margin: 1rem;
+    }
+
+    .centerbutton{ // Can be removed now
+        text-align: center;
+    }
+}
