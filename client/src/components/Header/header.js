@@ -3,6 +3,8 @@ import { stack as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
 import ProfessorDetails from '../Modals/ProfessorDetails/professorDetails';
 import GenerateTickets from '../Modals/GenerateTickets/generateTickets';
+import AddCourseDetails from '../Modals/AddCourses/addCourses';
+
 
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -15,7 +17,6 @@ import './header.scss';
 
 import Logo from './../../assets/bhu-logo.png';
 import LogoMin from './../../assets/bhu-logo-min.png';
-
 
 
 const Header = (props) => {
@@ -105,7 +106,7 @@ const Header = (props) => {
               aria-describedby="For ticket distribution via mail"
             >
               <Box sx={style}>
-                <GenerateTickets />
+                <AddCourseDetails mainState={props.mainState} closeModal={handleCloseAddCourses} />
               </Box>
             </Modal>
             <li>

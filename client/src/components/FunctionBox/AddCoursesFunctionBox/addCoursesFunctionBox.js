@@ -13,20 +13,18 @@ import FormHelperText from '@mui/material/FormHelperText';
 
 // Adornments
 import InputAdornment from '@mui/material/InputAdornment';
-import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import BadgeIcon from '@mui/icons-material/Badge';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import SendIcon from '@mui/icons-material/Send';
 
 
-const professorDetailsFunctionBox = (props) => {
+const addCoursesFunctionBox = (props) => {
     const data = props.data;
     const errors = props.errors;
 
     const defaultNumCoursesArr = Array.from({ length: 15 }, (_, i) => i + 1);
-    const numCoursesArr = Array.from({ length: state.numCourses }, (_, i) => i + 1);
+    const numCoursesArr = Array.from({ length: data.numCourses }, (_, i) => i + 1);
 
     return (
         <div className='fbox'>
@@ -61,7 +59,7 @@ const professorDetailsFunctionBox = (props) => {
                     }}
                     id="input-year"
                     name='year'
-                    value={state.year}
+                    value={data.year}
                     onChange={props.handleInputChange}
                     label="YEAR"
                     helperText=""
@@ -73,7 +71,7 @@ const professorDetailsFunctionBox = (props) => {
                     <InputLabel id="menu-course"> NUMBER </InputLabel>
                     <Select
                         name='numCourses'
-                        value={state.numCourses}
+                        value={data.numCourses}
                         label="NUMBER"
                         onChange={props.handleInputChange}
                     >
@@ -87,8 +85,10 @@ const professorDetailsFunctionBox = (props) => {
                     <FormHelperText> {errors.numCourses} </FormHelperText>
                 </CSSFormControl>
 
-                {state.courses.length >= state.numCourses ? numCoursesArr.map((_, idx) => (
-                    <CourseItem key={idx} index={idx} course={state.courses[idx]} errors={errors.courses[idx]} handleInputChange={(e) => props.handleCourseChange(e, idx)} />
+                <hr className='horizontalRule' />
+
+                {data.courses.length >= data.numCourses ? numCoursesArr.map((_, idx) => (
+                    <CourseItem key={idx} index={idx} course={data.courses[idx]} errors={errors.courses[idx]} handleInputChange={(e) => props.handleCourseChange(e, idx)} />
                 )) : null}
 
 
@@ -100,7 +100,7 @@ const professorDetailsFunctionBox = (props) => {
     );
 }
 
-export default professorDetailsFunctionBox;
+export default addCoursesFunctionBox;
 
 
 
@@ -108,7 +108,7 @@ const CourseItem = (props) => {
     const errors = props.errors;
     return (
         <Box sx={{ display: 'flexbox', alignItems: 'center' }}>
-            <CssTextField
+            <CssTextField sx={{ minWidth: 130, maxWidth: 200 }}
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
@@ -142,11 +142,11 @@ const CourseItem = (props) => {
                 helperText={errors.code}
             />
 
-            <CSSFormControl sx={{ m: 1, minWidth: 150 }} >
-                <InputLabel id="sem-course"> NUMBER </InputLabel>
+            <CSSFormControl sx={{ m: 1, minWidth: 100, maxWidth: 150 }} >
+                <InputLabel id="sem-course"> SEM </InputLabel>
                 <Select
                     name='sem'
-                    value={state.numCourses}
+                    value={props.course.sem}
                     label="SEM"
                     onChange={props.handleInputChange}
                 >
@@ -175,6 +175,7 @@ const CourseItem = (props) => {
                 error={errors.students}
                 helperText={errors.students}
             />
+            <hr className='horizontalRule' />
         </Box>
     );
 }
@@ -221,6 +222,27 @@ const CssTextField = styled(TextField)({
         },
         '&.Mui-focused fieldset': {
             borderColor: "#ffdd00 !important",
+        },
+    },
+
+    '& .MuiInputBase-input.Mui-disabled': {
+        color: '#808080'
+    },
+    "& .MuiFormLabel-root.Mui-disabled": {
+        color: "#ce3333 !important"
+    },
+    '& label.Mui-focused.Mui-disabled': {
+        color: "#808080 !important",
+    },
+    '& .MuiOutlinedInput-root.Mui-disabled': {
+        '& fieldset': {
+            borderColor: "#ce3333 !important",
+        },
+        '&:hover fieldset': {
+            borderColor: "#ce3333 !important",
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: "#ce3333 !important",
         },
     },
 });

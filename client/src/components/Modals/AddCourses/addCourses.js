@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import AddCoursesFunctionBox from '../../FunctionBox/AddCoursesFunctionBox/addCoursesFunctionBox';
+import AddCourseFunctionBox from '../../FunctionBox/AddCoursesFunctionBox/addCoursesFunctionBox';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 
 const AddCourses = (props) => {
     const [addCourseDetails, setAddCourseDetails] = useState({
-        email: '',
+        email: 'fixedemail@iitbhu.ac.in',
         year: '',
         numCourses: '',
         courses: [{
@@ -26,6 +31,12 @@ const AddCourses = (props) => {
             sem: '',
             students: ''
         }]
+    })
+
+    const [toast, setToast] = useState({
+        message: '',
+        severity: '',
+        open: false
     })
 
 
@@ -100,7 +111,7 @@ const AddCourses = (props) => {
             case 'sem':
                 if (value.length == 0)
                     updatedErrors[field] = 'Cannot be empty';
-                else if (!(value == 'Even' || value == 'Odd'))
+                else if (!(value == 0 || value == 1))
                     updatedErrors[field] = 'Can only be Even or Odd';
                 else
                     updatedErrors[field] = ''
@@ -116,8 +127,37 @@ const AddCourses = (props) => {
                     updatedErrors[field] = ''
                 break;
         }
-        console.log('Updated Errors:', updatedErrors);
         return updatedErrors;
+    }
+
+
+    // Asyncs:
+    const writeToBlockChain = async () => {
+        const feedbackData = props.mainState.contract.feedbackData;
+        const courses = addCourseDetails.courses;
+        console.log(feedbackData);
+        console.log(courses);
+        if (feedbackData) {
+            for (var i = 0; i < courses.length; i++) {
+                const { name, code, sem, students } = courses[i];
+                let result = await feedbackData.addCourse(
+                    addCourseDetails.year,
+                    addCourseDetails.email,
+                    name,
+                    code,
+                    sem,
+                    students, { from: props.mainState.account.address }
+                );
+
+                result = result.logs[0].args["course"];
+                console.log(result);
+                if (result == undefined)
+                    setToast({ message: `INTERNAL-ERROR: No response for TxN[${i + 1}, ${code}]`, severity: 'error', open: true });
+            }
+        } else {
+            setToast({ message: 'INTERNAL-ERROR: Feedback contract not deployed', severity: 'error', open: true });
+            console.log('Feedback contract not deployed');
+        }
     }
 
 
@@ -196,12 +236,43 @@ const AddCourses = (props) => {
 
         console.log('Ready:', ready);
         console.log(addCourseDetails);
+
+        if (ready) {
+            writeToBlockChain()
+                .then(r => {
+                    console.log(r);
+                    setToast({ message: 'TxN SUCCESS: Course(s) have been added', severity: 'success', open: true });
+                    setTimeout(() => props.closeModal(), 3500);
+                }
+                ).catch(e => {
+                    console.log(e);
+                    if (e.code == 'INVALID_ARGUMENT')
+                        setToast({ message: 'ERROR: INVALID_ARGUMENT', severity: 'error', open: true });
+                    else if (e.code == '4001')
+                        setToast({ message: 'TxN WARN: Denied by user', severity: 'warning', open: true });
+                    else
+                        setToast({ message: 'TxN ERROR: Something went wrong', severity: 'error', open: true });
+                })
+        }
     }
+
+    const handleToastClose = (event, reason) => {
+        if (reason === 'clickaway')
+            return;
+        setToast({ ...toast, open: false });
+    };
 
 
     return (
         <div>
-            <AddCourseDetailsFunctionBox
+            <Snackbar autoHideDuration={4500} open={toast.open}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={handleToastClose}>
+                <Alert severity={toast.severity} sx={{ width: '100%' }}>
+                    {toast.message}
+                </Alert>
+            </Snackbar>
+
+            <AddCourseFunctionBox
                 data={addCourseDetails}
                 errors={addCourseErrors}
                 handleInputChange={handleAddCourseInputChange}
@@ -212,4 +283,4 @@ const AddCourses = (props) => {
     );
 };
 
-export default AddCourseDetails;
+export default AddCourses;
