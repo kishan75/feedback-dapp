@@ -2,20 +2,24 @@ const web3Utils = require("web3-utils");
 const { assert, expect } = require("chai");
 
 const FeedbackData = artifacts.require("FeedbackData");
+const BHUToken = artifacts.require("BHUToken");
 
 require("chai").use(require("chai-as-promised")).should();
 
-function parseEvent(result, args) {
-  return result.logs[0].args;
+function tokensToWei(n) {
+  return web3.utils.toWei(n, "ether");
 }
 
 contract("FeedbackData", ([]) => {
   let feedbackData;
   let profData = {};
   let profEmails = [];
+  var adminKey = "password";
 
   before(async () => {
-    feedbackData = await FeedbackData.new();
+    bhuToken = await BHUToken.new();
+    feedbackData = await FeedbackData.new(adminKey, bhuToken.address);
+    await bhuToken.transfer(feedbackData.address, tokensToWei("1000000"));
   });
 
   describe("Professors data", async () => {
@@ -27,7 +31,7 @@ contract("FeedbackData", ([]) => {
     let prof1;
 
     it("is checking generate token for professor", async () => {
-      let result = await feedbackData.generateTokenForProfReg();
+      let result = await feedbackData.generateTokenForProfReg(adminKey);
       result = result.logs[0].args["token"];
       console.log(result);
       expect(result).to.not.be.undefined;
@@ -36,7 +40,7 @@ contract("FeedbackData", ([]) => {
     it("is creating professor", async () => {
       const name = "kk sir";
       const email = "kk@gmail.com";
-      let key = await feedbackData.generateTokenForProfReg();
+      let key = await feedbackData.generateTokenForProfReg(adminKey);
       key = key.logs[0].args["token"];
 
       let result = await feedbackData.createProfessor(name, email, key);
@@ -60,7 +64,7 @@ contract("FeedbackData", ([]) => {
     ["1@gmail", "2@gm"].forEach((email) => {
       it("is creating professor", async () => {
         const name = "kk sir";
-        let key = await feedbackData.generateTokenForProfReg();
+        let key = await feedbackData.generateTokenForProfReg(adminKey);
         key = key.logs[0].args["token"];
 
         let result = await feedbackData.createProfessor(name, email, key);
@@ -180,7 +184,7 @@ contract("FeedbackData", ([]) => {
 
     it("is creating professor", async () => {
       let name = "kk sir";
-      let key = await feedbackData.generateTokenForProfReg();
+      let key = await feedbackData.generateTokenForProfReg(adminKey);
       key = key.logs[0].args["token"];
 
       let result = await feedbackData.createProfessor(name, email, key);
@@ -220,10 +224,14 @@ contract("FeedbackData", ([]) => {
     const code = "hjfgk";
     const sem = 1;
     const studentCount = 15;
+    const updatedRating = {
+      preDecimal: 3,
+      postDecimal: 4,
+    };
 
     it("is creating professor", async () => {
       let name = "kk sir";
-      let key = await feedbackData.generateTokenForProfReg();
+      let key = await feedbackData.generateTokenForProfReg(adminKey);
       key = key.logs[0].args["token"];
 
       let result = await feedbackData.createProfessor(name, email, key);
@@ -270,8 +278,13 @@ contract("FeedbackData", ([]) => {
           skills,
         };
 
-        let result = await feedbackData.submitFeedback(email, ticket, feedback);
-        console.log(result.logs[0],result.logs[1]);
+        let result = await feedbackData.submitFeedback(
+          email,
+          ticket,
+          updatedRating,
+          feedback
+        );
+        console.log(result.logs[0], result.logs[1]);
         // expect(result.logs[0].args["skills"])
         //   .to.be.an("array")
         //   .include.all.members(skills);

@@ -2,6 +2,7 @@
 pragma solidity >=0.4.21 <8.10.0;
 
 import "./Utils.sol";
+import "./BHUToken.sol";
 
 contract FeedbackData {
     string[] public facultySkills = [
@@ -67,11 +68,17 @@ contract FeedbackData {
     mapping(bytes32 => bool) public _keysForProfReg;
 
     uint256 private counterForProfReg;
+    bytes32 private adminPassword;
+    BHUToken private bhuToken;
+    uint256 public earlyFeedbackCost = 5e18;
+    uint256 public lateFeedbackCost = 3e18;
 
-    constructor() {
+    constructor(string memory adminKey, address _bhuToken) {
         counterForProfReg = uint256(
             keccak256(abi.encodePacked(block.difficulty, block.timestamp))
         );
+        adminPassword = keccak256(abi.encodePacked(adminKey));
+        bhuToken = BHUToken(_bhuToken);
     }
 
     event professorCreated(Professor professor);
@@ -86,14 +93,37 @@ contract FeedbackData {
     );
     event feedbackSubmitted(string email, Feedback feedback);
     event skillsUpvoted(string email, SkillsUpvoteCount[] skills);
+    event ratingUpdated(string email, Float rating);
+    event balanceUpdated(address account, uint256 balance);
+    event passwordUpdated(bool success);
 
-    function generateTokenForProfReg() public {
+    function generateTokenForProfReg(string memory adminKey) public {
+        require(
+            keccak256(abi.encodePacked(adminKey)) == adminPassword,
+            "invalid password"
+        );
         counterForProfReg++;
         bytes32 id = keccak256(
             abi.encodePacked(block.timestamp, counterForProfReg)
         );
         _keysForProfReg[id] = true;
         emit tokenGenerated(id);
+    }
+
+    function checkBalance(address _address) public view returns (uint256) {
+        return bhuToken.balanceOf(_address);
+    }
+
+    function updatePassword(
+        string calldata oldPassword,
+        string calldata newPassword
+    ) public {
+        require(
+            keccak256(abi.encodePacked(oldPassword)) == adminPassword,
+            "invalid old password"
+        );
+        adminPassword = keccak256(abi.encodePacked(newPassword));
+        emit passwordUpdated(true);
     }
 
     function getFacultySkills() public view returns (string[] memory) {
@@ -148,7 +178,6 @@ contract FeedbackData {
         return _professorList;
     }
 
-
     function getFeedbacks(string calldata _email)
         public
         view
@@ -157,14 +186,8 @@ contract FeedbackData {
         Feedback[][] memory _feedbacks = new Feedback[][](
             profCred_Keys[_email].feedbacks.length
         );
-        for (
-            uint256 i = 0;
-            i < profCred_Keys[_email].feedbacks.length;
-            i++
-        ) {
-            _feedbacks[i] = feedbacks[
-                profCred_Keys[_email].feedbacks[i]
-            ];
+        for (uint256 i = 0; i < profCred_Keys[_email].feedbacks.length; i++) {
+            _feedbacks[i] = feedbacks[profCred_Keys[_email].feedbacks[i]];
         }
         return _feedbacks;
     }
@@ -177,14 +200,8 @@ contract FeedbackData {
         Course[][] memory _courses = new Course[][](
             profCred_Keys[_email].courses.length
         );
-        for (
-            uint256 i = 0;
-            i < profCred_Keys[_email].courses.length;
-            i++
-        ) {
-            _courses[i] = courses[
-                profCred_Keys[_email].courses[i]
-            ];
+        for (uint256 i = 0; i < profCred_Keys[_email].courses.length; i++) {
+            _courses[i] = courses[profCred_Keys[_email].courses[i]];
         }
 
         return _courses;
@@ -246,10 +263,7 @@ contract FeedbackData {
         );
     }
 
-    function addCourseKey(
-        string calldata email,
-        bytes32 __key
-    ) private {
+    function addCourseKey(string calldata email, bytes32 __key) private {
         if (courses[__key].length == 0) {
             profCred_Keys[email].courses.push(__key);
         }
@@ -326,6 +340,7 @@ contract FeedbackData {
     function submitFeedback(
         string calldata _email,
         bytes32 _ticket,
+        Float calldata updatedRating,
         Feedback calldata _feedback
     ) public {
         bytes32 course_Key = keccak256(
@@ -342,9 +357,7 @@ contract FeedbackData {
         for (; coursePos < courses[course_Key].length; coursePos++) {
             if (
                 keccak256(
-                    abi.encodePacked(
-                        courses[course_Key][coursePos].code
-                    )
+                    abi.encodePacked(courses[course_Key][coursePos].code)
                 ) == keccak256(abi.encodePacked(_feedback.code))
             ) {
                 found = true;
@@ -357,14 +370,9 @@ contract FeedbackData {
 
         found = false;
         uint256 ticketPos = 0;
-        uint256 ticketsLen = courses[course_Key][coursePos]
-            .tickets
-            .length;
+        uint256 ticketsLen = courses[course_Key][coursePos].tickets.length;
         for (; ticketPos < ticketsLen; ticketPos++) {
-            if (
-                courses[course_Key][coursePos].tickets[ticketPos] ==
-                _ticket
-            ) {
+            if (courses[course_Key][coursePos].tickets[ticketPos] == _ticket) {
                 found = true;
                 break;
             }
@@ -372,9 +380,9 @@ contract FeedbackData {
 
         if (found == false) revert("ticket not found, submit valid ticket");
 
-        courses[course_Key][coursePos].tickets[
-            ticketPos
-        ] = courses[course_Key][coursePos].tickets[ticketsLen - 1];
+        courses[course_Key][coursePos].tickets[ticketPos] = courses[course_Key][
+            coursePos
+        ].tickets[ticketsLen - 1];
         courses[course_Key][coursePos].tickets.pop();
 
         bytes32 _feedback_Key = keccak256(
@@ -397,5 +405,16 @@ contract FeedbackData {
         }
 
         emit skillsUpvoted(_email, getSkillsUpvote(_email));
+
+        professorDetail[_email].rating = updatedRating;
+        emit ratingUpdated(_email, updatedRating);
+
+        uint256 percentage = 3;
+        if (
+            feedbackLen <=
+            (courses[course_Key][coursePos].studentCount / percentage)
+        ) bhuToken.transfer(msg.sender, earlyFeedbackCost);
+        else bhuToken.transfer(msg.sender, lateFeedbackCost);
+        emit balanceUpdated(msg.sender, bhuToken.balanceOf(msg.sender));
     }
 }
