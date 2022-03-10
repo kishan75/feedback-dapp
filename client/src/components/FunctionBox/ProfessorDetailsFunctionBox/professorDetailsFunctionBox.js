@@ -4,16 +4,13 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-// CheckForm
-import FormControl from '@mui/material/FormControl';
-
 // Adornments
 import InputAdornment from '@mui/material/InputAdornment';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import BadgeIcon from '@mui/icons-material/Badge';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
-import DateRangeIcon from '@mui/icons-material/DateRange';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 // CSS
 import './professorDetailsFunctionBox.scss';
@@ -23,7 +20,7 @@ import './professorDetailsFunctionBox.scss';
 const professorDetailsFunctionBox = (props) => {
     const data = props.data;
     const errors = props.errors;
-    
+
     return (
         <div className='fbox'>
             <h1> PROFESSOR DETAILS </h1>
@@ -33,7 +30,7 @@ const professorDetailsFunctionBox = (props) => {
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
-                                <DateRangeIcon />
+                                <AccountBalanceWalletIcon />
                             </InputAdornment>
                         )
                     }}
@@ -43,16 +40,17 @@ const professorDetailsFunctionBox = (props) => {
                     disabled
                     //onChange={props.handleInputChange}
                     label="ADDRESS"
-                    helperText=""
+                    error={errors.address}
+                    helperText={errors.address}
                 />
 
 
                 <CssTextField
                     InputProps={{
                         startAdornment: (
-                          <InputAdornment position="start">
-                            <ConfirmationNumberIcon />
-                          </InputAdornment>
+                            <InputAdornment position="start">
+                                <ConfirmationNumberIcon />
+                            </InputAdornment>
                         ),
                     }}
                     id="input-ticket"
@@ -101,10 +99,10 @@ const professorDetailsFunctionBox = (props) => {
                     helperText={errors.email}
                 />
 
-                
+
             </Box>
             <div className='centerbutton'>
-                <Button sx={{m:2, width:300}} size='large' color="error" variant="contained" endIcon={<HowToRegIcon />} onClick={props.handleSubmit}>
+                <Button sx={{ m: 2, width: 300 }} size='large' color="error" variant="contained" endIcon={<HowToRegIcon />} onClick={props.handleSubmit}>
                     Register
                 </Button>
             </div>
@@ -121,7 +119,7 @@ const CssTextField = styled(TextField)({
     '& .MuiInputBase-input': {
         color: 'white'
     },
-    '& label':{
+    '& label': {
         color: '#666666'
     },
     '& label.Mui-focused': {
@@ -132,13 +130,13 @@ const CssTextField = styled(TextField)({
     },
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
-        borderColor: '#666666',
+            borderColor: '#666666',
         },
         '&:hover fieldset': {
-        borderColor: '#ce3333',
+            borderColor: '#ce3333',
         },
         '&.Mui-focused fieldset': {
-        borderColor: '#ce3333',
+            borderColor: '#ce3333',
         },
     },
 
@@ -150,34 +148,34 @@ const CssTextField = styled(TextField)({
     },
     '& .MuiOutlinedInput-root.Mui-error': {
         '& fieldset': {
-        borderColor: "#ffdd00 !important",
+            borderColor: "#ffdd00 !important",
         },
         '&:hover fieldset': {
-        borderColor: "#ffdd00 !important",
+            borderColor: "#ffdd00 !important",
         },
         '&.Mui-focused fieldset': {
-        borderColor: "#ffdd00 !important",
+            borderColor: "#ffdd00 !important",
         },
     },
 
     '& .MuiInputBase-input.Mui-disabled': {
-        color: 'white'
+        color: '#808080'
     },
     "& .MuiFormLabel-root.Mui-disabled": {
         color: "#ce3333 !important"
     },
     '& label.Mui-focused.Mui-disabled': {
-        color: "white !important",
+        color: "#808080 !important",
     },
     '& .MuiOutlinedInput-root.Mui-disabled': {
         '& fieldset': {
-        borderColor: "#ce3333 !important",
+            borderColor: "#ce3333 !important",
         },
         '&:hover fieldset': {
-        borderColor: "#ce3333 !important",
+            borderColor: "#ce3333 !important",
         },
         '&.Mui-focused fieldset': {
-        borderColor: "#ce3333 !important",
+            borderColor: "#ce3333 !important",
         },
     },
 });

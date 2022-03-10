@@ -8,46 +8,62 @@ import HomePage from './pages/HomePage/homePage';
 import "./App.css";
 
 const App = () => {
-  const [state, setState] = useState({
+  const [mainState, setMainState] = useState({
     web3: null,
-    transactorContract: null,
-    bhuTokenContract: null,
-    accountAddress: null,
-    accountBalance: null,
-    professorEmails: [],
-    professerDatas: [],
+    contract: {
+      transactor: null,
+      bhuToken: null,
+      feedbackData: null
+    },
+    account: {
+      address: '0x0',
+      balance: 0
+    },
+    professor: {
+
+    },
+
   })
+
 
   // React useEffects
   useEffect(() => {
     loadAll().then((e) => {
-      setState({
-        web3: e.web3,
-        transactorContract: e.transactorContract,
-        bhuTokenContract: e.bhuTokenContract,
-        accountAddress: e.accountAddress,
-        accountBalance: e.accountBalance,
-        professorEmails: e.professorEmails,
-        professerDatas: e.professerDatas
+      setMainState({
+        web3: null,
+        contract: {
+          transactor: e.transactorContract,
+          bhuToken: e.bhuTokenContract,
+          feedbackData: e.feedbackDataContract
+        },
+        account: {
+          address: e.accountAddress,
+          balance: e.accountBalance
+        },
+        professor: {
+          emails: e.professorEmails,
+          datas: e.professerDatas,
+        },
       });
+      console.log(e.feedbackDataContract);
     });
-  }, [state.accountAddress])
+  }, [mainState.accountAddress])
 
   // Handlers
   const handleBalanceChange = () => {
-    loadBalance(state.transactorContract, state.accountAddress).then((e) => {
-      setState({
-        ...state,
-        accountBalance: e.accountBalance
+    loadBalance(mainState.transactorContract, mainState.accountAddress).then((e) => {
+      setMainState({
+        ...mainState,
+        account: { ...mainState.account, balance: e.accountBalance }
       });
     });
   }
 
   const handleProfessorDataChange = () => {
     loadProfessorData().then((e) => {
-      setState({
-        ...state,
-        professerDatas: e.professerDatas
+      setMainState({
+        ...mainState,
+        professor: { ...mainState.professor, datas: e.professerDatas }
       });
     });
   }
@@ -56,9 +72,9 @@ const App = () => {
     <div className="App">
       <Routes>
         <Route exact path='/' element={<HomePage
-          state={state}
-          onBalanceChange={handleBalanceChange}
-          onProfessorDataChange={handleProfessorDataChange}
+          mainState={mainState}
+          handleBalanceChange={handleBalanceChange}
+          handleProfessorDataChange={handleProfessorDataChange}
         />} />
       </Routes>
     </div>

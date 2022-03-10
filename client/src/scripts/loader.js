@@ -1,6 +1,6 @@
 import TransactorJSON from '../contracts/Transactor.json';
 import BHUTokenJSON from '../contracts/BHUToken.json';
-//import ProfessorDataJSON from '../contracts/ProfessorData.json';
+import FeedbackDataJSON from '../contracts/FeedbackData.json';
 import Web3 from 'web3';
 
 export let web3;
@@ -9,10 +9,10 @@ var contract = require("@truffle/contract");
 export const loadAll = async () => {
   web3 = await loadWeb3();
   const accountAddress = await loadAccount();
-  const { transactorContract, bhuTokenContract, professorDataContract } = await loadContracts();
+  const { transactorContract, bhuTokenContract, feedbackDataContract } = await loadContracts();
   const accountBalance = loadBalance(transactorContract, accountAddress)
 
-  return { accountAddress, transactorContract, bhuTokenContract, professorDataContract, accountBalance };
+  return { accountAddress, accountBalance, transactorContract, bhuTokenContract, feedbackDataContract };
 };
 
 const loadContracts = async () => {
@@ -24,12 +24,11 @@ const loadContracts = async () => {
   theContract.setProvider(web3.eth.currentProvider);
   const bhuTokenContract = await theContract.deployed();
 
-  // theContract = contract(ProfessorDataJSON);
-  // theContract.setProvider(web3.eth.currentProvider);
-  // const professorDataContract = await theContract.deployed();
-  const professorDataContract = null
+  theContract = contract(FeedbackDataJSON);
+  theContract.setProvider(web3.eth.currentProvider);
+  const feedbackDataContract = await theContract.deployed();
 
-  return { transactorContract, bhuTokenContract, professorDataContract }
+  return { transactorContract, bhuTokenContract, feedbackDataContract }
 };
 
 export const loadAccount = async () => {

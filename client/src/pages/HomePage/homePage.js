@@ -5,9 +5,9 @@ import Header from '../../components/Header/header';
 const homePage = (props) => {
     const professerDatas = props.professerDatas;
 
-    return ( 
+    return (
         <div>
-            <Header />
+            <Header mainState={props.mainState} />
             <section>
                 <Sections />
                 <Sections />

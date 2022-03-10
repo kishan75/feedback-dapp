@@ -88,13 +88,13 @@ const Header = (props) => {
               onClose={handleCloseGenerateTickets}
               aria-labelledby="generate-tickets"
               aria-describedby="For ticket distribution via mail"
-            >  
+            >
               <Box sx={style}>
                 <GenerateTickets />
               </Box>
             </Modal>
             <li>
-            {professor ? width > breakpoint ? <Button variant="outlined" color="error" onClick={handleOpenAddCourses}> Add Courses </Button> :
+              {professor ? width > breakpoint ? <Button variant="outlined" color="error" onClick={handleOpenAddCourses}> Add Courses </Button> :
                 <Button color="error" size="small" onClick={handleOpenAddCourses}> Add Courses </Button> : width > breakpoint ? <Button variant="outlined" color="error"> Chat Box </Button> :
                 <Button color="error" size="small"> Chat Box </Button>}
             </li>
@@ -103,7 +103,7 @@ const Header = (props) => {
               onClose={handleCloseAddCourses}
               aria-labelledby="generate-tickets"
               aria-describedby="For ticket distribution via mail"
-            >  
+            >
               <Box sx={style}>
                 <GenerateTickets />
               </Box>
@@ -117,9 +117,9 @@ const Header = (props) => {
               onClose={handleCloseProfessorRegistry}
               aria-labelledby="professor-registry"
               aria-describedby="Register professor to database"
-            >  
+            >
               <Box sx={style}>
-                <ProfessorDetails />
+                <ProfessorDetails mainState={props.mainState} closeModal={handleCloseProfessorRegistry} />
               </Box>
             </Modal>
           </ul>
@@ -127,13 +127,13 @@ const Header = (props) => {
 
         <div className="statistics">
           <ul>
-              <li>
-                {width > breakpoint ? <div className="addressFont"> ADDRESS: </div> : null}
-                {width > breakpoint ? <div className="tokenFont"> BALANCE </div> : null}
-                <Avatar sx={{ bgcolor: red[900] }} onClick={() => setDisplayTokens(!displayTokens)}>
-                  {displayTokens ? tokens : <MonetizationOnIcon fontSize='large'/>}
-                </Avatar>
-              </li>
+            <li>
+              {width > breakpoint ? <div className="addressFont"> ADDRESS: </div> : null}
+              {width > breakpoint ? <div className="tokenFont"> BALANCE </div> : null}
+              <Avatar sx={{ bgcolor: red[900] }} onClick={() => setDisplayTokens(!displayTokens)}>
+                {displayTokens ? tokens : <MonetizationOnIcon fontSize='large' />}
+              </Avatar>
+            </li>
           </ul>
         </div>
       </div> :
@@ -147,7 +147,7 @@ const Header = (props) => {
         </div>,
         <div className="statistics">
           <Avatar sx={{ bgcolor: red[900] }} onClick={() => setDisplayTokens(!displayTokens)}>
-            {displayTokens ? tokens : <MonetizationOnIcon fontSize='large'/>}
+            {displayTokens ? tokens : <MonetizationOnIcon fontSize='large' />}
           </Avatar>
         </div>,
         <Menu right>
@@ -168,7 +168,7 @@ const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
-  overflow:'scroll',
+  overflow: 'scroll',
   transform: 'translate(-50%, -50%)',
   width: '70%',
   height: '90%',

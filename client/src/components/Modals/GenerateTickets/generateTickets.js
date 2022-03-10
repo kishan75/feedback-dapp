@@ -52,14 +52,14 @@ const GenerateTickets = (props) => {
         setCourseDatas(courseDatas);
 
         let courseNameOptions = []
-        for(var i=0; i<courseDatas.length; i++)
+        for (var i = 0; i < courseDatas.length; i++)
             courseNameOptions.push(courseDatas[i].name);
 
         setCourseNameOptions(courseNameOptions);
     }, []);
 
 
-    
+
     // Handlers
     const handleCourseNameChanged = (event) => {
         let updatedCourseCodeOptions = {
@@ -70,8 +70,8 @@ const GenerateTickets = (props) => {
         }
 
         updatedCourseCodeOptions.sem = ['Even', 'Odd']
-        for(var i=0; i<courseDatas.length; i++){
-            if(courseDatas[i].name == event.target.value){
+        for (var i = 0; i < courseDatas.length; i++) {
+            if (courseDatas[i].name == event.target.value) {
                 updatedCourseCodeOptions.code.push(courseDatas[i].code);
                 updatedCourseCodeOptions.year.push(courseDatas[i].year);
                 updatedCourseCodeOptions.students.push(courseDatas[i].students);
@@ -87,35 +87,34 @@ const GenerateTickets = (props) => {
             [event.target.name]: event.target.value
         });
 
-        let updatedErrors = {...genTicketsErrors};
+        let updatedErrors = { ...genTicketsErrors };
         updatedErrors = validateGenTicketsInput(event.target.name, event.target.value, updatedErrors);
         setGenTicketsErrors({ ...updatedErrors });
     };
 
 
     const handleGenTicketsSubmit = () => {
-        let updatedErrors = {...genTicketsErrors};
+        let updatedErrors = { ...genTicketsErrors };
 
-        for (var key in genTicketsDetails) 
+        for (var key in genTicketsDetails)
             if (genTicketsDetails.hasOwnProperty(key))
                 updatedErrors = validateGenTicketsInput(key, genTicketsDetails[key], updatedErrors);
 
-        setGenTicketsErrors({ ...updatedErrors});
-        const fastGenTicketsErrors = { ...updatedErrors};
+        setGenTicketsErrors({ ...updatedErrors });
+        const fastGenTicketsErrors = { ...updatedErrors };
 
-        let clear = true;
-        for (var key in fastGenTicketsErrors) 
+        let ready = true;
+        for (var key in fastGenTicketsErrors)
             if (fastGenTicketsErrors.hasOwnProperty(key))
-                if(fastGenTicketsErrors[key] != '')
-                    clear = false;
+                if (fastGenTicketsErrors[key] != '')
+                    ready = false;
 
-        console.log('Ready:', clear);
+        console.log('Ready:', ready);  // All validation tests passed
         console.log(genTicketsDetails);
         console.log(fastGenTicketsErrors);
 
-        
         // Send Email
-        if(clear) {
+        if (ready) {
             const mail = {
                 Host: "smtp.elasticemail.com",
                 Port: 2525,
@@ -124,28 +123,28 @@ const GenerateTickets = (props) => {
                 To: ['binit.57.singh@gmail.com'], //genTicketsDetails.emails
                 From: "feedback.dapp@gmail.com",
                 Subject: "Feedback Request",
-                Body: "<b>Hello </b>there, <br><br>You are requested to sumbit a feedback for:<br>"+
-                    "<b>Course: </b>"+genTicketsDetails.name+"<br>"+
-                    "<b>Code: </b>"+genTicketsDetails.code+"<br>"+
-                    "<b>Year: </b>"+genTicketsDetails.year+"<br>"+
-                    "<b>Semester: </b>"+genTicketsDetails.sem+"<br>"+
-                    "<b>Professor: </b>"+"props.professorName"+"<br><br>"+
-                    "Please use this unique ticket: <b>YYXXZZ</b> to submit the feedack anonymously<br><br>"+
-                    "Best wishes,<br>"+
+                Body: "<b>Hello </b>there, <br><br>You are requested to sumbit a feedback for:<br>" +
+                    "<b>Course: </b>" + genTicketsDetails.name + "<br>" +
+                    "<b>Code: </b>" + genTicketsDetails.code + "<br>" +
+                    "<b>Year: </b>" + genTicketsDetails.year + "<br>" +
+                    "<b>Semester: </b>" + genTicketsDetails.sem + "<br>" +
+                    "<b>Professor: </b>" + "props.professorName" + "<br><br>" +
+                    "Please use this unique ticket: <b>YYXXZZ</b> to submit the feedack anonymously<br><br>" +
+                    "Best wishes,<br>" +
                     "Feedback-DApp team",
             };
 
             console.log(mail);
             window.Email.send(mail)
-            .then(function (message) {
-                if(message == 'OK')
-                    console.log('Email Sent', message)
-                else
-                    console.log('Email Fail', message);
-            }) 
-            .catch(function (message) {
-                console.log('Email Fail', message)
-            })
+                .then(function (message) {
+                    if (message == 'OK')
+                        console.log('Email Sent', message)
+                    else
+                        console.log('Email Fail', message);
+                })
+                .catch(function (message) {
+                    console.log('Email Fail', message)
+                })
         }
     }
 
@@ -156,19 +155,19 @@ const GenerateTickets = (props) => {
                 const file = e.target.files[0];
                 const reader = new FileReader();
                 let emails = []
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     let text = e.target.result;
                     text = text.split(/,| |\n|\r/);
                     console.log(text);
 
-                    for(var i=0; i<text.length; i++)
-                        if(text[i].endsWith('@itbhu.ac.in') || text[i].endsWith('@iitbhu.ac.in') && re.test(text[i]))
+                    for (var i = 0; i < text.length; i++)
+                        if (text[i].endsWith('@itbhu.ac.in') || text[i].endsWith('@iitbhu.ac.in') && re.test(text[i]))
                             emails.push(text[i]);
 
                     console.log(emails);
-                    setGenTicketsDetails({...genTicketsDetails, emails: emails});
+                    setGenTicketsDetails({ ...genTicketsDetails, emails: emails });
                 }
-        
+
                 reader.readAsText(file);
 
                 break;
@@ -180,7 +179,7 @@ const GenerateTickets = (props) => {
 
     // Validators
     const validateGenTicketsInput = (field, value, updatedErrors) => {
-        switch(field) {
+        switch (field) {
             case 'name':
             case 'code':
                 if (value.length == 0)
@@ -193,20 +192,22 @@ const GenerateTickets = (props) => {
             case 'emails':
                 if (value.length == 0)
                     updatedErrors[field] = 'Please upload a csv file with student emails';
+                else if (value.length != genTicketsDetails.students)
+                    updatedErrors[field] = `Number of uploaded emails(${value.length}) should be equal to students(${genTicketsDetails.students})`;
                 else
                     updatedErrors[field] = ''
                 break;
             case 'year':
                 if (value.length == 0)
                     updatedErrors[field] = 'Cannot be empty';
-                else if(!/^\d+$/.test(value))
+                else if (!/^\d+$/.test(value))
                     updatedErrors[field] = 'Year should be numerical';
-                else if(value.length != 4)
+                else if (value.length != 4)
                     updatedErrors[field] = 'Length should be exacty 4';
-                else if(!(value > 2000))
+                else if (!(value > 2000))
                     updatedErrors[field] = 'Year should be greater than 2000';
                 else
-                    updatedErrors[field] = ''   
+                    updatedErrors[field] = ''
                 break;
             case 'sem':
                 if (value.length == 0)
@@ -214,15 +215,15 @@ const GenerateTickets = (props) => {
                 else if (!(value == 'Even' || value == 'Odd'))
                     updatedErrors[field] = 'Can only be Even or Odd';
                 else
-                    updatedErrors[field] = ''  
+                    updatedErrors[field] = ''
                 break;
             case 'students':
                 if (value.length == 0)
                     updatedErrors[field] = 'Cannot be empty';
-                else if(!/^\d+$/.test(value))
+                else if (!/^\d+$/.test(value))
                     updatedErrors[field] = 'Should be numerical';
                 else
-                    updatedErrors[field] = ''  
+                    updatedErrors[field] = ''
                 break;
 
         }
