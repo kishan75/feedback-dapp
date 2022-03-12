@@ -264,7 +264,7 @@ const AddCourses = (props) => {
 
 
     return (
-        <div>
+        <div className='cards'>
             <Snackbar autoHideDuration={4500} open={toast.open}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={handleToastClose}>
                 <Alert severity={toast.severity} sx={{ width: '100%' }}>

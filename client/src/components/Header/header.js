@@ -90,7 +90,7 @@ const Header = (props) => {
               aria-labelledby="generate-tickets"
               aria-describedby="For ticket distribution via mail"
             >
-              <Box sx={style}>
+              <Box sx={styleGenTickets}>
                 <GenerateTickets />
               </Box>
             </Modal>
@@ -105,7 +105,7 @@ const Header = (props) => {
               aria-labelledby="generate-tickets"
               aria-describedby="For ticket distribution via mail"
             >
-              <Box sx={style}>
+              <Box sx={styleAddCourses}>
                 <AddCourseDetails mainState={props.mainState} closeModal={handleCloseAddCourses} />
               </Box>
             </Modal>
@@ -119,7 +119,7 @@ const Header = (props) => {
               aria-labelledby="professor-registry"
               aria-describedby="Register professor to database"
             >
-              <Box sx={style}>
+              <Box sx={styleProfessorDetails}>
                 <ProfessorDetails mainState={props.mainState} closeModal={handleCloseProfessorRegistry} />
               </Box>
             </Modal>
@@ -164,17 +164,30 @@ export default Header;
 
 
 
-
-const style = {
+const styleProfessorDetails = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   overflow: 'scroll',
   transform: 'translate(-50%, -50%)',
-  width: '70%',
-  height: '90%',
+  width: '50%',
+  height: '50%',
   bgcolor: '#00000099',
   border: '2px solid #000',
   boxShadow: 24,
   p: 0,
+};
+
+
+const styleAddCourses = {
+  ...styleProfessorDetails,
+  width: '50%',
+  height: '70%',
+};
+
+
+const styleGenTickets = {
+  ...styleProfessorDetails,
+  width: '50%',
+  height: '70%',
 };

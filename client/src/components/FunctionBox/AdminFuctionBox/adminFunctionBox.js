@@ -9,6 +9,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import KeyIcon from '@mui/icons-material/Key';
 import SendAndArchiveIcon from '@mui/icons-material/SendAndArchive';
+import SettingSuggest from '@mui/icons-material/SettingsSuggestOutlined';
 
 const adminFunctionBox = (props) => {
     const data = props.data;
@@ -34,7 +35,6 @@ const adminFunctionBox = (props) => {
                     onChange={props.handleInputChange}
                     label="PROFESSOR EMAIL"
                     type='email'
-                    helperText=""
                     error={errors.email}
                     helperText={errors.email}
                 />
@@ -54,11 +54,9 @@ const adminFunctionBox = (props) => {
                     value={data.password}
                     onChange={props.handleInputChange}
                     label="ADMIN PASSWORD"
-                    helperText=""
                     error={errors.password}
                     helperText={errors.password}
                 />
-
 
             </Box>
             <div className='centerbutton'>
@@ -66,6 +64,80 @@ const adminFunctionBox = (props) => {
                     GENERATE AND SEND
                 </Button>
             </div>
+
+            <hr className='horizontalRuleAdmin' />
+
+
+            <h1> CHANGE PASSWORD </h1>
+
+            <br />
+
+            <Box component="form" autoComplete="off">
+
+                <CssTextField
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <KeyIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    id="input-oldpassword"
+                    name='old'
+                    type='password'
+                    value={data.old}
+                    onChange={props.handlePasswordInputChange}
+                    label="OLD PASSWORD"
+                    error={errors.old}
+                    helperText={errors.old}
+                />
+
+
+                <CssTextField
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <KeyIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    id="input-newpassword"
+                    name='new'
+                    type='password'
+                    value={data.new}
+                    onChange={props.handlePasswordInputChange}
+                    label="NEW PASSWORD"
+                    error={errors.new}
+                    helperText={errors.new}
+                />
+
+
+                <CssTextField
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <KeyIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    id="input-confirmpassword"
+                    name='confirm'
+                    type='password'
+                    value={data.confirm}
+                    onChange={props.handlePasswordInputChange}
+                    label="CONFIRM PASSWORD"
+                    error={errors.confirm}
+                    helperText={errors.confirm}
+                />
+
+            </Box>
+
+            <div className='centerbutton'>
+                <Button sx={{ m: 2, width: 300 }} size='large' color="error" variant="contained" endIcon={<SettingSuggest />} onClick={props.handlePasswordSubmit}>
+                    CHANGE PASSWORD
+                </Button>
+            </div>
+
         </div>
     );
 }

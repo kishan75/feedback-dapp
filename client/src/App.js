@@ -7,6 +7,8 @@ import HomePage from './pages/HomePage/homePage';
 
 import "./App.css";
 
+require('dotenv').config()
+
 const App = () => {
   const [mainState, setMainState] = useState({
     web3: null,

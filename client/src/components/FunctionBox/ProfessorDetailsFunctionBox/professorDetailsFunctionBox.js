@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
 
 // Adornments
 import InputAdornment from '@mui/material/InputAdornment';
@@ -11,6 +12,7 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 // CSS
 import './professorDetailsFunctionBox.scss';
@@ -105,6 +107,13 @@ const professorDetailsFunctionBox = (props) => {
                 <Button sx={{ m: 2, width: 300 }} size='large' color="error" variant="contained" endIcon={<HowToRegIcon />} onClick={props.handleSubmit}>
                     Register
                 </Button>
+
+                <label htmlFor="icon-button-img">
+                    <Input id="icon-button-img" accept=".jpeg, .jpg, .png" type="file" name='imagefile' onChange={props.handleFileChange} />
+                    <Button sx={{ m: 2, width: 250 }} variant="outlined" component="span" color="error" startIcon={<PhotoCamera style={{ color: 'red' }} />}>
+                        Upload Image
+                    </Button>
+                </label>
             </div>
         </div>
     );
@@ -178,4 +187,8 @@ const CssTextField = styled(TextField)({
             borderColor: "#ce3333 !important",
         },
     },
+});
+
+const Input = styled('input')({
+    display: 'none',
 });

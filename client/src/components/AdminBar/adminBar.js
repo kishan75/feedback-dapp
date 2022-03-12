@@ -29,7 +29,7 @@ const AdminBar = (props) => {
                         aria-describedby="For admin controls"
                     >
                         <Box sx={style}>
-                            <Admin />
+                            <Admin mainState={props.mainState} closeModal={handleCloseAdmin} />
                         </Box>
                     </Modal>
                 </ul>
@@ -49,7 +49,7 @@ const style = {
     overflow: 'scroll',
     transform: 'translate(-50%, -50%)',
     width: '70%',
-    height: '70%',
+    height: '75%',
     bgcolor: '#00000099',
     border: '2px solid #000',
     boxShadow: 24,

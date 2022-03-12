@@ -933,6 +933,11 @@
   "resolved" "https://registry.npmjs.org/@csstools/normalize.css/-/normalize.css-9.0.1.tgz"
   "version" "9.0.1"
 
+"@emailjs/browser@^3.4.0":
+  "integrity" "sha512-pTR9wEj0KLrJBVWFfB6IFEwmGIod/6cfN541Y0TVN2+9Bbn+R9a8gq6GeJZ6ggbYs36J3gCTXDyVKhtxjRsjtw=="
+  "resolved" "https://registry.npmjs.org/@emailjs/browser/-/browser-3.4.0.tgz"
+  "version" "3.4.0"
+
 "@emotion/babel-plugin@^11.7.1":
   "integrity" "sha512-6mGSCWi9UzXut/ZAN6lGFu33wGR3SJisNl3c0tvlmb8XChH1b2SUvxvnOh7hvLpqyRdHHU9AiazV3Cwbk5SXKQ=="
   "resolved" "https://registry.npmjs.org/@emotion/babel-plugin/-/babel-plugin-11.7.2.tgz"
@@ -4713,6 +4718,11 @@
   "resolved" "https://registry.npmjs.org/dotenv-expand/-/dotenv-expand-5.1.0.tgz"
   "version" "5.1.0"
 
+"dotenv@^16.0.0":
+  "integrity" "sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q=="
+  "resolved" "https://registry.npmjs.org/dotenv/-/dotenv-16.0.0.tgz"
+  "version" "16.0.0"
+
 "dotenv@6.2.0":
   "integrity" "sha512-HygQCKUBSFl8wKQZBSemMywRWcEDNidvNbjGVyZu3nbZ8qq9ubiPoGLMdRDpfSrpkkm9BXYFkpKxxFX38o/76w=="
   "resolved" "https://registry.npmjs.org/dotenv/-/dotenv-6.2.0.tgz"
@@ -7974,6 +7984,13 @@
   "version" "6.0.0"
   dependencies:
     "yallist" "^4.0.0"
+
+"lzutf8@^0.6.1":
+  "integrity" "sha512-XsaftVRx/OFJC85vuqWsz4ihvD+DOOL1gU0UbgAR/MMLNvZWWOMncEnAAQf9XOMOHBeVcRxmujvWUo37LYJyMg=="
+  "resolved" "https://registry.npmjs.org/lzutf8/-/lzutf8-0.6.1.tgz"
+  "version" "0.6.1"
+  dependencies:
+    "readable-stream" "^3.6.0"
 
 "make-dir@^2.0.0", "make-dir@^2.1.0":
   "integrity" "sha512-LS9X+dc8KLxXCb8dni79fLIIUA5VyZoyjSMCwTluaXA0o27cCK0bhXkpgw+sTXVpPy/lSO57ilRixqk0vDmtRA=="

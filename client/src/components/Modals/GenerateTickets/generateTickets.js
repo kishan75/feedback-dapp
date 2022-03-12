@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import GenerateTicketsFunctionBox from '../../FunctionBox/GenerateTicketsFunctionBox/generateTicketsFunctionBox';
 
-import "./generateTickets.css";
+import emailjs, { init } from '@emailjs/browser';
+init("2pvfnImfRTGi6OSnk");
 
 
 const GenerateTickets = (props) => {
@@ -115,36 +116,26 @@ const GenerateTickets = (props) => {
 
         // Send Email
         if (ready) {
-            const mail = {
-                Host: "smtp.elasticemail.com",
-                Port: 2525,
-                Username: "feedback.dapp@gmail.com",
-                Password: "812195DD647B3B77757DA600C55529F34E3E",
-                To: ['binit.57.singh@gmail.com'], //genTicketsDetails.emails
-                From: "feedback.dapp@gmail.com",
-                Subject: "Feedback Request",
-                Body: "<b>Hello </b>there, <br><br>You are requested to sumbit a feedback for:<br>" +
-                    "<b>Course: </b>" + genTicketsDetails.name + "<br>" +
-                    "<b>Code: </b>" + genTicketsDetails.code + "<br>" +
-                    "<b>Year: </b>" + genTicketsDetails.year + "<br>" +
-                    "<b>Semester: </b>" + genTicketsDetails.sem + "<br>" +
-                    "<b>Professor: </b>" + "props.professorName" + "<br><br>" +
-                    "Please use this unique ticket: <b>YYXXZZ</b> to submit the feedack anonymously<br><br>" +
+            let templateParams = {
+                from: 'SYSTEM',
+                to: ['binit.57.singh@gmail.com', 'yee80andres@gmail.com'],
+                subject: "Registration Ticket",
+                reply_to: "feedback.dapp@gmail.com",
+                html: "<b>Respected sir</b>, <br><br>" +
+                    "Please use this unique ticket: <b>[ " + "r" + " ]</b> get registered <br><br>" +
                     "Best wishes,<br>" +
                     "Feedback-DApp team",
-            };
+            }
 
-            console.log(mail);
-            window.Email.send(mail)
-                .then(function (message) {
-                    if (message == 'OK')
-                        console.log('Email Sent', message)
-                    else
-                        console.log('Email Fail', message);
-                })
-                .catch(function (message) {
-                    console.log('Email Fail', message)
-                })
+            emailjs.send(process.env.EMAILJS_SERVICEID, process.env.EMAILJS_TEMPLATEID, templateParams)
+                .then(function (response) {
+                    //setToast({ message: 'TxN SUCCESS: Ticket generated and sent', severity: 'success', open: true });
+                    //setTimeout(() => props.closeModal(), 3500);
+                    console.log('Email success: ', response.status, response.text);
+                }, function (error) {
+                    //setToast({ message: 'ERROR: While sending email', severity: 'error', open: true });
+                    console.log('Email fail: ', error);
+                });
         }
     }
 

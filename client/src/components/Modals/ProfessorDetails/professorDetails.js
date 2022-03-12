@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ProfessorDetailsFunctionBox from '../../FunctionBox/ProfessorDetailsFunctionBox/professorDetailsFunctionBox';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
 import "./professorDetails.css";
+
+import fs from 'fs';
+const LZUTF8 = require('lzutf8');
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -103,6 +106,36 @@ const ProfessorDetails = (props) => {
     };
 
 
+    const convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file)
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+            }
+            fileReader.onerror = (error) => {
+                console.log(error);
+                reject(error);
+            }
+        })
+    }
+
+
+    const handleImageFileUpload = async (e) => {
+        switch (e.target.name) {
+            case 'imagefile':
+                const file = e.target.files[0];
+
+                const base64 = await convertBase64(file)
+                console.log(base64);
+
+                break;
+            default:
+                console.error('Error while uploading file'); break;
+        }
+    }
+
+
     // Validators
     const validateProfessorInput = (field, value, updatedErrors) => {
         switch (field) {
@@ -158,6 +191,7 @@ const ProfessorDetails = (props) => {
                     errors={professorErrors}
                     handleInputChange={handleProfessorInputChange}
                     handleSubmit={handlerProfessorSubmit}
+                    handleFileChange={handleImageFileUpload}
                 />
             </div>
         </div>
