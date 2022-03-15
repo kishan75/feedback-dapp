@@ -1,84 +1,99 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route } from 'react-router-dom';
-import { loadAll, loadBalance, loadProfessorData } from './scripts/loader'
+import { Routes, Route } from "react-router-dom";
+import {
+  loadContracts,
+  loadCourses,
+  loadEmails,
+  loadFeedbacks,
+  loadProfsByEmail,
+  loadSkills,
+  loadSkillsCount,
+  setupMetamask,
+} from "./scripts/loader";
 
 // Pages
-import HomePage from './pages/HomePage/homePage';
+import HomePage from "./pages/HomePage/homePage";
 
 import "./App.css";
+import { Loader } from "./components/utils/Loader";
 
 const App = () => {
-  const [mainState, setMainState] = useState({
-    web3: null,
-    contract: {
-      transactor: null,
-      bhuToken: null,
-      feedbackData: null
-    },
-    account: {
-      address: '0x0',
-      balance: 0
-    },
-    professor: {
+  const [profEmails, setProfEmails] = useState(null);
+  const [addressToEmail, setAddressToEmail] = useState(null);
 
-    },
+  const [profsDetails, setProfsDetails] = useState(null);
+  const [skillCount, setSkillCount] = useState(null);
+  const [profCourses, setProfCourses] = useState(null);
+  const [feedbacks, setFeedbacks] = useState(null);
 
-  })
+  const [account, setAccount] = useState(null);
+  const [showLoader, setLoader] = useState(true);
+  const [contracts, setContracts] = useState(null);
 
+  const [skills, setSkills] = useState(null);
+  const [isProf, setIsProf] = useState(false);
 
   // React useEffects
   useEffect(() => {
-    loadAll().then((e) => {
-      setMainState({
-        web3: null,
-        contract: {
-          transactor: e.transactorContract,
-          bhuToken: e.bhuTokenContract,
-          feedbackData: e.feedbackDataContract
-        },
-        account: {
-          address: e.accountAddress,
-          balance: e.accountBalance
-        },
-        professor: {
-          emails: e.professorEmails,
-          datas: e.professerDatas,
-        },
-      });
-      console.log(e.feedbackDataContract);
-    });
-  }, [mainState.accountAddress])
+    (async () => {
+      const accountAddress = await setupMetamask();
+      setAccount(accountAddress);
 
-  // Handlers
-  const handleBalanceChange = () => {
-    loadBalance(mainState.transactorContract, mainState.accountAddress).then((e) => {
-      setMainState({
-        ...mainState,
-        account: { ...mainState.account, balance: e.accountBalance }
-      });
-    });
-  }
+      const deployedContracts = await loadContracts();
+      setContracts(deployedContracts);
 
-  const handleProfessorDataChange = () => {
-    loadProfessorData().then((e) => {
-      setMainState({
-        ...mainState,
-        professor: { ...mainState.professor, datas: e.professerDatas }
-      });
-    });
-  }
+      const skills = await loadSkills(deployedContracts);
+      setSkills(skills);
+
+      const emails = await loadEmails(deployedContracts);
+      setProfEmails(emails);
+
+      const profs = await loadProfsByEmail(deployedContracts, emails);
+      setProfsDetails(profs.profsDetails);
+      setAddressToEmail(profs.addressToEmail);
+      setIsProf(profs.addressToEmail[accountAddress] !== undefined);
+
+      const courses = await loadCourses(deployedContracts, emails);
+      setProfCourses(courses);
+
+      const { feedbacks, updatedCourses } = await loadFeedbacks(
+        deployedContracts,
+        emails,
+        courses
+      );
+      setFeedbacks(feedbacks);
+      //TODO update course with added feedbacks
+      console.log(feedbacks, updatedCourses);
+
+      const { skillsUpvote, updatedProfsDetail } = await loadSkillsCount(
+        contracts,
+        emails,
+        profs
+      );
+      setSkillCount(skillsUpvote);
+      //TODO update profdetails with skills
+      console.log(skillsUpvote, updatedProfsDetail);
+    })();
+    setLoader(false);
+  }, []);
 
   return (
     <div className="App">
+      <Loader show={showLoader}></Loader>
       <Routes>
-        <Route exact path='/' element={<HomePage
-          mainState={mainState}
-          handleBalanceChange={handleBalanceChange}
-          handleProfessorDataChange={handleProfessorDataChange}
-        />} />
+        <Route
+          exact
+          path="/"
+          element={
+            <HomePage
+            // mainState={mainState}
+            // handleBalanceChange={handleBalanceChange}
+            />
+          }
+        />
       </Routes>
     </div>
   );
-}
+};
 
 export default App;
