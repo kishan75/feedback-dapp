@@ -42,10 +42,10 @@ const Admin = (props) => {
 
     // Asyncs:
     const writeTicketToBlockChain = async () => {
-        const feedbackData = props.mainState.contract.feedbackData;
+        const feedbackData = props.contract.feedbackData;
         if (feedbackData != undefined) {
-            let result = await feedbackData.generateTokenForProfReg(genProfTicketDetails.password, { from: props.mainState.account.address });
-            result = result.logs[0].args["token"];
+            let result = await feedbackData.methods.generateTokenForProfReg(genProfTicketDetails.password).send({ from: props.account });
+            result = result.events.tokenGenerated.returnValues[0];
             console.log(result);
             return result
         } else {
@@ -56,11 +56,12 @@ const Admin = (props) => {
 
 
     const writePasswordToBlockChain = async () => {
-        const feedbackData = props.mainState.contract.feedbackData;
+        const feedbackData = props.contract.feedbackData;
         if (feedbackData != undefined) {
-            let result = await feedbackData.updatePassword(changePasswordDetails.old, changePasswordDetails.new, { from: props.mainState.account.address });
-            //result = result.logs[0].args["professor"];
+            let result = await feedbackData.methods.updatePassword(changePasswordDetails.old, changePasswordDetails.new).send({ from: props.account });
+            result = result.events.tokenGenerated.returnValues[0];
             console.log(result);
+            return true
         } else {
             setToast({ message: 'INTERNAL-ERROR: Contract not deployed', severity: 'error', open: true });
             console.log('Feedback contract not deployed');
@@ -119,11 +120,11 @@ const Admin = (props) => {
 
                     let templateParams = {
                         from: 'SYSTEM',
-                        to: ['kishan.chaurasiya.75@gmail.com', 'yee80andres@gmail.com'],
+                        to: 'binit.57.singh@gmail.com',//genProfTicketDetails.email,
                         subject: "Registration Ticket",
                         reply_to: "feedback.dapp@gmail.com",
                         html: "<b>Respected sir</b>, <br><br>" +
-                            "Please use this unique ticket: <b>[ " + r + " ]</b> to get registered. PLease do not share this with anyone. <br><br>" +
+                            "Please use this unique ticket: <b>[ " + r + " ]</b> to get registered. Please do not share this with anyone. <br><br>" +
                             "Best wishes,<br>" +
                             "Feedback-DApp team",
                     }
@@ -175,7 +176,7 @@ const Admin = (props) => {
         if (ready) {
             writePasswordToBlockChain()
                 .then(r => {
-                    console.log(r);
+                    console.log('Password changed: ', r);
                     setToast({ message: 'TxN SUCCESS: Password changed', severity: 'success', open: true });
                     setTimeout(() => props.closeModal(), 3500);
                 }
@@ -183,7 +184,7 @@ const Admin = (props) => {
                     console.log(e);
                     if (e.code == '4001')
                         setToast({ message: 'TxN WARN: Denied by user', severity: 'warning', open: true });
-                    else if (props.mainState.contract.feedbackData == null)
+                    else if (props.contract.feedbackData == null)
                         setToast({ message: 'INTERNAL-ERROR: Contract not deployed', severity: 'error', open: true });
                     else if (e.code == '-32603')
                         setToast({ message: 'TxN ERROR: Old password is invalid', severity: 'error', open: true });

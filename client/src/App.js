@@ -44,6 +44,7 @@ const App = () => {
       const deployedContracts = await loadContracts();
       setContracts(deployedContracts);
 
+      console.log(deployedContracts);
       const skills = await loadSkills(deployedContracts);
       setSkills(skills);
 
@@ -68,7 +69,7 @@ const App = () => {
       console.log(feedbacks, updatedCourses);
 
       const { skillsUpvote, updatedProfsDetail } = await loadSkillsCount(
-        contracts,
+        deployedContracts,
         emails,
         profs
       );
@@ -88,8 +89,10 @@ const App = () => {
           path="/"
           element={
             <HomePage
-            // mainState={mainState}
-            // handleBalanceChange={handleBalanceChange}
+              contracts={contracts}
+              profsDetails={profsDetails}
+              account={account}
+              emailMap={addressToEmail}
             />
           }
         />

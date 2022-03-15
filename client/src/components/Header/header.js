@@ -91,7 +91,7 @@ const Header = (props) => {
               aria-describedby="For ticket distribution via mail"
             >
               <Box sx={styleGenTickets}>
-                <GenerateTickets />
+                <GenerateTickets {...props} />
               </Box>
             </Modal>
             <li>
@@ -106,7 +106,7 @@ const Header = (props) => {
               aria-describedby="For ticket distribution via mail"
             >
               <Box sx={styleAddCourses}>
-                <AddCourseDetails mainState={props.mainState} closeModal={handleCloseAddCourses} />
+                <AddCourseDetails {...props} closeModal={handleCloseAddCourses} />
               </Box>
             </Modal>
             <li>
@@ -120,7 +120,7 @@ const Header = (props) => {
               aria-describedby="Register professor to database"
             >
               <Box sx={styleProfessorDetails}>
-                <ProfessorDetails mainState={props.mainState} closeModal={handleCloseProfessorRegistry} />
+                <ProfessorDetails {...props} closeModal={handleCloseProfessorRegistry} />
               </Box>
             </Modal>
           </ul>

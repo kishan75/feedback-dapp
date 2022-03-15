@@ -5,12 +5,12 @@ import Header from '../../components/Header/header';
 import AdminBar from '../../components/AdminBar/adminBar';
 
 const homePage = (props) => {
-    const professerDatas = props.professerDatas;
 
     return (
+
         <div>
-            <AdminBar mainState={props.mainState} />
-            <Header mainState={props.mainState} />
+            <AdminBar {...props} />
+            <Header {...props} />
             <section>
                 <Sections />
                 <Sections2 />

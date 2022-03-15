@@ -13,7 +13,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const ProfessorDetails = (props) => {
     const [professorDetails, setProfessorDetails] = useState({
-        address: props.mainState.account.address,
+        address: props.account,
         ticket: '',
         name: 'Dr. ',
         email: '',
@@ -36,11 +36,11 @@ const ProfessorDetails = (props) => {
 
     // Asyncs:
     const writeToBlockChain = async () => {
-        const feedbackData = props.mainState.contract.feedbackData;
-        if (feedbackData) {
-            let result = await feedbackData.createProfessor(professorDetails.name, professorDetails.email, professorDetails.ticket, { from: professorDetails.address });
-            result = result.logs[0].args["professor"];
+        const feedbackData = props.contracts.feedbackData;
+        if (feedbackData != undefined) {
+            let result = await feedbackData.methods.createProfessor(professorDetails.name, professorDetails.email, '', professorDetails.ticket).send({ from: professorDetails.address });
             console.log(result);
+            return result
         } else {
             setToast({ message: 'INTERNAL-ERROR: Feedback contract not deployed', severity: 'error', open: true });
             console.log('Feedback contract not deployed');
@@ -145,7 +145,10 @@ const ProfessorDetails = (props) => {
                             file: e.target.files[0]
                         });
                     })
-                    .catch(err => console.log(err));
+                    .catch(err => {
+                        setToast({ message: 'UPLOAD ERROR: Something went wrong or already uploaded with current account', severity: 'error', open: true });
+                        console.log(err)
+                    });
 
                 break;
             default:
@@ -191,7 +194,7 @@ const ProfessorDetails = (props) => {
                 break;
             case 'file':
                 if (value.length == 0)
-                    updatedErrors[field] = 'Must upload your display image';
+                    updatedErrors[field] = 'Must upload display picture';
                 else
                     updatedErrors[field] = ''
                 break

@@ -10,7 +10,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const AddCourses = (props) => {
     const [addCourseDetails, setAddCourseDetails] = useState({
-        email: 'fixedemail@iitbhu.ac.in',
+        email: props.emailMap[props.account],
         year: '',
         numCourses: '',
         courses: [{
@@ -133,23 +133,19 @@ const AddCourses = (props) => {
 
     // Asyncs:
     const writeToBlockChain = async () => {
-        const feedbackData = props.mainState.contract.feedbackData;
+        const feedbackData = props.contracts.feedbackData;
         const courses = addCourseDetails.courses;
-        console.log(feedbackData);
-        console.log(courses);
         if (feedbackData) {
             for (var i = 0; i < courses.length; i++) {
                 const { name, code, sem, students } = courses[i];
-                let result = await feedbackData.addCourse(
+                let result = await feedbackData.methods.addCourse(
                     addCourseDetails.year,
                     addCourseDetails.email,
                     name,
                     code,
                     sem,
-                    students, { from: props.mainState.account.address }
-                );
+                    students).send({ from: props.account });
 
-                result = result.logs[0].args["course"];
                 console.log(result);
                 if (result == undefined)
                     setToast({ message: `INTERNAL-ERROR: No response for TxN[${i + 1}, ${code}]`, severity: 'error', open: true });

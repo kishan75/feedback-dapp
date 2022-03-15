@@ -152,6 +152,7 @@ export const loadFeedbacks = async (contracts, emails, courses) => {
 };
 
 export const loadSkillsCount = async (contracts, emails, profsDetails) => {
+  //console.log(contracts, contracts, '------------------');
   let result = await contracts.feedbackData.methods
     .getSkillsUpvotesByEmails(emails)
     .call();

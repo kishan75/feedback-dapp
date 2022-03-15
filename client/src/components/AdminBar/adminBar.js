@@ -29,7 +29,7 @@ const AdminBar = (props) => {
                         aria-describedby="For admin controls"
                     >
                         <Box sx={style}>
-                            <Admin mainState={props.mainState} closeModal={handleCloseAdmin} />
+                            <Admin account={props.account} contract={props.contracts} closeModal={handleCloseAdmin} />
                         </Box>
                     </Modal>
                 </ul>
