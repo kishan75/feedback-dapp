@@ -1,4 +1,3 @@
-const web3Utils = require("web3-utils");
 const { assert, expect } = require("chai");
 
 const FeedbackData = artifacts.require("FeedbackData");
@@ -40,10 +39,16 @@ contract("FeedbackData", ([]) => {
     it("is creating professor", async () => {
       const name = "kk sir";
       const email = "kk@gmail.com";
+      const profilePicture = "";
       let key = await feedbackData.generateTokenForProfReg(adminKey);
       key = key.logs[0].args["token"];
 
-      let result = await feedbackData.createProfessor(name, email, key);
+      let result = await feedbackData.createProfessor(
+        name,
+        email,
+        profilePicture,
+        key
+      );
       result = result.logs[0].args["professor"];
 
       profData = { ...profData, [email]: result };
@@ -64,10 +69,16 @@ contract("FeedbackData", ([]) => {
     ["1@gmail", "2@gm"].forEach((email) => {
       it("is creating professor", async () => {
         const name = "kk sir";
+        const profilePicture = "";
         let key = await feedbackData.generateTokenForProfReg(adminKey);
         key = key.logs[0].args["token"];
 
-        let result = await feedbackData.createProfessor(name, email, key);
+        let result = await feedbackData.createProfessor(
+          name,
+          email,
+          profilePicture,
+          key
+        );
         result = result.logs[0].args["professor"];
 
         profData = { ...profData, [email]: result };
@@ -184,10 +195,16 @@ contract("FeedbackData", ([]) => {
 
     it("is creating professor", async () => {
       let name = "kk sir";
+      const profilePicture = "";
       let key = await feedbackData.generateTokenForProfReg(adminKey);
       key = key.logs[0].args["token"];
 
-      let result = await feedbackData.createProfessor(name, email, key);
+      let result = await feedbackData.createProfessor(
+        name,
+        email,
+        profilePicture,
+        key
+      );
       result = result.logs[0].args["professor"];
       expect(result).to.not.be.undefined;
     });
@@ -231,10 +248,16 @@ contract("FeedbackData", ([]) => {
 
     it("is creating professor", async () => {
       let name = "kk sir";
+      const profilePicture = "";
       let key = await feedbackData.generateTokenForProfReg(adminKey);
       key = key.logs[0].args["token"];
 
-      let result = await feedbackData.createProfessor(name, email, key);
+      let result = await feedbackData.createProfessor(
+        name,
+        email,
+        profilePicture,
+        key
+      );
       result = result.logs[0].args["professor"];
       expect(result).to.not.be.undefined;
     });
@@ -284,12 +307,20 @@ contract("FeedbackData", ([]) => {
           updatedRating,
           feedback
         );
-        console.log(result.logs[0], result.logs[1]);
+        // console.log(result.logs[0], result.logs[1]);
         // expect(result.logs[0].args["skills"])
         //   .to.be.an("array")
         //   .include.all.members(skills);
         // expect(result.logs[0].args["content"]).to.equal(feedback.content);
       }
+    });
+  });
+
+  describe("Get all details", async () => {
+    it("fetching all emails and data", async () => {
+      let emails = await feedbackData.getProfessorIds();
+      result = await feedbackData.getCoursesByEmails(emails);
+      console.log(result);
     });
   });
 });
