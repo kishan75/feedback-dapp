@@ -45,6 +45,7 @@ contract FeedbackData {
     struct Professor {
         string name;
         string email;
+        string profilePicture;
         address addressId;
         Float rating;
     }
@@ -133,6 +134,7 @@ contract FeedbackData {
     function createProfessor(
         string calldata name,
         string calldata email,
+        string calldata profilePicture,
         bytes32 secret
     ) public {
         require(
@@ -150,6 +152,7 @@ contract FeedbackData {
             name: name,
             email: email,
             addressId: msg.sender,
+            profilePicture: profilePicture,
             rating: Float(0, 0)
         });
 
@@ -192,6 +195,18 @@ contract FeedbackData {
         return _feedbacks;
     }
 
+    function getFeedbacksByEmails(string[] calldata _emails)
+        public
+        view
+        returns (Feedback[][][] memory)
+    {
+        Feedback[][][] memory _feedbacks = new Feedback[][][](_emails.length);
+        for (uint256 i = 0; i < _emails.length; i++) {
+            _feedbacks[i] = getFeedbacks(_emails[i]);
+        }
+        return _feedbacks;
+    }
+
     function getCourses(string calldata _email)
         public
         view
@@ -204,6 +219,18 @@ contract FeedbackData {
             _courses[i] = courses[profCred_Keys[_email].courses[i]];
         }
 
+        return _courses;
+    }
+
+    function getCoursesByEmails(string[] calldata _emails)
+        public
+        view
+        returns (Course[][][] memory)
+    {
+        Course[][][] memory _courses = new Course[][][](_emails.length);
+        for (uint256 i = 0; i < _emails.length; i++) {
+            _courses[i] = getCourses(_emails[i]);
+        }
         return _courses;
     }
 
@@ -225,6 +252,20 @@ contract FeedbackData {
             });
         }
 
+        return skillUpvotes;
+    }
+
+    function getSkillsUpvotesByEmails(string[] calldata _emails)
+        public
+        view
+        returns (SkillsUpvoteCount[][] memory)
+    {
+        SkillsUpvoteCount[][] memory skillUpvotes = new SkillsUpvoteCount[][](
+            _emails.length
+        );
+        for (uint256 i = 0; i < _emails.length; i++) {
+            skillUpvotes[i] = getSkillsUpvote(_emails[i]);
+        }
         return skillUpvotes;
     }
 
