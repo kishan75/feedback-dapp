@@ -74,7 +74,7 @@ export const loadProfsByEmail = async (contracts, emails) => {
 
   result.forEach((prof) => {
     let { name, email, profilePicture, addressId, rating } = prof;
-    addressId.toLowerCase();
+    addressId = addressId.toLowerCase();
 
     profsDetails[email] = {
       name,
@@ -101,7 +101,8 @@ export const loadCourses = async (contracts, emails) => {
     courses = [].concat(...courses);
 
     courses.forEach((course) => {
-      const { name, code, semester, year, studentCount } = course;
+      const { name, code, semester, year, studentCount, ticketGenerated } =
+        course;
       if (yearWise[year] === undefined) yearWise[year] = {};
       if (yearWise[year][semester] === undefined) yearWise[year][semester] = {};
       yearWise[year][semester][code] = {
@@ -110,6 +111,7 @@ export const loadCourses = async (contracts, emails) => {
         semester,
         year,
         studentCount,
+        ticketGenerated,
         feedbacks: [],
       };
     });
@@ -148,9 +150,8 @@ export const loadFeedbacks = async (contracts, emails, courses) => {
     });
 
     feedbacks[email] = yearWise;
-    let updatedCourses = courses;
   }
-  return { feedbacks, updatedCourses };
+  return { feedbacks, updatedCourses: courses };
 };
 
 export const loadSkillsCount = async (contracts, emails, profsDetails) => {
@@ -170,7 +171,7 @@ export const loadSkillsCount = async (contracts, emails, profsDetails) => {
     });
 
     skillsUpvote[email] = skills;
-    profsDetails["skillsUpvote"] = skills;
+    profsDetails[email]["skillsUpvote"] = skills;
   }
 
   return { skillsUpvote, updatedProfsDetail: profsDetails };
