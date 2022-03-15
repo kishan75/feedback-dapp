@@ -119,6 +119,7 @@ const App = () => {
               profsDetails={profsDetails}
               account={account}
               emailMap={addressToEmail}
+              courses={courses}
             />
           }
         />

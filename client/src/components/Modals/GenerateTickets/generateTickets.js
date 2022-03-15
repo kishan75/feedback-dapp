@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import GenerateTicketsFunctionBox from '../../FunctionBox/GenerateTicketsFunctionBox/generateTicketsFunctionBox';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 import emailjs, { init } from '@emailjs/browser';
 init("2pvfnImfRTGi6OSnk");
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const GenerateTickets = (props) => {
     const [genTicketsDetails, setGenTicketsDetails] = useState({
@@ -19,7 +24,7 @@ const GenerateTickets = (props) => {
         name: '',
         code: '',
         year: '',
-        sem: '',
+        semester: '',
         students: '',
         emails: ''
     })
@@ -33,22 +38,25 @@ const GenerateTickets = (props) => {
         students: []
     });
 
+    const [toast, setToast] = useState({
+        message: '',
+        severity: '',
+        open: false
+    })
 
     // React useEffect
     // Get professor's course data from blockchain
     useEffect(() => {
-        let courseDatas = [{
-            name: 'NetSec',
-            code: 'CSE-69',
-            year: '2021',
-            students: '20',
-        },
-        {
-            name: 'NetSec2',
-            code: 'CSE-692',
-            year: '2022',
-            students: '25',
-        }]
+        console.log(props.courses[props.emailMap[props.account]])
+        const coursesObj = props.courses[props.emailMap[props.account]]
+        const courseDatas = []
+        for (var year in coursesObj)
+            if (coursesObj.hasOwnProperty(year))
+                for (var sem in coursesObj[year])
+                    if (coursesObj[year].hasOwnProperty(sem))
+                        for (var code in coursesObj[year][sem])
+                            if (coursesObj[year][sem].hasOwnProperty(code))
+                                courseDatas.push(coursesObj[year][sem][code])
 
         setCourseDatas(courseDatas);
 
@@ -58,6 +66,27 @@ const GenerateTickets = (props) => {
 
         setCourseNameOptions(courseNameOptions);
     }, []);
+
+
+    // Asyncs:
+    const writeTicketToBlockChain = async () => {
+        const feedbackData = props.contracts.feedbackData;
+        if (feedbackData != undefined) {
+            let result = await feedbackData.methods.generateTickets(
+                props.emailMap[props.account],
+                genTicketsDetails.year,
+                genTicketsDetails.sem,
+                genTicketsDetails.code,
+                (Math.random() + 1).toString(36).substring(7),
+            ).send({ from: props.account });
+            result = result.events.ticketGenerated.returnValues.tickets;
+            console.log(result);
+            return result
+        } else {
+            setToast({ message: 'INTERNAL-ERROR: Contract not deployed', severity: 'error', open: true });
+            console.log('Feedback contract not deployed');
+        }
+    }
 
 
 
@@ -70,12 +99,13 @@ const GenerateTickets = (props) => {
             students: []
         }
 
-        updatedCourseCodeOptions.sem = ['Even', 'Odd']
+        const semester = { 0: 'Even', 1: 'Odd' };
         for (var i = 0; i < courseDatas.length; i++) {
             if (courseDatas[i].name == event.target.value) {
                 updatedCourseCodeOptions.code.push(courseDatas[i].code);
                 updatedCourseCodeOptions.year.push(courseDatas[i].year);
-                updatedCourseCodeOptions.students.push(courseDatas[i].students);
+                updatedCourseCodeOptions.sem.push(semester[courseDatas[i].semester]);
+                updatedCourseCodeOptions.students.push(courseDatas[i].studentCount);
             }
         }
         setCourseDataOptions(updatedCourseCodeOptions);
@@ -114,27 +144,43 @@ const GenerateTickets = (props) => {
         console.log(genTicketsDetails);
         console.log(fastGenTicketsErrors);
 
-        // Send Email
-        if (ready) {
-            let templateParams = {
-                from: 'SYSTEM',
-                to: ['binit.57.singh@gmail.com', 'yee80andres@gmail.com'],
-                subject: "Registration Ticket",
-                reply_to: "feedback.dapp@gmail.com",
-                html: "<b>Respected sir</b>, <br><br>" +
-                    "Please use this unique ticket: <b>[ " + "r" + " ]</b> get registered <br><br>" +
-                    "Best wishes,<br>" +
-                    "Feedback-DApp team",
-            }
 
-            emailjs.send(process.env.EMAILJS_SERVICEID, process.env.EMAILJS_TEMPLATEID, templateParams)
-                .then(function (response) {
-                    //setToast({ message: 'TxN SUCCESS: Ticket generated and sent', severity: 'success', open: true });
-                    //setTimeout(() => props.closeModal(), 3500);
-                    console.log('Email success: ', response.status, response.text);
-                }, function (error) {
-                    //setToast({ message: 'ERROR: While sending email', severity: 'error', open: true });
-                    console.log('Email fail: ', error);
+        // Send Email
+        const semester = { 0: 'Even', 1: 'Odd' };
+        if (ready) {
+            writeTicketToBlockChain()
+                .then(res => {
+                    console.log(res);
+                    for (var i = 0; i < res.length; i++) {
+                        let templateParams = {
+                            from: 'SYSTEM',
+                            to: genTicketsDetails.emails,
+                            subject: "Registration Ticket",
+                            reply_to: "feedback.dapp@gmail.com",
+                            course_name: genTicketsDetails.name,
+                            course_code: genTicketsDetails.code,
+                            course_year: genTicketsDetails.year,
+                            course_sem: semester[genTicketsDetails.sem],
+                            ticket: res[i]
+                        }
+
+                        emailjs.send('service_kqkqbxv', 'template_c496wv7', templateParams)
+                            .then(function (response) {
+                                setToast({ message: 'TxN SUCCESS: Ticket generated and sent', severity: 'success', open: true });
+                                setTimeout(() => props.closeModal(), 3500);
+                                console.log('Email success: ', response.status, response.text);
+                            }, function (error) {
+                                setToast({ message: 'ERROR: While sending email', severity: 'error', open: true });
+                                console.log('Email fail: ', error);
+                            })
+                    }
+                }).catch(e => {
+                    ready = false;
+                    console.log(e);
+                    if (e.code == '4001')
+                        setToast({ message: 'TxN WARN: Denied by user', severity: 'warning', open: true });
+                    else
+                        setToast({ message: 'TxN ERROR: Something went wrong', severity: 'error', open: true });
                 });
         }
     }
@@ -166,6 +212,12 @@ const GenerateTickets = (props) => {
                 console.error('Error while uploading file'); break;
         }
     }
+
+    const handleToastClose = (event, reason) => {
+        if (reason === 'clickaway')
+            return;
+        setToast({ ...toast, open: false });
+    };
 
 
     // Validators
@@ -203,7 +255,7 @@ const GenerateTickets = (props) => {
             case 'sem':
                 if (value.length == 0)
                     updatedErrors[field] = 'Cannot be empty';
-                else if (!(value == 'Even' || value == 'Odd'))
+                else if (!(value == 1 || value == 0))
                     updatedErrors[field] = 'Can only be Even or Odd';
                 else
                     updatedErrors[field] = ''
@@ -223,17 +275,25 @@ const GenerateTickets = (props) => {
 
 
     return (
-        <div className='cards'>
-            <GenerateTicketsFunctionBox
-                data={genTicketsDetails}
-                errors={genTicketsErrors}
-                mainOptions={courseNameOptions}
-                subOptions={courseDataOptions}
-                handleMainChange={handleCourseNameChanged}
-                handleInputChange={handleGenTicketsInputChange}
-                handleFileChange={handleEmailFileUpload}
-                handleSubmit={handleGenTicketsSubmit}
-            />
+        <div>
+            <Snackbar autoHideDuration={4500} open={toast.open}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={handleToastClose}>
+                <Alert severity={toast.severity} sx={{ width: '100%' }}>
+                    {toast.message}
+                </Alert>
+            </Snackbar>
+            <div className='cards'>
+                <GenerateTicketsFunctionBox
+                    data={genTicketsDetails}
+                    errors={genTicketsErrors}
+                    mainOptions={courseNameOptions}
+                    subOptions={courseDataOptions}
+                    handleMainChange={handleCourseNameChanged}
+                    handleInputChange={handleGenTicketsInputChange}
+                    handleFileChange={handleEmailFileUpload}
+                    handleSubmit={handleGenTicketsSubmit}
+                />
+            </div>
         </div>
     );
 };

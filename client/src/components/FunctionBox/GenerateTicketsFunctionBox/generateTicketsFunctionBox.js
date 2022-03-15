@@ -115,7 +115,7 @@ const generateTicketsFunctionBox = (props) => {
                                 <em>None</em>
                             </MenuItem>
                             {semOptions.map((value, idx) => (
-                                <MenuItem key={idx} value={value}> {value} </MenuItem>
+                                <MenuItem key={idx} value={idx}> {value} </MenuItem>
                             ))}
                         </Select>
                         <FormHelperText>{errors.sem}</FormHelperText>

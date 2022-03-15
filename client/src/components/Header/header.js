@@ -91,7 +91,7 @@ const Header = (props) => {
               aria-describedby="For ticket distribution via mail"
             >
               <Box sx={styleGenTickets}>
-                <GenerateTickets {...props} />
+                <GenerateTickets {...props} closeModal={handleCloseGenerateTickets} />
               </Box>
             </Modal>
             <li>

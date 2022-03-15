@@ -74,7 +74,7 @@ export const loadProfsByEmail = async (contracts, emails) => {
 
   result.forEach((prof) => {
     let { name, email, profilePicture, addressId, rating } = prof;
-    addressId.toLowerCase();
+    addressId = addressId.toLowerCase();
 
     profsDetails[email] = {
       name,
