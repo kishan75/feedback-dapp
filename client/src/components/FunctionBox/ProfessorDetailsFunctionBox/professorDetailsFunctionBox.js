@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
 
 // Adornments
 import InputAdornment from '@mui/material/InputAdornment';
@@ -109,11 +108,13 @@ const professorDetailsFunctionBox = (props) => {
                 </Button>
 
                 <label htmlFor="icon-button-img">
-                    <Input id="icon-button-img" accept=".jpeg, .jpg, .png" type="file" name='imagefile' onChange={props.handleFileChange} />
+                    <Input id="icon-button-img" accept=".jpeg, .jpg, .png" type="file" name='pic' onChange={props.handleFileChange} />
                     <Button sx={{ m: 2, width: 250 }} variant="outlined" component="span" color="error" startIcon={<PhotoCamera style={{ color: 'red' }} />}>
                         Upload Image
                     </Button>
                 </label>
+                <br></br>
+                {errors.file}
             </div>
         </div>
     );

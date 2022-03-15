@@ -14,6 +14,8 @@ const Sections = (props) => {
 
   let { pathname } = useLocation();
 
+  const profAddresses = ['abcd', 'efgh', 'ijkl'] // dum dum
+  const imgAddr = ['https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'] // dum dum
 
   // Handlers
   const handleRenderOnClick = (idx, bool) => {
@@ -48,6 +50,12 @@ const Sections = (props) => {
         });
       });
       console.log("Homepage Rerendering...")
+
+      // let $bg_eles = document.getElementsByClassName('el__bg')
+      // for (var i = 0; i < $bg_eles.length; i++) {
+      //   $bg_eles[i].style.backgroundImage = `url(https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg)`
+      // }
+
     }, 1000)
   }, [pathname]);
 

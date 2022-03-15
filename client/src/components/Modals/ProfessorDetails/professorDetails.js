@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import ProfessorDetailsFunctionBox from '../../FunctionBox/ProfessorDetailsFunctionBox/professorDetailsFunctionBox';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
 import "./professorDetails.css";
-
-import fs from 'fs';
-const LZUTF8 = require('lzutf8');
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -19,6 +17,7 @@ const ProfessorDetails = (props) => {
         ticket: '',
         name: 'Dr. ',
         email: '',
+        file: '',
     });
 
     const [professorErrors, setProfessorErrors] = useState({
@@ -26,6 +25,7 @@ const ProfessorDetails = (props) => {
         ticket: '',
         name: '',
         email: '',
+        file: '',
     })
 
     const [toast, setToast] = useState({
@@ -123,11 +123,29 @@ const ProfessorDetails = (props) => {
 
     const handleImageFileUpload = async (e) => {
         switch (e.target.name) {
-            case 'imagefile':
+            case 'pic':
                 const file = e.target.files[0];
-
                 const base64 = await convertBase64(file)
                 console.log(base64);
+
+                const data = new FormData();
+                data.append("image", e.target.files[0]);
+                data.append("address", professorDetails.address);
+                const config = {
+                    headers: {
+                        "Content-type": 'multipart/form-data',
+                    },
+                };
+                axios.post("http://127.0.0.1:5001/upload", data, config)
+                    .then(res => {
+                        console.log(res)
+
+                        setProfessorDetails({
+                            ...professorDetails,
+                            file: e.target.files[0]
+                        });
+                    })
+                    .catch(err => console.log(err));
 
                 break;
             default:
@@ -171,6 +189,12 @@ const ProfessorDetails = (props) => {
                 else
                     updatedErrors[field] = ''
                 break;
+            case 'file':
+                if (value.length == 0)
+                    updatedErrors[field] = 'Must upload your display image';
+                else
+                    updatedErrors[field] = ''
+                break
         }
         return updatedErrors;
     }

@@ -10,6 +10,7 @@
     "@mui/material": "^5.4.4",
     "@mui/x-data-grid": "^5.6.0",
     "@truffle/contract": "^4.4.11",
+    "axios": "^0.26.1",
     "dotenv": "^16.0.0",
     "lzutf8": "^0.6.1",
     "react": "^17.0.2",
@@ -21,7 +22,7 @@
     "web3": "^1.7.1"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
+    "start": "react-scripts --openssl-legacy-provider start --host 0.0.0.0",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
