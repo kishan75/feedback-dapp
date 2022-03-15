@@ -74,6 +74,7 @@ export const loadProfsByEmail = async (contracts, emails) => {
 
   result.forEach((prof) => {
     let { name, email, profilePicture, addressId, rating } = prof;
+    addressId.toLowerCase();
 
     profsDetails[email] = {
       name,
@@ -143,12 +144,13 @@ export const loadFeedbacks = async (contracts, emails, courses) => {
         skills,
       };
 
-      courses[email][year][semester][code].feedback.push({ content, skills });
+      courses[email][year][semester][code].feedbacks.push({ content, skills });
     });
 
     feedbacks[email] = yearWise;
+    let updatedCourses = courses;
   }
-  return { feedbacks, courses };
+  return { feedbacks, updatedCourses };
 };
 
 export const loadSkillsCount = async (contracts, emails, profsDetails) => {
@@ -172,4 +174,11 @@ export const loadSkillsCount = async (contracts, emails, profsDetails) => {
   }
 
   return { skillsUpvote, updatedProfsDetail: profsDetails };
+};
+
+export const getBalance = async (contracts, address) => {
+  let balance = await contracts.feedbackData.methods
+    .checkBalance(address)
+    .call();
+  return balance;
 };
