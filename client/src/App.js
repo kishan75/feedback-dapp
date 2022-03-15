@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import {
+  getBalance,
   loadContracts,
   loadCourses,
   loadEmails,
@@ -23,10 +24,11 @@ const App = () => {
 
   const [profsDetails, setProfsDetails] = useState(null);
   const [skillCount, setSkillCount] = useState(null);
-  const [profCourses, setProfCourses] = useState(null);
+  const [courses, setCourses] = useState(null);
   const [feedbacks, setFeedbacks] = useState(null);
 
   const [account, setAccount] = useState(null);
+  const [balance, setBalance] = useState(null);
   const [showLoader, setLoader] = useState(true);
   const [contracts, setContracts] = useState(null);
 
@@ -36,46 +38,71 @@ const App = () => {
   // React useEffects
   useEffect(() => {
     (async () => {
-      const accountAddress = await setupMetamask();
-      setAccount(accountAddress);
+      const account = await setupMetamask();
+      setAccount(account);
 
-      const deployedContracts = await loadContracts();
-      setContracts(deployedContracts);
-
-      const skills = await loadSkills(deployedContracts);
-      setSkills(skills);
-
-      const emails = await loadEmails(deployedContracts);
-      setProfEmails(emails);
-
-      const profs = await loadProfsByEmail(deployedContracts, emails);
-      setProfsDetails(profs.profsDetails);
-      setAddressToEmail(profs.addressToEmail);
-      setIsProf(profs.addressToEmail[accountAddress] !== undefined);
-
-      const courses = await loadCourses(deployedContracts, emails);
-      setProfCourses(courses);
-
-      const { feedbacks, updatedCourses } = await loadFeedbacks(
-        deployedContracts,
-        emails,
-        courses
-      );
-      setFeedbacks(feedbacks);
-      //TODO update course with added feedbacks
-      console.log(feedbacks, updatedCourses);
-
-      const { skillsUpvote, updatedProfsDetail } = await loadSkillsCount(
-        contracts,
-        emails,
-        profs
-      );
-      setSkillCount(skillsUpvote);
-      //TODO update profdetails with skills
-      console.log(skillsUpvote, updatedProfsDetail);
+      const contracts = await loadContracts();
+      setContracts(contracts);
     })();
-    setLoader(false);
   }, []);
+
+  useEffect(() => {
+    if (contracts) {
+      (async () => {
+        const skills = await loadSkills(contracts);
+        setSkills(skills);
+
+        const balance = await getBalance(contracts, account);
+        setBalance(balance);
+
+        const profEmails = await loadEmails(contracts);
+        setProfEmails(profEmails);
+
+        const { profsDetails, addressToEmail } = await loadProfsByEmail(
+          contracts,
+          profEmails
+        );
+        setProfsDetails(profsDetails);
+        setAddressToEmail(addressToEmail);
+        setIsProf(addressToEmail[account] !== undefined);
+
+        const courses = await loadCourses(contracts, profEmails);
+        setCourses(courses);
+
+        const { feedbacks, updatedCourses } = await loadFeedbacks(
+          contracts,
+          profEmails,
+          courses
+        );
+        setFeedbacks(feedbacks);
+        setCourses(updatedCourses);
+
+        const { skillsUpvote, updatedProfsDetail } = await loadSkillsCount(
+          contracts,
+          profEmails,
+          profsDetails
+        );
+        setSkillCount(skillsUpvote);
+        setProfsDetails(updatedProfsDetail);
+
+        contracts.feedbackData.events.professorCreated((err, data) =>
+          professorCreated(err, data)
+        );
+
+        setLoader(false);
+      })();
+    }
+  }, [contracts]);
+
+  const professorCreated = (err, data) => {
+    if (err) alert("something is wrong");
+    const { professor } = data["returnValues"];
+    const { name, email, profilePicture, addressId, rating } = professor;
+    setProfsDetails((prev) => ({
+      ...prev,
+      [email]: { name, email, profilePicture, addressId, rating },
+    }));
+  };
 
   return (
     <div className="App">
