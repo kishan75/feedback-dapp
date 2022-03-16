@@ -154,7 +154,7 @@ const GenerateTickets = (props) => {
                     for (var i = 0; i < res.length; i++) {
                         let templateParams = {
                             from: 'SYSTEM',
-                            to: genTicketsDetails.emails,
+                            to: genTicketsDetails.emails[i],
                             subject: "Registration Ticket",
                             reply_to: "feedback.dapp@gmail.com",
                             course_name: genTicketsDetails.name,

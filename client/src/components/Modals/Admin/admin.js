@@ -120,7 +120,7 @@ const Admin = (props) => {
 
                     let templateParams = {
                         from: 'SYSTEM',
-                        to: 'binit.57.singh@gmail.com',//genProfTicketDetails.email,
+                        to: genProfTicketDetails.email,
                         subject: "Registration Ticket",
                         reply_to: "feedback.dapp@gmail.com",
                         html: "<b>Respected sir</b>, <br><br>" +
