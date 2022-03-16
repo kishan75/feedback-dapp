@@ -4,7 +4,6 @@
     border: 1px solid #ce3333;
     padding: 2rem;
     color: white;
-    transform: scale(.75);
     text-align: center;
 
     .MuiFormControl-root{
@@ -39,5 +38,23 @@
 
     .centerbutton{ // Can be removed now
         text-align: center;
+
+        .yellow{
+            color: #ffdd00;
+        }
+    }
+
+    .horizontalRule{
+        border: 1px solid #ce3333;
+        border-radius: 3px;
+        margin: 1rem;
+    }
+
+    .horizontalRuleAdmin{
+        border: 1px solid #ce3333;
+        border-radius: 3px;
+        margin: 1rem;
+        margin-top: 3rem;
+        margin-bottom: 3rem;
     }
 }

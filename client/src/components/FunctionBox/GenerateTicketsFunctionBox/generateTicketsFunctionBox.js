@@ -32,15 +32,15 @@ const generateTicketsFunctionBox = (props) => {
     const semOptions = props.subOptions.sem;
     const studentsOptions = props.subOptions.students;
     const emails = props.data.emails;
-    
+
     // For Datagrid:
     const columns = [
-        { field: 'id', headerName: 'S-No.', width: 90 }, 
+        { field: 'id', headerName: 'S-No.', width: 90 },
         { field: 'email', headerName: 'Student E-Mail', width: 200 }
     ];
     let rows = [];
-    for (var i=0; i < emails.length; i++) 
-        rows.push({id: i+1, email: emails[i]});
+    for (var i = 0; i < emails.length; i++)
+        rows.push({ id: i + 1, email: emails[i] });
 
     return (
         <div className='fbox'>
@@ -55,19 +55,19 @@ const generateTicketsFunctionBox = (props) => {
                             name='name'
                             value={data.name}
                             label="COURSE"
-                            onChange={(e) => {props.handleInputChange(e); props.handleMainChange(e);}}
+                            onChange={(e) => { props.handleInputChange(e); props.handleMainChange(e); }}
                         >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        {nameOptions.map((value, idx) => (
-                            <MenuItem key={idx} value={value}> {value} </MenuItem>
-                        ))}
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {nameOptions.map((value, idx) => (
+                                <MenuItem key={idx} value={value}> {value} </MenuItem>
+                            ))}
                         </Select>
                         <FormHelperText>{errors.name}</FormHelperText>
                     </CSSFormControl>
 
-                    <CSSFormControl sx={{ m: 1, minWidth: 150 }} >
+                    <CSSFormControl sx={{ m: 1, minWidth: 200 }} >
                         <InputLabel id="menu-course-code"> CODE </InputLabel>
                         <Select
                             name='code'
@@ -75,17 +75,17 @@ const generateTicketsFunctionBox = (props) => {
                             label="CODE"
                             onChange={props.handleInputChange}
                         >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        {codeOptions.map((value, idx) => (
-                            <MenuItem key={idx} value={value}> {value} </MenuItem>
-                        ))}
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {codeOptions.map((value, idx) => (
+                                <MenuItem key={idx} value={value}> {value} </MenuItem>
+                            ))}
                         </Select>
                         <FormHelperText>{errors.code}</FormHelperText>
                     </CSSFormControl>
 
-                    <CSSFormControl sx={{ m: 1, minWidth: 150 }} >
+                    <CSSFormControl sx={{ m: 1, minWidth: 200 }} >
                         <InputLabel id="menu-course-year"> YEAR </InputLabel>
                         <Select
                             name='year'
@@ -93,17 +93,17 @@ const generateTicketsFunctionBox = (props) => {
                             label="YEAR"
                             onChange={props.handleInputChange}
                         >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        {yearOptions.map((value, idx) => (
-                            <MenuItem key={idx} value={value}> {value} </MenuItem>
-                        ))}
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {yearOptions.map((value, idx) => (
+                                <MenuItem key={idx} value={value}> {value} </MenuItem>
+                            ))}
                         </Select>
                         <FormHelperText>{errors.year}</FormHelperText>
                     </CSSFormControl>
 
-                    <CSSFormControl sx={{ m: 1, minWidth: 150 }} >
+                    <CSSFormControl sx={{ m: 1, minWidth: 200 }} >
                         <InputLabel id="menu-course-sem"> SEM </InputLabel>
                         <Select
                             name='sem'
@@ -111,17 +111,17 @@ const generateTicketsFunctionBox = (props) => {
                             label="SEM"
                             onChange={props.handleInputChange}
                         >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        {semOptions.map((value, idx) => (
-                            <MenuItem key={idx} value={value}> {value} </MenuItem>
-                        ))}
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {semOptions.map((value, idx) => (
+                                <MenuItem key={idx} value={idx}> {value} </MenuItem>
+                            ))}
                         </Select>
                         <FormHelperText>{errors.sem}</FormHelperText>
                     </CSSFormControl>
 
-                    <CSSFormControl sx={{ m: 1, minWidth: 150 }} >
+                    <CSSFormControl sx={{ m: 1, minWidth: 200 }} >
                         <InputLabel id="menu-course-studs"> STUDENTS </InputLabel>
                         <Select
                             name='students'
@@ -129,43 +129,43 @@ const generateTicketsFunctionBox = (props) => {
                             label="STUDENTS"
                             onChange={props.handleInputChange}
                         >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        {studentsOptions.map((value, idx) => (
-                            <MenuItem key={idx} value={value}> {value} </MenuItem>
-                        ))}
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {studentsOptions.map((value, idx) => (
+                                <MenuItem key={idx} value={value}> {value} </MenuItem>
+                            ))}
                         </Select>
                         <FormHelperText>{errors.students}</FormHelperText>
                     </CSSFormControl>
                 </div>
 
                 <div>
-                    {props.data.emails.length > 0 ? 
-                    <div style={{ height: 400, width: 320, marginRight: 20}}>
-                        <DataGrid
-                            rows={rows}
-                            columns={columns}
-                            pageSize={5}
-                            rowsPerPageOptions={[5]}
-                        />
-                    </div> : null}
+                    {props.data.emails.length > 0 ?
+                        <div style={{ height: 400, width: 320, marginRight: 20 }}>
+                            <DataGrid
+                                rows={rows}
+                                columns={columns}
+                                pageSize={5}
+                                rowsPerPageOptions={[5]}
+                            />
+                        </div> : null}
                 </div>
-                
+
             </Box>
 
             <div className='buttonflex'>
-                <Button sx={{m:2, width:300}} size='large' color="error" variant="contained" endIcon={<SendIcon />} onClick={props.handleSubmit}>
+                <Button sx={{ m: 2, width: 300 }} size='large' color="error" variant="contained" endIcon={<SendIcon />} onClick={props.handleSubmit}>
                     Send
                 </Button>
                 <label htmlFor="icon-button-file">
-                    <Input id="icon-button-file" accept=".csv" type="file" name='emailsfile' onChange={props.handleFileChange}/>
-                    <Button sx={{m:2, width:250}} variant="outlined" component="span" color="error" startIcon={<UploadFileIcon style={{ color: 'red' }} />}>
+                    <Input id="icon-button-file" accept=".csv, .txt" type="file" name='emailsfile' onChange={props.handleFileChange} />
+                    <Button sx={{ m: 2, width: 250 }} variant="outlined" component="span" color="error" startIcon={<UploadFileIcon style={{ color: 'red' }} />}>
                         Upload
                     </Button>
                 </label>
             </div>
-            <FormHelperText  sx={{m:2}}>{errors.emails}</FormHelperText>
+            <FormHelperText sx={{ m: 2 }}>{errors.emails}</FormHelperText>
 
         </div>
     );
@@ -179,7 +179,7 @@ const CssTextField = styled(TextField)({
     '& .MuiInputBase-input': {
         color: 'white'
     },
-    '& label':{
+    '& label': {
         color: '#666666'
     },
     '& label.Mui-focused': {
@@ -190,13 +190,13 @@ const CssTextField = styled(TextField)({
     },
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
-        borderColor: '#666666',
+            borderColor: '#666666',
         },
         '&:hover fieldset': {
-        borderColor: '#ce3333',
+            borderColor: '#ce3333',
         },
         '&.Mui-focused fieldset': {
-        borderColor: '#ce3333',
+            borderColor: '#ce3333',
         },
     },
 
@@ -208,13 +208,13 @@ const CssTextField = styled(TextField)({
     },
     '& .MuiOutlinedInput-root.Mui-error': {
         '& fieldset': {
-        borderColor: "#ffdd00 !important",
+            borderColor: "#ffdd00 !important",
         },
         '&:hover fieldset': {
-        borderColor: "#ffdd00 !important",
+            borderColor: "#ffdd00 !important",
         },
         '&.Mui-focused fieldset': {
-        borderColor: "#ffdd00 !important",
+            borderColor: "#ffdd00 !important",
         },
     },
 });
@@ -224,7 +224,7 @@ const CSSFormControl = styled(FormControl)({
     '& .MuiInputBase-input': {
         color: 'white'
     },
-    '& label':{
+    '& label': {
         color: '#666666'
     },
     '& label.Mui-focused': {
@@ -235,13 +235,13 @@ const CSSFormControl = styled(FormControl)({
     },
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
-        borderColor: '#666666',
+            borderColor: '#666666',
         },
         '&:hover fieldset': {
-        borderColor: '#ce3333',
+            borderColor: '#ce3333',
         },
         '&.Mui-focused fieldset': {
-        borderColor: '#ce3333',
+            borderColor: '#ce3333',
         },
     },
 });
@@ -249,4 +249,4 @@ const CSSFormControl = styled(FormControl)({
 
 const Input = styled('input')({
     display: 'none',
-  });
+});

@@ -3,6 +3,8 @@ import { stack as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
 import ProfessorDetails from '../Modals/ProfessorDetails/professorDetails';
 import GenerateTickets from '../Modals/GenerateTickets/generateTickets';
+import AddCourseDetails from '../Modals/AddCourses/addCourses';
+
 
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -17,11 +19,10 @@ import Logo from './../../assets/bhu-logo.png';
 import LogoMin from './../../assets/bhu-logo-min.png';
 
 
-
 const Header = (props) => {
   const breakpoint1 = 100;
   const breakpoint2 = 630;
-  const professor = true;
+  const professor = props.isProf;
 
   const [width, setWidth] = useState(window.innerWidth);
   const [breakpoint, setBreakpoint] = useState(breakpoint1);
@@ -89,8 +90,8 @@ const Header = (props) => {
               aria-labelledby="generate-tickets"
               aria-describedby="For ticket distribution via mail"
             >
-              <Box sx={style}>
-                <GenerateTickets />
+              <Box sx={styleGenTickets}>
+                <GenerateTickets {...props} closeModal={handleCloseGenerateTickets} />
               </Box>
             </Modal>
             <li>
@@ -104,8 +105,8 @@ const Header = (props) => {
               aria-labelledby="generate-tickets"
               aria-describedby="For ticket distribution via mail"
             >
-              <Box sx={style}>
-                <GenerateTickets />
+              <Box sx={styleAddCourses}>
+                <AddCourseDetails {...props} closeModal={handleCloseAddCourses} />
               </Box>
             </Modal>
             <li>
@@ -118,8 +119,8 @@ const Header = (props) => {
               aria-labelledby="professor-registry"
               aria-describedby="Register professor to database"
             >
-              <Box sx={style}>
-                <ProfessorDetails mainState={props.mainState} closeModal={handleCloseProfessorRegistry} />
+              <Box sx={styleProfessorDetails}>
+                <ProfessorDetails {...props} closeModal={handleCloseProfessorRegistry} />
               </Box>
             </Modal>
           </ul>
@@ -163,17 +164,30 @@ export default Header;
 
 
 
-
-const style = {
+const styleProfessorDetails = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   overflow: 'scroll',
   transform: 'translate(-50%, -50%)',
-  width: '70%',
-  height: '90%',
+  width: '50%',
+  height: '50%',
   bgcolor: '#00000099',
   border: '2px solid #000',
   boxShadow: 24,
   p: 0,
+};
+
+
+const styleAddCourses = {
+  ...styleProfessorDetails,
+  width: '50%',
+  height: '70%',
+};
+
+
+const styleGenTickets = {
+  ...styleProfessorDetails,
+  width: '50%',
+  height: '70%',
 };

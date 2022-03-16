@@ -3,15 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emailjs/browser": "^3.4.0",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
+    "@material-ui/core": "^4.12.3",
     "@mui/icons-material": "^5.4.4",
     "@mui/material": "^5.4.4",
     "@mui/x-data-grid": "^5.6.0",
     "@truffle/contract": "^4.4.11",
+    "axios": "^0.26.1",
+    "dotenv": "^16.0.0",
     "lzutf8": "^0.6.1",
-    "nodemailer": "^6.7.2",
-    "nodemailer-sendgrid-transport": "^0.2.0",
     "react": "^17.0.2",
     "react-burger-menu": "^3.0.6",
     "react-dom": "^17.0.2",
@@ -22,7 +24,7 @@
     "web3": "^1.7.1"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
+    "start": "react-scripts --openssl-legacy-provider start --host 0.0.0.0",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

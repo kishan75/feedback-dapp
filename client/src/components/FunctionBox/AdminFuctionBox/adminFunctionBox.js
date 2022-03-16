@@ -6,80 +6,20 @@ import Button from '@mui/material/Button';
 
 // Adornments
 import InputAdornment from '@mui/material/InputAdornment';
-import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import BadgeIcon from '@mui/icons-material/Badge';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
-import HowToRegIcon from '@mui/icons-material/HowToReg';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import KeyIcon from '@mui/icons-material/Key';
+import SendAndArchiveIcon from '@mui/icons-material/SendAndArchive';
+import SettingSuggest from '@mui/icons-material/SettingsSuggestOutlined';
 
-// CSS
-import './professorDetailsFunctionBox.scss';
-
-
-
-const professorDetailsFunctionBox = (props) => {
+const adminFunctionBox = (props) => {
     const data = props.data;
     const errors = props.errors;
 
     return (
         <div className='fbox'>
-            <h1> PROFESSOR DETAILS </h1>
+            <h1> GENERATE PROFESSOR TICKET </h1>
             <br />
             <Box component="form" autoComplete="off">
-                <CssTextField
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <AccountBalanceWalletIcon />
-                            </InputAdornment>
-                        )
-                    }}
-                    id="input-address"
-                    name='address'
-                    value={data.address}
-                    disabled
-                    //onChange={props.handleInputChange}
-                    label="ADDRESS"
-                    error={errors.address}
-                    helperText={errors.address}
-                />
-
-
-                <CssTextField
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <ConfirmationNumberIcon />
-                            </InputAdornment>
-                        ),
-                    }}
-                    id="input-ticket"
-                    name='ticket'
-                    value={data.ticket}
-                    onChange={props.handleInputChange}
-                    label="UNIQUE TICKET"
-                    error={errors.ticket}
-                    helperText={errors.ticket}
-                />
-
-                <CssTextField
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <BadgeIcon />
-                            </InputAdornment>
-                        ),
-                    }}
-                    id="input-name"
-                    name='name'
-                    value={data.name}
-                    onChange={props.handleInputChange}
-                    label="NAME"
-                    helperText=""
-                    error={errors.name}
-                    helperText={errors.name}
-                />
 
                 <CssTextField
                     InputProps={{
@@ -93,34 +33,116 @@ const professorDetailsFunctionBox = (props) => {
                     name='email'
                     value={data.email}
                     onChange={props.handleInputChange}
-                    label="EMAIL"
+                    label="PROFESSOR EMAIL"
                     type='email'
-                    helperText=""
                     error={errors.email}
                     helperText={errors.email}
                 />
 
 
+                <CssTextField
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <KeyIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    id="input-password"
+                    name='password'
+                    type='password'
+                    value={data.password}
+                    onChange={props.handleInputChange}
+                    label="ADMIN PASSWORD"
+                    error={errors.password}
+                    helperText={errors.password}
+                />
+
             </Box>
             <div className='centerbutton'>
-                <Button sx={{ m: 2, width: 300 }} size='large' color="error" variant="contained" endIcon={<HowToRegIcon />} onClick={props.handleSubmit}>
-                    Register
+                <Button sx={{ m: 2, width: 300 }} size='large' color="error" variant="contained" endIcon={<SendAndArchiveIcon />} onClick={props.handleSubmit}>
+                    GENERATE AND SEND
                 </Button>
-
-                <label htmlFor="icon-button-img" disabled={props.disableUpload.disabled}>
-                    <Input id="icon-button-img" accept=".jpeg, .jpg, .png" type="file" name='pic' onChange={props.handleFileChange} disabled={props.disableUpload.disabled} />
-                    <Button sx={{ m: 2, width: 250 }} variant="outlined" component="span" color="error" startIcon={<PhotoCamera style={{ color: 'red' }} />}>
-                        {props.disableUpload.disabled ? props.disableUpload.message : 'Upload Image'}
-                    </Button>
-                </label>
-                <br></br>
-                <div className='yellow'>{errors.file}</div>
             </div>
+
+            <hr className='horizontalRuleAdmin' />
+
+
+            <h1> CHANGE PASSWORD </h1>
+
+            <br />
+
+            <Box component="form" autoComplete="off">
+
+                <CssTextField
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <KeyIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    id="input-oldpassword"
+                    name='old'
+                    type='password'
+                    value={data.old}
+                    onChange={props.handlePasswordInputChange}
+                    label="OLD PASSWORD"
+                    error={errors.old}
+                    helperText={errors.old}
+                />
+
+
+                <CssTextField
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <KeyIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    id="input-newpassword"
+                    name='new'
+                    type='password'
+                    value={data.new}
+                    onChange={props.handlePasswordInputChange}
+                    label="NEW PASSWORD"
+                    error={errors.new}
+                    helperText={errors.new}
+                />
+
+
+                <CssTextField
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <KeyIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                    id="input-confirmpassword"
+                    name='confirm'
+                    type='password'
+                    value={data.confirm}
+                    onChange={props.handlePasswordInputChange}
+                    label="CONFIRM PASSWORD"
+                    error={errors.confirm}
+                    helperText={errors.confirm}
+                />
+
+            </Box>
+
+            <div className='centerbutton'>
+                <Button sx={{ m: 2, width: 300 }} size='large' color="error" variant="contained" endIcon={<SettingSuggest />} onClick={props.handlePasswordSubmit}>
+                    CHANGE PASSWORD
+                </Button>
+            </div>
+
         </div>
     );
 }
 
-export default professorDetailsFunctionBox;
+export default adminFunctionBox;
 
 
 
@@ -188,8 +210,4 @@ const CssTextField = styled(TextField)({
             borderColor: "#ce3333 !important",
         },
     },
-});
-
-const Input = styled('input')({
-    display: 'none',
 });

@@ -15,8 +15,14 @@ import {
 // Pages
 import HomePage from "./pages/HomePage/homePage";
 
+// Utils
+import Loader from "./components/utils/loader";
+import Toast from "./components/utils/toast";
+
+//CSS
 import "./App.css";
-import { Loader } from "./components/utils/Loader";
+
+require('dotenv').config()
 
 const App = () => {
   const [profEmails, setProfEmails] = useState(null);
@@ -29,6 +35,7 @@ const App = () => {
   const [account, setAccount] = useState(null);
   const [balance, setBalance] = useState(null);
   const [showLoader, setLoader] = useState(true);
+  const [toast, setToast] = useState(null);
   const [contracts, setContracts] = useState(null);
 
   const [skills, setSkills] = useState(null);
@@ -42,6 +49,9 @@ const App = () => {
 
       const contracts = await loadContracts();
       setContracts(contracts);
+
+      const toast = { message: '', type: '', show: false };
+      setToast(toast);
     })();
   }, []);
 
@@ -140,7 +150,7 @@ const App = () => {
   const professorCreated = (err, data) => {
     if (err) alert("something is wrong");
     const { professor } = data["returnValues"];
-    const { name, email, profilePicture, addressId, rating } = professor;
+    let { name, email, profilePicture, addressId, rating } = professor;
     addressId = addressId.toLowerCase();
 
     setProfsDetails((prev) => ({
@@ -266,22 +276,45 @@ const App = () => {
     }));
   };
 
+  // Very toasty
+  const handleToastClose = (_, reason) => {
+    if (reason === 'clickaway')
+      return;
+    setToast({ ...toast, show: false });
+  };
+
+  const handleToastChange = (message, severity, open) => {
+    console.log(message, severity, open)
+    setToast({ message: message, type: severity, show: open });
+  }
+
+  const handleLoaderChange = (show) => {
+    setLoader(show);
+  }
+
   return (
     <div className="App">
-      <Loader show={showLoader}></Loader>
+      <Loader show={showLoader} />
+      {toast ? <Toast onClose={handleToastClose} message={toast.message} show={toast.show} type={toast.type} /> : null}
       <Routes>
         <Route
           exact
           path="/"
           element={
             <HomePage
-            // mainState={mainState}
-            // handleBalanceChange={handleBalanceChange}
+              contracts={contracts}
+              profsDetails={profsDetails}
+              account={account}
+              emailMap={addressToEmail}
+              courses={courses}
+              onLoading={handleLoaderChange}
+              onToastChange={handleToastChange}
+              isProf={isProf}
             />
           }
         />
       </Routes>
-    </div>
+    </div >
   );
 };
 
