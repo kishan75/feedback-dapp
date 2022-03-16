@@ -143,6 +143,8 @@ const App = () => {
     if (err) alert("something is wrong");
     const { professor } = data["returnValues"];
     const { name, email, profilePicture, addressId, rating } = professor;
+    addressId = addressId.toLowerCase();
+
     setProfsDetails((prev) => ({
       ...prev,
       [email]: {
@@ -153,6 +155,12 @@ const App = () => {
         rating,
         skillsUpvote: [],
       },
+    }));
+
+    setProfEmails([...profEmails, email]);
+    setAddressToEmail((prev) => ({
+      ...prev,
+      [addressId]: email,
     }));
   };
 
