@@ -31,7 +31,6 @@ const Sections = (props) => {
       setTimeout(function () {
         $cont.classList.remove('s2--inactive');
       }, 200);
-      console.log($elsArr)
       $elsArr.forEach(function ($el) {
         $el.addEventListener('click', function () {
           if (this.classList.contains('s2--active')) return;
@@ -47,7 +46,6 @@ const Sections = (props) => {
           document.querySelector('.el2.s2--active').classList.remove('s2--active');
         });
       });
-      console.log("Homepage Rerendering...")
     }, 1000)
   }, [pathname]);
 

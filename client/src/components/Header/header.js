@@ -22,7 +22,7 @@ import LogoMin from './../../assets/bhu-logo-min.png';
 const Header = (props) => {
   const breakpoint1 = 100;
   const breakpoint2 = 630;
-  const professor = true;
+  const professor = props.isProf;
 
   const [width, setWidth] = useState(window.innerWidth);
   const [breakpoint, setBreakpoint] = useState(breakpoint1);

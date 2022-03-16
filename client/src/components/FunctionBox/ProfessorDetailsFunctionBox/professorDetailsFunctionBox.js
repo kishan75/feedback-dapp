@@ -107,14 +107,14 @@ const professorDetailsFunctionBox = (props) => {
                     Register
                 </Button>
 
-                <label htmlFor="icon-button-img">
-                    <Input id="icon-button-img" accept=".jpeg, .jpg, .png" type="file" name='pic' onChange={props.handleFileChange} />
+                <label htmlFor="icon-button-img" disabled={props.disableUpload.disabled}>
+                    <Input id="icon-button-img" accept=".jpeg, .jpg, .png" type="file" name='pic' onChange={props.handleFileChange} disabled={props.disableUpload.disabled} />
                     <Button sx={{ m: 2, width: 250 }} variant="outlined" component="span" color="error" startIcon={<PhotoCamera style={{ color: 'red' }} />}>
-                        Upload Image
+                        {props.disableUpload.disabled ? props.disableUpload.message : 'Upload Image'}
                     </Button>
                 </label>
                 <br></br>
-                {errors.file}
+                <div className='yellow'>{errors.file}</div>
             </div>
         </div>
     );

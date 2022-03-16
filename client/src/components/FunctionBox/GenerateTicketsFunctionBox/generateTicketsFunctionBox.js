@@ -159,7 +159,7 @@ const generateTicketsFunctionBox = (props) => {
                     Send
                 </Button>
                 <label htmlFor="icon-button-file">
-                    <Input id="icon-button-file" accept=".csv" type="file" name='emailsfile' onChange={props.handleFileChange} />
+                    <Input id="icon-button-file" accept=".csv, .txt" type="file" name='emailsfile' onChange={props.handleFileChange} />
                     <Button sx={{ m: 2, width: 250 }} variant="outlined" component="span" color="error" startIcon={<UploadFileIcon style={{ color: 'red' }} />}>
                         Upload
                     </Button>
