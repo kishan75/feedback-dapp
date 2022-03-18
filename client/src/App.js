@@ -16,13 +16,13 @@ import {
 import HomePage from "./pages/HomePage/homePage";
 
 // Utils
-import Loader from "./components/utils/loader";
 import Toast from "./components/utils/toast";
 
 //CSS
 import "./App.css";
+import Loader from "./components/utils/Loader";
 
-require('dotenv').config()
+require("dotenv").config();
 
 const App = () => {
   const [profEmails, setProfEmails] = useState(null);
@@ -50,7 +50,7 @@ const App = () => {
       const contracts = await loadContracts();
       setContracts(contracts);
 
-      const toast = { message: '', type: '', show: false };
+      const toast = { message: "", type: "", show: false };
       setToast(toast);
     })();
   }, []);
@@ -165,7 +165,7 @@ const App = () => {
       },
     }));
 
-    setProfEmails([...profEmails, email]);
+    setProfEmails((prev) => [...prev, email]);
     setAddressToEmail((prev) => ({
       ...prev,
       [addressId]: email,
@@ -178,6 +178,7 @@ const App = () => {
     setCourses((prev) => ({
       ...prev,
       [email]: {
+        ...prev[email],
         [year]: {
           ...prev[email][year],
           [sem]: {
@@ -199,6 +200,7 @@ const App = () => {
     setCourses((prev) => ({
       ...prev,
       [email]: {
+        ...prev[email],
         [year]: {
           ...prev[email][year],
           [semester]: {
@@ -226,36 +228,41 @@ const App = () => {
     const { email, year, course } = data["returnValues"];
     const { name, code, semester, studentCount, ticketGenerated } = course;
 
-    if (courses[email] == undefined)
-      setCourses((prev) => ({
-        ...prev,
-        [email]: {},
-      }));
+    setCourses((prev) => {
+      return prev[email] ? { ...prev } : { ...prev, [email]: {} };
+    });
 
-    if (courses[email][year] == undefined)
-      setCourses((prev) => ({
-        ...prev,
-        [email]: {
-          ...prev[email],
-          [year]: {},
-        },
-      }));
+    setCourses((prev) => {
+      return prev[email][year]
+        ? { ...prev }
+        : {
+            ...prev,
+            [email]: {
+              ...prev[email],
+              [year]: {},
+            },
+          };
+    });
 
-    if (courses[email][year][semester] == undefined)
-      setCourses((prev) => ({
-        ...prev,
-        [email]: {
-          ...prev[email],
-          [year]: {
-            ...prev[email][year],
-            [semester]: {},
-          },
-        },
-      }));
+    setCourses((prev) => {
+      return prev[email][year][semester]
+        ? { ...prev }
+        : {
+            ...prev,
+            [email]: {
+              ...prev[email],
+              [year]: {
+                ...prev[email][year],
+                [semester]: {},
+              },
+            },
+          };
+    });
 
     setCourses((prev) => ({
       ...prev,
       [email]: {
+        ...prev[email],
         [year]: {
           ...prev[email][year],
           [semester]: {
@@ -278,24 +285,30 @@ const App = () => {
 
   // Very toasty
   const handleToastClose = (_, reason) => {
-    if (reason === 'clickaway')
-      return;
+    if (reason === "clickaway") return;
     setToast({ ...toast, show: false });
   };
 
   const handleToastChange = (message, severity, open) => {
-    console.log(message, severity, open)
+    console.log(message, severity, open);
     setToast({ message: message, type: severity, show: open });
-  }
+  };
 
   const handleLoaderChange = (show) => {
     setLoader(show);
-  }
+  };
 
   return (
     <div className="App">
       <Loader show={showLoader} />
-      {toast ? <Toast onClose={handleToastClose} message={toast.message} show={toast.show} type={toast.type} /> : null}
+      {toast ? (
+        <Toast
+          onClose={handleToastClose}
+          message={toast.message}
+          show={toast.show}
+          type={toast.type}
+        />
+      ) : null}
       <Routes>
         <Route
           exact
@@ -314,7 +327,7 @@ const App = () => {
           }
         />
       </Routes>
-    </div >
+    </div>
   );
 };
 

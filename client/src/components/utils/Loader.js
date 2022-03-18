@@ -13,7 +13,7 @@ const theme = createTheme({
 })
 
 
-const loader = (props) => {
+const Loader = (props) => {
   return (
     <div>
       <Modal open={props.show}>
@@ -25,4 +25,4 @@ const loader = (props) => {
   );
 };
 
-export default loader;
+export default Loader;
