@@ -253,7 +253,7 @@ $contentFadeinAT: 0.5s;
       width: 100%;
       height: 8px;
       margin-top: -4px;
-      background: #fff;
+      background: rgb(211, 16, 16);
       opacity: 0;
       transition: opacity 0s;
       
@@ -290,7 +290,7 @@ $contentFadeinAT: 0.5s;
     height: 100%;
     min-height: 250px;
     text-align: center;
-    font-size: 10vw / $numOfEls;
+    font-size: 5vw / $numOfEls;
     line-height: 0.85;
     font-weight: bold;
     transition: transform $indexHoverAT, opacity $moveAT/2 $expandAT + $expandDelay + $moveAT;

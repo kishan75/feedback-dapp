@@ -261,7 +261,7 @@ const AddCourses = (props) => {
               true
             );
         })
-        .finally(() => props.onLoading(true));
+        .finally(() => props.onLoading(false));
     }
   };
 

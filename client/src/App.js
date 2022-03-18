@@ -236,27 +236,27 @@ const App = () => {
       return prev[email][year]
         ? { ...prev }
         : {
-            ...prev,
-            [email]: {
-              ...prev[email],
-              [year]: {},
-            },
-          };
+          ...prev,
+          [email]: {
+            ...prev[email],
+            [year]: {},
+          },
+        };
     });
 
     setCourses((prev) => {
       return prev[email][year][semester]
         ? { ...prev }
         : {
-            ...prev,
-            [email]: {
-              ...prev[email],
-              [year]: {
-                ...prev[email][year],
-                [semester]: {},
-              },
+          ...prev,
+          [email]: {
+            ...prev[email],
+            [year]: {
+              ...prev[email][year],
+              [semester]: {},
             },
-          };
+          },
+        };
     });
 
     setCourses((prev) => ({
@@ -317,6 +317,7 @@ const App = () => {
             <HomePage
               contracts={contracts}
               profsDetails={profsDetails}
+              profsEmails={profEmails}
               account={account}
               emailMap={addressToEmail}
               courses={courses}

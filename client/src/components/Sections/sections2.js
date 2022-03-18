@@ -52,7 +52,7 @@ const Sections = (props) => {
 
   const SectionContent = (props) => {
     return (
-      <div className="el2" onClick={() => handleRenderOnClick(props.key, true)}>
+      <div className="el2" onClick={() => handleRenderOnClick(props.idx, true)}>
         <div className="el2__overflow">
           <div className="el2__inner">
             <div className="el2__bg"></div>
@@ -61,15 +61,15 @@ const Sections = (props) => {
             </div>
             <div className="el2__content">
               <div className="el2__text">{props.professer}</div>
-              <div className="el2__close-btn" onClick={() => handleRenderOnClick(props.key, false)}></div>
-              {/*renderSections[props.key] && <Gallery filter="leather"/>*/}
+              <div className="el2__close-btn" onClick={() => handleRenderOnClick(props.idx, false)}></div>
+              {/*renderSections[props.idx] && <Gallery filter="leather"/>*/}
             </div>
           </div>
         </div>
         <div className="el2__index">
           <div className="el2__index-back">{props.about}</div>
           <div className="el2__index-front">
-            <div className="el2__index-overlay" data-index={props.about}>{props.key + 1}</div>
+            <div className="el2__index-overlay" data-index={props.about}>{props.idx + 1}</div>
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@ const Sections = (props) => {
       <div className="cont2 s2--inactive">
         {/* <!-- cont inner start --> */}
         <div className="cont2__inner">
-          {renderSections.map((_, idx) => <SectionContent key={idx} professer={professers[idx]} about={abouts[idx]} />)};
+          {renderSections.map((_, idx) => <SectionContent key={idx} idx={idx} professer={professers[idx]} about={abouts[idx]} />)};
         </div>
         {/* <!-- cont inner end --> */}
       </div>
