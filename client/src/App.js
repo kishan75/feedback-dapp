@@ -21,6 +21,8 @@ import Toast from "./components/utils/toast";
 //CSS
 import "./App.css";
 import Loader from "./components/utils/Loader";
+import { Courses } from "./components/Courses";
+import { Feedbacks } from "./components/feedbacks";
 
 require("dotenv").config();
 
@@ -206,8 +208,9 @@ const App = () => {
           [semester]: {
             ...prev[email][year][semester],
             [code]: {
+              ...prev[email][year][semester][code],
               feedback: [
-                ...prev[email][year][semester].feedback,
+                ...prev[email][year][semester][code].feedback,
                 {
                   code,
                   semester,
@@ -323,6 +326,23 @@ const App = () => {
               onLoading={handleLoaderChange}
               onToastChange={handleToastChange}
               isProf={isProf}
+            />
+          }
+        />
+        <Route
+          exact
+          path=":email/:year"
+          element={
+            <Courses showLoader={() => handleLoaderChange} courses={courses} />
+          }
+        />
+        <Route
+          exact
+          path=":email/:year/:sem/:courseCode"
+          element={
+            <Feedbacks
+              showLoader={() => handleLoaderChange}
+              feedbacks={courses}
             />
           }
         />
