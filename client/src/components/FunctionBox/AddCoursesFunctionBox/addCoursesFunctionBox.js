@@ -94,7 +94,7 @@ const addCoursesFunctionBox = (props) => {
 
             </Box>
             <Button sx={{ m: 2, width: 300 }} size='large' color="error" variant="contained" endIcon={<SendIcon />} onClick={props.handleSubmit}>
-                Send
+                Add
             </Button>
         </div>
     );
