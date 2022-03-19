@@ -7,6 +7,7 @@ import {
   Typography,
   Grid,
   Box,
+  Divider,
 } from "@mui/material";
 import { BootstrapTooltip } from "./utils/common";
 import { useParams } from "react-router-dom";
@@ -24,21 +25,35 @@ export const CourseCard = (props) => {
               window.location.href = `${props.email}/${props.year}/${props.semester}/${props.code}`;
             }}
             style={{
-              backgroundColor: "white",
+              // backgroundColor: "white",
               boxShadow: "none",
               border: "4px solid",
               borderColor: "red",
-              "&:hover": {
-                backgroundColor: "blue !important",
-              },
             }}
           >
-            <CardHeader title={props.name} subheader={props.code} />
-            <CardContent>
-              <Typography variant="body1" color="text.primary">
-                {`taught in ${
+            <CardHeader
+              style={{
+                color: "white",
+                fontFamily: "Arial",
+                backgroundColor: "#282c34",
+                boxShadow: "none",
+              }}
+              titleTypographyProps={{ variant: "h4" }}
+              title={props.name}
+            />
+            <CardContent
+              style={{
+                color: "white",
+                fontFamily: "Arial",
+                backgroundColor: "#282c34",
+                boxShadow: "none",
+              }}
+            >
+              <Typography variant="body1">
+                {`code:${props.code}, sem:${
                   props.semester == 0 ? "even" : "odd"
-                } semester, enrolled ${props.studentCount} students`}
+                }, students:${props.studentCount}`}
+                <Divider orientation="vertical"></Divider>
               </Typography>
             </CardContent>
           </Card>

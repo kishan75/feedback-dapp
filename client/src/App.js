@@ -341,6 +341,7 @@ const App = () => {
           path=":email/:year/:sem/:courseCode"
           element={
             <Feedbacks
+              skills={skills}
               showLoader={() => handleLoaderChange}
               feedbacks={courses}
             />
