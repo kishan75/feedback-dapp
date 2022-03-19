@@ -54,10 +54,12 @@ const Header = (props) => {
       headerEl = document.getElementById("header");
 
     if (distanceY > shrinkOn) {
-      headerEl.classList.add("sticky");
+      if (headerEl)
+        headerEl.classList.add("sticky");
       setBreakpoint(69420)
     } else {
-      headerEl.classList.remove("sticky");
+      if (headerEl)
+        headerEl.classList.remove("sticky");
       setBreakpoint(100)
     }
   }

@@ -67,6 +67,10 @@
       text-align: left;
       display: flex;
 
+      .MuiFormHelperText-root{
+        color: #fad60c;
+      }
+
       .MuiTextField-root{
         width: 70%;
         margin-left: 1rem;
@@ -75,6 +79,10 @@
 
     .feedbackFinal{
       margin: 1rem;
+
+      .MuiFormHelperText-root{
+        color: #fad60c;
+      }
     }
   }
 }

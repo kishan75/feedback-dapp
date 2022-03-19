@@ -23,7 +23,7 @@ const StyledRating = styled(Rating)({
 
 const ProfessorBio = (props) => {
   const [selected, setSelected] = useState(0);
-
+  const email = props.profDetails.email
   const skills = props.profDetails.skillsUpvote;
   let rating = props.profDetails.rating;
   const skillKeys = skills ? Object.keys(skills) : [];
@@ -107,7 +107,7 @@ const ProfessorBio = (props) => {
         [<h1> ACADEMIC YEARS </h1>,
         <div className="profYears">
           {years.map((y, i) => (
-            <Link key={i} to={y.toString()}>
+            <Link key={i} to={`${email}/${y}`}>
               <NavigationIcon size='large' sx={{ mr: 1 }} />
               {y}
             </Link>

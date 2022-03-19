@@ -14,7 +14,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
 
 import './feedbackSubmit.scss';
 
@@ -25,16 +24,23 @@ const FeedbackSubmit = (props) => {
   const year = '2020'
   const sem = "Even"
   const studens = "20"
+  const skills = ['ABCD', 'EFGH', 'IJKL', 'MNOP']
 
 
   const [feedbackDetails, setFeedbackDetails,] = useState({
     feedback: '',
+    ticket: '',
     skills: [],
-
   });
 
+  const [feedbackErrors, setFeedbackErrors,] = useState({
+    feedback: '',
+    ticket: '',
+  });
+
+
   // List state
-  const [checked, setChecked] = useState([0]);
+  const [checked, setChecked] = useState([]);
 
   // List handler
   const handleToggle = (value) => () => {
@@ -45,8 +51,84 @@ const FeedbackSubmit = (props) => {
       newChecked.push(value);
     else
       newChecked.splice(currentIndex, 1);
+
     setChecked(newChecked);
+    setFeedbackDetails({ ...feedbackDetails, skills: newChecked })
+
+    console.log(feedbackDetails)
   };
+
+  // Input handler
+  const handleInputChange = (event) => {
+    setFeedbackDetails({
+      ...feedbackDetails,
+      [event.target.name]: event.target.value
+    });
+
+    let updatedErrors = { ...feedbackErrors };
+    updatedErrors = validateInput(event.target.name, event.target.value, updatedErrors);
+    setFeedbackErrors({ ...updatedErrors });
+  }
+
+
+  // Submit handler
+  const handleFeedbackSubmit = () => {
+    //props.onLoading(true);
+    let updatedErrors = { ...feedbackErrors };
+
+    for (var key in feedbackErrors)
+      if (feedbackDetails.hasOwnProperty(key))
+        updatedErrors = validateInput(key, feedbackDetails[key], updatedErrors);
+
+    setFeedbackErrors({ ...updatedErrors });
+    const fastFeedbackErrors = { ...updatedErrors };
+
+    let ready = true;
+    for (var key in fastFeedbackErrors) {
+      if (fastFeedbackErrors.hasOwnProperty(key))
+        if (fastFeedbackErrors[key] != '')
+          ready = false;
+    }
+
+    console.log('Ready:', ready);
+    console.log(feedbackDetails);
+
+    // Write to blockChain
+
+  }
+
+
+
+  // Validators
+  const validateInput = (field, value, updatedErrors) => {
+    switch (field) {
+      case 'feedback':
+        if (value.length == 0)
+          updatedErrors[field] = 'Cannot be empty';
+        else if (value.length < 10)
+          updatedErrors[field] = 'Length should be greater than 10';
+        else if (value.length > 5000)
+          updatedErrors[field] = 'Length should be less than 5000';
+        else if (! /^[a-zA-Z0-9\s]*$/.test(value))
+          updatedErrors[field] = 'Feedback should only contain letters and numbers';
+        else
+          updatedErrors[field] = '';
+        break;
+      case 'ticket':
+        if (value.length == 0)
+          updatedErrors[field] = 'Cannot be empty';
+        else if (value.length < 10)
+          updatedErrors[field] = 'Length should be greater than 10';
+        else if (value.length > 100)
+          updatedErrors[field] = 'Length should be smaller than 100';
+        else
+          updatedErrors[field] = ''
+        break;
+    }
+    return updatedErrors;
+  }
+
+
 
   return (
     <div className='feedbackSubmit'>
@@ -67,9 +149,14 @@ const FeedbackSubmit = (props) => {
         <div className='feedbackInput'>
           <CssTextField
             id="feedback-input"
+            name='feedback'
             label="FEEDBACK"
             multiline
             rows={5}
+            value={feedbackDetails.feedback}
+            onChange={handleInputChange}
+            error={feedbackErrors.feedback}
+            helperText={feedbackErrors.feedback}
           />
 
           <List sx={{
@@ -84,12 +171,12 @@ const FeedbackSubmit = (props) => {
             maxHeight: 150,
             '& ul': { padding: 0 },
           }}>
-            {[0, 1, 2, 3].map((value) => {
+            {skills.map((value, i) => {
               const labelId = `checkbox-list-label-${value}`;
 
               return (
                 <ListItem
-                  key={value}
+                  key={i}
                   disablePadding
                 >
                   <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
@@ -108,7 +195,7 @@ const FeedbackSubmit = (props) => {
                         inputProps={{ 'aria-labelledby': labelId }}
                       />
                     </ListItemIcon>
-                    <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
+                    <ListItemText id={labelId} primary={value} />
                   </ListItemButton>
                 </ListItem>
               );
@@ -128,14 +215,15 @@ const FeedbackSubmit = (props) => {
             }}
             id="input-ticket"
             name='ticket'
-            //value={data.ticket}
-            //onChange={props.handleInputChange}
+            value={feedbackDetails.ticket}
+            onChange={handleInputChange}
             label="UNIQUE TICKET"
-          //error={errors.ticket}
-          //helperText={errors.ticket}
+            error={feedbackErrors.ticket}
+            helperText={feedbackErrors.ticket}
           />
 
-          <Button sx={{ margin: '1rem', width: 300, height: 55, fontSize: '1rem' }} size='large' color="error" variant="contained" endIcon={<SendIcon />} onClick={props.handleSubmit}>
+          <Button sx={{ margin: '1rem', width: 300, height: 55, fontSize: '1rem' }} size='large' color="error"
+            variant="contained" endIcon={<SendIcon />} onClick={handleFeedbackSubmit}>
             Submit
           </Button>
         </div>
