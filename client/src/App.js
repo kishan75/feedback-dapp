@@ -14,6 +14,7 @@ import {
 
 // Pages
 import HomePage from "./pages/HomePage/homePage";
+import FeedbackSubmit from "./components/FeedbackSubmit/feedbackSubmit";
 
 // Utils
 import Toast from "./components/utils/toast";
@@ -315,6 +316,24 @@ const App = () => {
           path="/"
           element={
             <HomePage
+              contracts={contracts}
+              profsDetails={profsDetails}
+              profsEmails={profEmails}
+              account={account}
+              emailMap={addressToEmail}
+              courses={courses}
+              onLoading={handleLoaderChange}
+              onToastChange={handleToastChange}
+              isProf={isProf}
+            />
+          }
+        />
+
+        <Route
+          exact
+          path="/feedbackSubmit"
+          element={
+            <FeedbackSubmit
               contracts={contracts}
               profsDetails={profsDetails}
               profsEmails={profEmails}

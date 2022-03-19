@@ -10,7 +10,21 @@
     color: white;
     font-size: 1.9rem;
     padding: 4rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    
     justify-content:space-between;
+
+    h1{
+      text-align: center;
+      margin-top: 0rem;
+      font-size: 35px;
+      margin-bottom: 2rem;
+    }
+
+    .sr{
+      margin-bottom: 0rem;
+    }
 
     .profStatsNumerical {
       align-items: flex-start;
@@ -30,6 +44,8 @@
 
   h1{
     color: white;
+    font-size: 40px;
+    font-weight: 600;
   }
 
   .profYears{
@@ -41,8 +57,9 @@
     height: 20%;
     color: white;
     font-size: 2rem;
-    
-    padding: 3rem;
+    padding: 2rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
 
     a{
       border-top: 1px solid red;

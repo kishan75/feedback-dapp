@@ -1,28 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from "react-router-dom";
-import './sections.scss';
+import { SectionContent2 } from './Content/content';
+
+import './sections2.scss';
 
 const Sections = (props) => {
-  // Local variables, to be deleted
-  const n = 5
-  const initRenders = new Array(n).fill(false);
-  const professers = Array.from({ length: n }, (_, k) => `Professor ${k}`);
-  const abouts = Array.from({ length: n }, (_, k) => `About ${k}`);
+  // Local variables
+  const on = 5 // Original n
+  let n = 5  // Extra n
+  let profNames = [];
+  let profEmails = [];
+  let initRenders = []
 
-  // State variables, to also be deleted
+  n = Math.min(n, props.profsEmails.length - on);
+
+  for (var i = on; i < on + n; i++) {
+    profNames.push(props.profsDetails[props.profsEmails[i]].name);
+    profEmails.push(props.profsDetails[props.profsEmails[i]].email);
+    initRenders.push(false);
+  }
+
+  // State variables
   const [renderSections, setRenderSections] = useState(initRenders);
 
   let { pathname } = useLocation();
 
-
   // Handlers
   const handleRenderOnClick = (idx, bool) => {
-    let renders = renderSections;
+    let renders = new Array(n).fill(false);
     renders[idx] = bool;
     setRenderSections(renders);
   }
 
   useEffect(() => {
+    if (n <= 0)
+      return null;
     setTimeout(() => {
       var $cont = document.querySelector('.cont2');
       var $elsArr = [].slice.call(document.querySelectorAll('.el2'));
@@ -49,41 +61,19 @@ const Sections = (props) => {
     }, 1000)
   }, [pathname]);
 
-
-  const SectionContent = (props) => {
-    return (
-      <div className="el2" onClick={() => handleRenderOnClick(props.idx, true)}>
-        <div className="el2__overflow">
-          <div className="el2__inner">
-            <div className="el2__bg"></div>
-            <div className="el2__preview-cont2">
-              <h2 className="el2__heading">{props.professer}</h2>
-            </div>
-            <div className="el2__content">
-              <div className="el2__text">{props.professer}</div>
-              <div className="el2__close-btn" onClick={() => handleRenderOnClick(props.idx, false)}></div>
-              {/*renderSections[props.idx] && <Gallery filter="leather"/>*/}
-            </div>
-          </div>
-        </div>
-        <div className="el2__index">
-          <div className="el2__index-back">{props.about}</div>
-          <div className="el2__index-front">
-            <div className="el2__index-overlay" data-index={props.about}>{props.idx + 1}</div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+  if (n <= 0)
+    return null;
 
   return (
     <div>
       <div className="cont2 s2--inactive">
         {/* <!-- cont inner start --> */}
         <div className="cont2__inner">
-          {renderSections.map((_, idx) => <SectionContent key={idx} idx={idx} professer={professers[idx]} about={abouts[idx]} />)};
-        </div>
+          {profEmails.map((_, idx) =>
+            <SectionContent2 key={idx} idx={idx} show={renderSections} n={on}
+              profName={profNames[idx]} profsDetails={props.profsDetails} courses={props.courses}
+              profEmail={profEmails[idx]} handleRenderOnClick={handleRenderOnClick} profsEmails={props.profsEmails} />)
+          }        </div>
         {/* <!-- cont inner end --> */}
       </div>
     </div>

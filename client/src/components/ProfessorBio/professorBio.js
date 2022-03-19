@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { PieChart } from 'react-minimal-pie-chart';
 import Rating from '@mui/material/Rating';
@@ -22,15 +22,16 @@ const StyledRating = styled(Rating)({
 });
 
 const ProfessorBio = (props) => {
-  console.log(props.profDetails)
+  const [selected, setSelected] = useState(0);
+
   const skills = props.profDetails.skillsUpvote;
   let rating = props.profDetails.rating;
   const skillKeys = skills ? Object.keys(skills) : [];
   let skillValues = skills ? Object.values(skills) : [];
   let showPieChart = false
 
-  //skillValues = [2, 13, 0, 6, 10]; //dummy
-  //rating = { preDecimal: '68' } //dummy
+  skillValues = [2, 13, 0, 6, 10]; //dummy
+  rating = { preDecimal: '68' } //dummy
 
   skillValues = skillValues.map(Number);
   var maxSkill = Math.max.apply(Math, skillValues);
@@ -48,6 +49,7 @@ const ProfessorBio = (props) => {
     <div className="secParent">
       <div className="profStats">
         <ul className="profStatsNumerical">
+          <h1> TOP SKILLS </h1>
           {skills ? skillKeys.map((k, i) => (
             <li key={i}>
               {k} &nbsp; <StyledRating precision={0.5}
@@ -59,16 +61,16 @@ const ProfessorBio = (props) => {
         </ul>
 
         {rating.preDecimal !== '0' ? <div className="profStatsRank">
-          <p> Machine Rating </p>
+          <h1> RATING </h1>
           <PieChart
             data={[{ value: rating.preDecimal, color: 'red' }]}
-            radius={14}
+            radius={30}
             totalValue={100}
             lineWidth={20}
-            center={[50, 30]}
+            center={[50, 25]}
             label={({ dataEntry }) => dataEntry.value}
             labelStyle={{
-              fontSize: '0.5rem',
+              fontSize: '1rem',
               fontFamily: 'sans-serif',
               fill: 'red',
             }}
@@ -77,15 +79,27 @@ const ProfessorBio = (props) => {
         </div> : null}
 
         <div className="profStatsPie">
-          {skills && showPieChart ? <PieChart lineWidth={60} paddingAngle={5} label={({ dataEntry }) => `${Math.round(dataEntry.percentage)} %`} labelPosition={70}
-            labelStyle={{ fill: 'white', }} data={[
+          {skills && showPieChart ? [<h1 className='sr'> SKILLS RATIO </h1>,
+          <PieChart lineWidth={60} label={({ dataEntry }) => (
+            Math.round(dataEntry.percentage) !== 0 ? `${Math.round(dataEntry.percentage)} %` : '')}
+            labelPosition={70}
+            radius={45}
+            segmentsShift={(index) => (index === selected ? 6 : 1)}
+            segmentsStyle={{ transition: 'stroke .3s', cursor: 'pointer' }}
+            center={[50, 42]}
+            //viewBoxSize={[100, 100]}
+            labelStyle={{ fill: 'white', }}
+            onClick={(_, index) => {
+              setSelected(index === selected ? undefined : index);
+            }}
+            data={[
               { title: skillKeys[0], value: skillValues[0], color: '#E38627' },
               { title: skillKeys[1], value: skillValues[1], color: '#C13C37' },
               { title: skillKeys[2], value: skillValues[2], color: '#6B2125' },
               { title: skillKeys[3], value: skillValues[3], color: '#6A2115' },
               { title: skillKeys[4], value: skillValues[4], color: '#6D2137' },
             ]}
-          /> : null}
+          />] : null}
         </div>
       </div>
 
@@ -98,7 +112,7 @@ const ProfessorBio = (props) => {
               {y}
             </Link>
           ))}
-        </div>] : null}
+        </div>] : <p style={{ color: 'gray' }}> Courses yet to be assigned... </p>}
     </div>
   )
 }

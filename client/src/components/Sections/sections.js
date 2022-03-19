@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from "react-router-dom";
-import SectionContent from './Content/content';
+import { SectionContent } from './Content/content';
 
-import './sections2.scss';
+import './sections.scss';
 
 const Sections = (props) => {
   // Local variables
@@ -26,7 +26,6 @@ const Sections = (props) => {
   const handleRenderOnClick = (idx, bool) => {
     let renders = new Array(n).fill(false);
     renders[idx] = bool;
-    console.log(renders);
     setRenderSections(renders);
   }
 

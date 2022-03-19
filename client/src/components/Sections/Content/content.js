@@ -1,7 +1,7 @@
 import React from 'react';
 import ProfessorBio from '../../ProfessorBio/professorBio';
 
-const content = (props) => {
+export const SectionContent = (props) => {
   return (
     <div className="el" onClick={() => props.handleRenderOnClick(props.idx, true)}>
       <div className="el__overflow">
@@ -27,4 +27,30 @@ const content = (props) => {
   );
 }
 
-export default content;
+
+export const SectionContent2 = (props) => {
+  return (
+    <div className="el2" onClick={() => props.handleRenderOnClick(props.idx, true)}>
+      <div className="el2__overflow">
+        <div className="el2__inner">
+          <div className="el2__bg"></div>
+          <div className="el2__preview-cont2">
+            <h2 className="el2__heading">{props.profName}</h2>
+          </div>
+          <div className="el2__content">
+            <div className="el2__text">{props.profName}</div>
+            <div className="el2__close-btn" onClick={() => props.handleRenderOnClick(props.idx, false)}></div>
+            {props.show && <ProfessorBio profDetails={props.profsDetails[props.profsEmails[props.idx + props.n]]} courses={props.courses[props.profsEmails[props.idx + props.n]]} />}
+          </div>
+        </div>
+      </div>
+      <div className="el2__index">
+        <div className="el2__index-back">{props.profEmail}</div>
+        <div className="el2__index-front">
+          <div className="el2__index-overlay" data-index={props.profEmail}>{props.idx + 1}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
