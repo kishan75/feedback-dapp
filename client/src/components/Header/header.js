@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { red } from '@mui/material/colors';
 import Avatar from '@mui/material/Avatar';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin';
 import Modal from '@mui/material/Modal';
 
 import './header.scss';
@@ -54,10 +54,12 @@ const Header = (props) => {
       headerEl = document.getElementById("header");
 
     if (distanceY > shrinkOn) {
-      headerEl.classList.add("sticky");
+      if (headerEl)
+        headerEl.classList.add("sticky");
       setBreakpoint(69420)
     } else {
-      headerEl.classList.remove("sticky");
+      if (headerEl)
+        headerEl.classList.remove("sticky");
       setBreakpoint(100)
     }
   }
@@ -129,10 +131,10 @@ const Header = (props) => {
         <div className="statistics">
           <ul>
             <li>
-              {width > breakpoint ? <div className="addressFont"> ADDRESS: </div> : null}
+              {width > breakpoint ? <div className="addressFont"> ADDRESS: {props.account}</div> : null}
               {width > breakpoint ? <div className="tokenFont"> BALANCE </div> : null}
               <Avatar sx={{ bgcolor: red[900] }} onClick={() => setDisplayTokens(!displayTokens)}>
-                {displayTokens ? tokens : <MonetizationOnIcon fontSize='large' />}
+                {displayTokens ? tokens : width > breakpoint ? <CurrencyBitcoinIcon fontSize='large' /> : <CurrencyBitcoinIcon fontSize='small' />}
               </Avatar>
             </li>
           </ul>
@@ -148,7 +150,7 @@ const Header = (props) => {
         </div>,
         <div className="statistics">
           <Avatar sx={{ bgcolor: red[900] }} onClick={() => setDisplayTokens(!displayTokens)}>
-            {displayTokens ? tokens : <MonetizationOnIcon fontSize='large' />}
+            {displayTokens ? tokens : <CurrencyBitcoinIcon fontSize='large' />}
           </Avatar>
         </div>,
         <Menu right>

@@ -14,6 +14,7 @@ import {
 
 // Pages
 import HomePage from "./pages/HomePage/homePage";
+import FeedbackSubmit from "./components/FeedbackSubmit/feedbackSubmit";
 
 // Utils
 import Toast from "./components/utils/toast";
@@ -239,27 +240,27 @@ const App = () => {
       return prev[email][year]
         ? { ...prev }
         : {
-            ...prev,
-            [email]: {
-              ...prev[email],
-              [year]: {},
-            },
-          };
+          ...prev,
+          [email]: {
+            ...prev[email],
+            [year]: {},
+          },
+        };
     });
 
     setCourses((prev) => {
       return prev[email][year][semester]
         ? { ...prev }
         : {
-            ...prev,
-            [email]: {
-              ...prev[email],
-              [year]: {
-                ...prev[email][year],
-                [semester]: {},
-              },
+          ...prev,
+          [email]: {
+            ...prev[email],
+            [year]: {
+              ...prev[email][year],
+              [semester]: {},
             },
-          };
+          },
+        };
     });
 
     setCourses((prev) => ({
@@ -320,6 +321,7 @@ const App = () => {
             <HomePage
               contracts={contracts}
               profsDetails={profsDetails}
+              profsEmails={profEmails}
               account={account}
               emailMap={addressToEmail}
               courses={courses}
