@@ -11,8 +11,8 @@ const homePage = (props) => {
       <AdminBar {...props} />
       <Header {...props} />
       <section>
-        {props.profsEmails && props.profsDetails ? < Sections {...props} /> : null}
-        {props.profsEmails && props.profsDetails ? < Sections2 {...props} /> : null}
+        {props.profsEmails && props.profsDetails && props.courses ? < Sections {...props} /> : null}
+        {props.profsEmails && props.profsDetails && props.courses ? < Sections2 {...props} /> : null}
       </section>
     </div>
   );

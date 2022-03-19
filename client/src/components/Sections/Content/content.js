@@ -13,7 +13,7 @@ const content = (props) => {
           <div className="el__content">
             <div className="el__text">{props.profName}</div>
             <div className="el__close-btn" onClick={() => props.handleRenderOnClick(props.idx, false)}></div>
-            {props.show && <ProfessorBio profDetails={props.profsDetails[props.profsEmails[props.idx]]} />}
+            {props.show && <ProfessorBio profDetails={props.profsDetails[props.profsEmails[props.idx]]} courses={props.courses[props.profsEmails[props.idx]]} />}
           </div>
         </div>
       </div>

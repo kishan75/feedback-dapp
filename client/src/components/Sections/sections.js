@@ -66,7 +66,8 @@ const Sections = (props) => {
         {/* <!-- cont inner start --> */}
         <div className="cont__inner">
           {profEmails.map((_, idx) =>
-            <SectionContent key={idx} idx={idx} show={renderSections} profName={profNames[idx]} profsDetails={props.profsDetails}
+            <SectionContent key={idx} idx={idx} show={renderSections}
+              profName={profNames[idx]} profsDetails={props.profsDetails} courses={props.courses}
               profEmail={profEmails[idx]} handleRenderOnClick={handleRenderOnClick} profsEmails={props.profsEmails} />)
           }
         </div>
