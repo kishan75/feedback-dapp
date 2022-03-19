@@ -331,24 +331,6 @@ const App = () => {
             />
           }
         />
-
-        <Route
-          exact
-          path="/feedbackSubmit"
-          element={
-            <FeedbackSubmit
-              contracts={contracts}
-              profsDetails={profsDetails}
-              profsEmails={profEmails}
-              account={account}
-              emailMap={addressToEmail}
-              courses={courses}
-              onLoading={handleLoaderChange}
-              onToastChange={handleToastChange}
-              isProf={isProf}
-            />
-          }
-        />
         <Route
           exact
           path=":email/:year"
