@@ -210,8 +210,8 @@ const App = () => {
             ...prev[email][year][semester],
             [code]: {
               ...prev[email][year][semester][code],
-              feedback: [
-                ...prev[email][year][semester][code].feedback,
+              feedbacks: [
+                ...prev[email][year][semester][code].feedbacks,
                 {
                   code,
                   semester,
@@ -240,27 +240,27 @@ const App = () => {
       return prev[email][year]
         ? { ...prev }
         : {
-          ...prev,
-          [email]: {
-            ...prev[email],
-            [year]: {},
-          },
-        };
+            ...prev,
+            [email]: {
+              ...prev[email],
+              [year]: {},
+            },
+          };
     });
 
     setCourses((prev) => {
       return prev[email][year][semester]
         ? { ...prev }
         : {
-          ...prev,
-          [email]: {
-            ...prev[email],
-            [year]: {
-              ...prev[email][year],
-              [semester]: {},
+            ...prev,
+            [email]: {
+              ...prev[email],
+              [year]: {
+                ...prev[email][year],
+                [semester]: {},
+              },
             },
-          },
-        };
+          };
     });
 
     setCourses((prev) => ({
@@ -344,8 +344,9 @@ const App = () => {
           element={
             <Feedbacks
               skills={skills}
+              profs={profsDetails}
               showLoader={() => handleLoaderChange}
-              feedbacks={courses}
+              courses={courses}
             />
           }
         />
