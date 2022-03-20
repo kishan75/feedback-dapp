@@ -50,13 +50,15 @@ const Sections = (props) => {
       $closeBtnsArr.forEach(function ($btn) {
         $btn.addEventListener('click', function (e) {
           e.stopPropagation();
-          $cont.classList.remove('s--el-active');
-          document.querySelector('.el.s--active').classList.remove('s--active');
+          if ($cont)
+            $cont.classList.remove('s--el-active');
+          if (document.querySelector('.el.s--active'))
+            document.querySelector('.el.s--active').classList.remove('s--active');
         });
       });
       console.log("Homepage Rerendering...")
     }, 1000)
-  }, [pathname]);
+  }, [pathname, props.profsEmails]);
 
 
   return (

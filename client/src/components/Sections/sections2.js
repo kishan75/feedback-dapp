@@ -54,12 +54,14 @@ const Sections = (props) => {
       $closeBtnsArr.forEach(function ($btn) {
         $btn.addEventListener('click', function (e) {
           e.stopPropagation();
-          $cont.classList.remove('s2--el2-active');
-          document.querySelector('.el2.s2--active').classList.remove('s2--active');
+          if ($cont)
+            $cont.classList.remove('s2--el2-active');
+          if (document.querySelector('.el.s--active'))
+            document.querySelector('.el2.s2--active').classList.remove('s2--active');
         });
       });
     }, 1000)
-  }, [pathname]);
+  }, [pathname, props.profsEmails]);
 
   if (n <= 0)
     return null;
