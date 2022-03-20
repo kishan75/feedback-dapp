@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useParams } from "react-router";
+import FeedbackSubmit from "./FeedbackSubmit/feedbackSubmit";
 
 export const FeedbackCard = (props) => {
   const [expandAccordian, setAccordian] = useState(false);
@@ -88,26 +89,32 @@ export const Feedbacks = (props) => {
   const { email, year, sem, courseCode } = useParams();
 
   useEffect(() => {
-    if (props.courses && email)
-      setFeedbacks(props.courses[email][year][sem][courseCode]);
+    if (props.courses && email) {
+      setFeedbacks(props.courses[email][year][sem][courseCode].feedbacks);
+    }
   }, [props.courses, email]);
   return (
     <div>
-      {feedbacks == null ? (
-        props.showLoader(true)
-      ) : (
-        <Box m={4}>
-          <Grid container spacing={4}>
-            {feedbacks.map((feedback, i) => {
-              return (
-                <Grid item xs={3} key={i.toString()}>
-                  <FeedbackCard {...feedback}></FeedbackCard>
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Box>
-      )}
+      {feedbacks == null
+        ? props.showLoader(true)
+        : [
+            <FeedbackSubmit
+              skills={props.skills}
+              course={props.courses[email][year][sem][courseCode]}
+              prof={props.profs[email]}
+            />,
+            <Box m={4}>
+              <Grid container spacing={4}>
+                {feedbacks.map((feedback, i) => {
+                  return (
+                    <Grid item xs={3} key={i.toString()}>
+                      <FeedbackCard {...feedback}></FeedbackCard>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            </Box>,
+          ]}
     </div>
   );
 };
