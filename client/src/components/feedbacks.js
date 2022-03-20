@@ -20,12 +20,11 @@ export const FeedbackCard = (props) => {
   const [accordianHeader, setAccordianHeader] = useState(null);
 
   useEffect(() => {
-    let splits = props.content.split(" ");
     let head = "";
-    if (splits.length <= 4) {
-      splits.forEach((word) => (head += word + " "));
+    if (props.content.length <= 20) {
+      head = props.content;
     } else {
-      head = `${splits[0]} ${splits[1]} ${splits[2]} ${splits[3]}`;
+      head = props.content.slice(0, 20);
     }
     head += "...";
     setAccordianHeader(head);
@@ -37,9 +36,6 @@ export const FeedbackCard = (props) => {
         <Card
           onMouseEnter={() => setAccordian(true)}
           onMouseLeave={() => setAccordian(false)}
-          onClick={() => {
-            window.location.href = `${props.email}/${props.year}/${props.semester}/${props.code}`;
-          }}
           style={{
             backgroundColor: "white",
             boxShadow: "none",
