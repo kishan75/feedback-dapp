@@ -13,6 +13,7 @@ import './canteen.scss';
 
 const Canteen = (props) => {
   const food = {
+    Air: 0,
     Burger: 5,
     Juice: 2,
     Pizza: 15,
@@ -33,18 +34,51 @@ const Canteen = (props) => {
     for (var i = 0; i < foods.length; i++)
       price += food[foods[i]]
 
-    setOrder({ price: price, foods: foods })
+    setOrder({ price: price, foods: foods, error: '' })
   }
 
 
   const handleSubmit = () => {
+    props.onLoading(true);
     if (props.balance < order.price) {
       setOrder({ ...order, error: `Insufficient tokens (${props.balance})` })
+      props.onLoading(false);
       return;
     }
 
+    const bhuContract = props.contracts.bhuToken;
 
+    // Approval to spend:
+    if (bhuContract !== undefined) {
+      bhuContract.methods.approve(bhuContract._address, order.price.toString() + '000000000000000000').send({ from: props.account })
+        .then(() => {
+          props.onToastChange('TxN INFO: TxN approved by user', 'info', true)
 
+          // Transfer commit
+          bhuContract.methods.transferFrom(bhuContract._address, props.account, order.price.toString() + '000000000000000000').send({ from: props.account })
+            .then(() => {
+              props.onToastChange('TxN SUCCESS: Transaction successful', 'success', true)
+              setTimeout(() => props.closeModal(), 3500);
+            })
+            .catch((e) => {
+              if (e.code == '4001')
+                props.onToastChange('TxN WARN: Denied by user', 'warning', true);
+              else
+                props.onToastChange('TxN ERROR: Something went wrong', 'error', true)
+            })
+        })
+        .catch((e) => {
+          if (e.code == '4001')
+            props.onToastChange('TxN WARN: Denied by user', 'warning', true);
+          else
+            props.onToastChange('TxN ERROR: Something went wrong', 'error', true)
+        })
+        .finally(() => props.onLoading(false));
+
+    } else {
+      props.onToastChange('BHU Contract not deployed', 'error', true)
+      props.onLoading(false);
+    }
   }
 
   return (
@@ -72,7 +106,7 @@ const Canteen = (props) => {
               disabled
               value={order.price}
               label="TOTAL"
-              error={order.error}
+              error={order.error.length !== 0}
               helperText={order.error}
             />
             <Button variant='outlined' color='error' endIcon={<ShoppingCartOutlinedIcon />} sx={{ color: 'white' }}
