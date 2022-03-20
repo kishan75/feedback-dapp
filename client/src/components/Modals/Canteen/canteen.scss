@@ -1,0 +1,34 @@
+.fbox{
+
+  .innerCanteen{
+    text-align: center;
+
+    .MuiCardHeader-root{
+      background-color: #0a0909;
+      color: #fff;
+    }
+
+    .MuiList-root{
+      width: 270px;
+    }
+
+    .MuiListItemSecondaryAction-root{
+      color: #9c9c9c;
+    }
+
+    .MuiTypography-root{
+      color: white;
+    }
+
+    .MuiInputAdornment-root{
+      color: white;
+    }
+
+    .priceWindow{
+      display: grid;
+      row-gap: 1rem;
+      font-size: 1rem;
+      margin: 1rem;
+    }
+  }
+}
