@@ -107,8 +107,8 @@ const FeedbackSubmit = (props) => {
           code: props.course.code,
           semester: props.course.semester,
           year: props.course.year,
-          content: "",
-          skills: [],
+          content: feedbackDetails.feedback,
+          skills: feedbackDetails.skills,
         },
         props.account
       );
@@ -155,7 +155,6 @@ const FeedbackSubmit = (props) => {
     _account
   ) => {
     props.toast("writing data to contract", "info", true);
-    console.log(_email, _ticket, _updatedRating, _feedback);
 
     let promise = new Promise((resolve, reject) => {
       props.contracts.feedbackData.methods

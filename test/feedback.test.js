@@ -240,7 +240,7 @@ contract("FeedbackData", ([]) => {
     const year = 202;
     const code = "hjfgk";
     const sem = 1;
-    const studentCount = 15;
+    const studentCount = 1;
     const updatedRating = {
       preDecimal: 3,
       postDecimal: 4,

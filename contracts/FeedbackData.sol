@@ -406,7 +406,7 @@ contract FeedbackData {
             }
         }
         if (found == false) {
-            revert("course not found, invalid course detail");
+            revert("Course not found, invalid course detail");
         }
 
         found = false;
@@ -419,7 +419,7 @@ contract FeedbackData {
             }
         }
 
-        if (found == false) revert("ticket not found, submit valid ticket");
+        if (found == false) revert("TxN Error: Invalid ticket");
 
         courses[course_Key][coursePos].tickets[ticketPos] = courses[course_Key][
             coursePos
@@ -427,7 +427,15 @@ contract FeedbackData {
         courses[course_Key][coursePos].tickets.pop();
 
         bytes32 _feedback_Key = keccak256(
-            abi.encodePacked(course_Key, ",", _feedback.code)
+            abi.encodePacked(
+                _email,
+                ",",
+                _feedback.year,
+                ",",
+                _feedback.semester,
+                ",",
+                _feedback.code
+            )
         );
 
         feedbacks[_feedback_Key].push(_feedback);

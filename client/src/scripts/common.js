@@ -1,7 +1,7 @@
 export function getErrorMsg(message) {
   let msgArray = [
-    "course not found, invalid course detail",
-    "ticket not found, submit valid ticket",
+    "Course not found, invalid course detail",
+    "TxN Error: Invalid ticket",
     "INVALID_ARGUMENT",
   ];
   if (message)

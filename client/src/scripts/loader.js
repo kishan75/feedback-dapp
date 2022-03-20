@@ -125,6 +125,8 @@ export const loadFeedbacks = async (contracts, emails, courses) => {
   let result = await contracts.feedbackData.methods
     .getFeedbacksByEmails(emails)
     .call();
+  console.log(result);
+
   let feedbacks = {};
   for (let i = 0; i < emails.length; i++) {
     let email = emails[i];

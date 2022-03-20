@@ -53,6 +53,9 @@ const App = () => {
       const contracts = await loadContracts();
       setContracts(contracts);
 
+      const skills = await loadSkills(contracts);
+      setSkills(skills);
+
       const toast = { message: "", type: "", show: false };
       setToast(toast);
     })();
@@ -61,9 +64,6 @@ const App = () => {
   useEffect(() => {
     if (contracts) {
       (async () => {
-        const skills = await loadSkills(contracts);
-        setSkills(skills);
-
         const balance = await getBalance(contracts, account);
         setBalance(balance);
 
@@ -96,9 +96,6 @@ const App = () => {
         setSkillCount(skillsUpvote);
         setProfsDetails(updatedProfsDetail);
 
-        contracts.feedbackData.events.professorCreated((err, data) =>
-          professorCreated(err, data)
-        );
         contracts.feedbackData.events.courseUpdated((err, data) =>
           addCourse(err, data)
         );
@@ -122,6 +119,14 @@ const App = () => {
       })();
     }
   }, [contracts]);
+
+  useEffect(() => {
+    if (skills && contracts) {
+      contracts.feedbackData.events.professorCreated((err, data) =>
+        professorCreated(err, data)
+      );
+    }
+  }, [skills, contracts]);
 
   const balanceUpdated = (err, data) => {
     if (err) alert("something is wrong");
@@ -164,7 +169,9 @@ const App = () => {
         profilePicture,
         addressId,
         rating,
-        skillsUpvote: [],
+        skillsUpvote: skills.map((skill) => ({
+          [skill]: 0,
+        })),
       },
     }));
 
@@ -173,6 +180,8 @@ const App = () => {
       ...prev,
       [addressId]: email,
     }));
+
+    setIsProf(addressId == account);
   };
 
   const ticketGenerated = (err, data) => {
@@ -187,6 +196,7 @@ const App = () => {
           [sem]: {
             ...prev[email][year][sem],
             [code]: {
+              ...prev[email][year][sem][code],
               ticketGenerated: true,
             },
           },
@@ -198,6 +208,7 @@ const App = () => {
   const feedbackSubmitted = (err, data) => {
     if (err) alert("something is wrong");
     const { email, feedback } = data["returnValues"];
+    console.log(feedback);
     const { code, semester, year, content, skills } = feedback;
 
     setCourses((prev) => ({
@@ -240,27 +251,27 @@ const App = () => {
       return prev[email][year]
         ? { ...prev }
         : {
-          ...prev,
-          [email]: {
-            ...prev[email],
-            [year]: {},
-          },
-        };
+            ...prev,
+            [email]: {
+              ...prev[email],
+              [year]: {},
+            },
+          };
     });
 
     setCourses((prev) => {
       return prev[email][year][semester]
         ? { ...prev }
         : {
-          ...prev,
-          [email]: {
-            ...prev[email],
-            [year]: {
-              ...prev[email][year],
-              [semester]: {},
+            ...prev,
+            [email]: {
+              ...prev[email],
+              [year]: {
+                ...prev[email][year],
+                [semester]: {},
+              },
             },
-          },
-        };
+          };
     });
 
     setCourses((prev) => ({
