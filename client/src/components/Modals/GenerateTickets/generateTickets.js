@@ -113,6 +113,7 @@ const GenerateTickets = (props) => {
 
 
   const handleGenTicketsSubmit = () => {
+    props.onLoading(true);
     let updatedErrors = { ...genTicketsErrors };
 
     for (var key in genTicketsDetails)
@@ -171,7 +172,7 @@ const GenerateTickets = (props) => {
             props.onToastChange('TxN WARN: Denied by user', 'warning', true);
           else
             props.onToastChange('TxN ERROR: Something went wrong', 'error', true);
-        });
+        }).finally(() => props.onLoading(false));
     }
   }
 

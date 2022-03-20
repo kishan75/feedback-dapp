@@ -35,7 +35,7 @@ export const CourseCard = (props) => {
               style={{
                 color: "white",
                 fontFamily: "Arial",
-                backgroundColor: "#282c34",
+                backgroundColor: "#181818",
                 boxShadow: "none",
               }}
               titleTypographyProps={{ variant: "h4" }}
@@ -45,14 +45,13 @@ export const CourseCard = (props) => {
               style={{
                 color: "white",
                 fontFamily: "Arial",
-                backgroundColor: "#282c34",
+                backgroundColor: "#181818",
                 boxShadow: "none",
               }}
             >
               <Typography variant="body1">
-                {`code:${props.code}, sem:${
-                  props.semester == 0 ? "even" : "odd"
-                }, students:${props.studentCount}`}
+                {`code:${props.code}, sem:${props.semester == 0 ? "even" : "odd"
+                  }, students:${props.studentCount}`}
                 <Divider orientation="vertical"></Divider>
               </Typography>
             </CardContent>
