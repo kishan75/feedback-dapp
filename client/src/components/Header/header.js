@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import ProfessorDetails from '../Modals/ProfessorDetails/professorDetails';
 import GenerateTickets from '../Modals/GenerateTickets/generateTickets';
 import AddCourseDetails from '../Modals/AddCourses/addCourses';
+import Canteen from '../Modals/Canteen/canteen';
 
 
 import Button from '@mui/material/Button';
@@ -43,6 +44,14 @@ const Header = (props) => {
   const handleOpenAddCourses = () => setOpenAddCourses(true);
   const handleCloseAddCourses = () => setOpenAddCourses(false);
 
+  // For Canteen Modal
+  const [openCanteen, setOpenCanteen] = useState(false);
+  const handleOpenCanteen = () => setOpenCanteen(true);
+  const handleCloseCanteen = () => setOpenCanteen(false);
+
+  useEffect(() => {
+    setTokens(1443);
+  }, [tokens]);
 
   const resizeHeaderOnScroll = () => {
     const distanceY = window.pageYOffset || document.documentElement.scrollTop,
@@ -79,8 +88,8 @@ const Header = (props) => {
           <ul>
             <li>
               {professor ? width > breakpoint ? <Button variant="outlined" color="error" onClick={handleOpenGenerateTickets}> Generate Tickets </Button> :
-                <Button color="error" size="small" onClick={handleOpenGenerateTickets}> Generate Tickets </Button> : width > breakpoint ? <Button variant="outlined" color="error"> Virtual Canteen </Button> :
-                <Button color="error" size="small"> Virtual Canteen </Button>}
+                <Button color="error" size="small" onClick={handleOpenGenerateTickets}> Generate Tickets </Button> : width > breakpoint ? <Button variant="outlined" color="error" onClick={handleOpenCanteen}> Virtual Canteen </Button> :
+                <Button color="error" size="small" onClick={handleOpenCanteen}> Virtual Canteen </Button>}
             </li>
             <Modal
               open={openGenerateTickets}
@@ -90,6 +99,17 @@ const Header = (props) => {
             >
               <Box sx={styleGenTickets}>
                 <GenerateTickets {...props} closeModal={handleCloseGenerateTickets} />
+              </Box>
+            </Modal>
+
+            <Modal
+              open={openCanteen}
+              onClose={handleCloseCanteen}
+              aria-labelledby="canteen"
+              aria-describedby="For ordering from canteen"
+            >
+              <Box sx={styleGenTickets}>
+                <Canteen {...props} closeModal={handleCloseCanteen} />
               </Box>
             </Modal>
             <li>
