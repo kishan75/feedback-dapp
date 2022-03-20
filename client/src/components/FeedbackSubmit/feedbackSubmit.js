@@ -5,6 +5,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import SendIcon from "@mui/icons-material/Send";
 import Button from "@mui/material/Button";
+import { getErrorMsg } from "../../scripts/common";
 
 // List
 import List from "@mui/material/List";
@@ -63,7 +64,7 @@ const FeedbackSubmit = (props) => {
   };
 
   // Submit handler
-  const handleFeedbackSubmit = () => {
+  const handleFeedbackSubmit = async () => {
     //props.onLoading(true);
     let updatedErrors = { ...feedbackErrors };
 
@@ -83,7 +84,96 @@ const FeedbackSubmit = (props) => {
     console.log("Ready:", ready);
     console.log(feedbackDetails);
 
-    // Write to blockChain
+    try {
+      props.showLoader(true);
+
+      let isAbusive = await checkAbusive(feedbackDetails.feedback);
+      if (isAbusive) {
+        props.showLoader(false);
+        props.toast("your content is abusive", "warning", true);
+        return null;
+      }
+
+      let updatedRating = await getUpdatedRating([
+        ...props.course.feedbacks,
+        feedbackDetails.feedback,
+      ]);
+
+      let res = await submitToContract(
+        props.prof.email,
+        feedbackDetails.ticket,
+        updatedRating,
+        {
+          code: props.course.code,
+          semester: props.course.semester,
+          year: props.course.year,
+          content: "",
+          skills: [],
+        },
+        props.account
+      );
+      if (res) {
+        props.showLoader(false);
+        props.toast(res, "success", true);
+      }
+    } catch (err) {
+      props.showLoader(false);
+      err = getErrorMsg(err);
+      props.toast(err, "error", true);
+    }
+  };
+
+  const checkAbusive = (content) => {
+    props.toast("checking abusiveness of content", "info", true);
+
+    let promise = new Promise((resolve, reject) => {
+      //TODO add model call
+      resolve(false);
+    });
+    return promise;
+  };
+
+  const getUpdatedRating = (contents) => {
+    props.toast("calculating updated rating", "success", true);
+
+    let updatedRating = {
+      preDecimal: 3,
+      postDecimal: 4,
+    };
+    let promise = new Promise((resolve, reject) => {
+      //TODO add model call
+      resolve(updatedRating);
+    });
+    return promise;
+  };
+
+  const submitToContract = (
+    _email,
+    _ticket,
+    _updatedRating,
+    _feedback,
+    _account
+  ) => {
+    props.toast("writing data to contract", "info", true);
+    console.log(_email, _ticket, _updatedRating, _feedback);
+
+    let promise = new Promise((resolve, reject) => {
+      props.contracts.feedbackData.methods
+        .submitFeedback(_email, _ticket, _updatedRating, _feedback)
+        .send({ from: _account })
+        .then(() => {
+          resolve("feedback submitted");
+        })
+        .catch((err) => {
+          //TODO parse error
+          console.log(err);
+          if (err && err.message) err = err.message;
+          else if (err && err.code) err = err.code;
+          else err = "";
+          reject(err);
+        });
+    });
+    return promise;
   };
 
   // Validators
@@ -117,12 +207,12 @@ const FeedbackSubmit = (props) => {
       <div className="feedbackSideStats">
         <h1> Course Information </h1>
         <ul>
-          <li> Professor: {props.prof.name} </li>
-          <li> Course: {props.course.name} </li>
-          <li> Code: {props.course.code} </li>
-          <li> Year: {props.course.year} </li>
-          <li> Semester: {props.course.semester} </li>
-          <li> Strength: {props.course.studentCount} </li>
+          <li key={"1"}> Professor: {props.prof.name} </li>
+          <li key={"2"}> Course: {props.course.name} </li>
+          <li key={"3"}> Code: {props.course.code} </li>
+          <li key={"4"}> Year: {props.course.year} </li>
+          <li key={"5"}> Semester: {props.course.semester} </li>
+          <li key={"6"}> Strength: {props.course.studentCount} </li>
         </ul>
       </div>
 
@@ -159,7 +249,7 @@ const FeedbackSubmit = (props) => {
               const labelId = `checkbox-list-label-${value}`;
 
               return (
-                <ListItem key={i} disablePadding>
+                <ListItem key={i.toString()} disablePadding>
                   <ListItemButton
                     role={undefined}
                     onClick={handleToggle(value)}

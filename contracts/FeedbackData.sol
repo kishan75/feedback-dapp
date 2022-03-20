@@ -452,6 +452,7 @@ contract FeedbackData {
 
         uint256 percentage = 3;
         if (
+            courses[course_Key][coursePos].studentCount <= 3 ||
             feedbackLen <=
             (courses[course_Key][coursePos].studentCount / percentage)
         ) bhuToken.transfer(msg.sender, earlyFeedbackCost);

@@ -325,6 +325,7 @@ const App = () => {
               account={account}
               emailMap={addressToEmail}
               courses={courses}
+              balance={balance}
               onLoading={handleLoaderChange}
               onToastChange={handleToastChange}
               isProf={isProf}
@@ -343,10 +344,13 @@ const App = () => {
           path=":email/:year/:sem/:courseCode"
           element={
             <Feedbacks
+              contracts={contracts}
+              account={account}
               skills={skills}
               profs={profsDetails}
               showLoader={() => handleLoaderChange}
               courses={courses}
+              toast={handleToastChange}
             />
           }
         />

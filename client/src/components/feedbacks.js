@@ -99,7 +99,7 @@ export const Feedbacks = (props) => {
         ? props.showLoader(true)
         : [
             <FeedbackSubmit
-              skills={props.skills}
+              {...props}
               course={props.courses[email][year][sem][courseCode]}
               prof={props.profs[email]}
             />,
