@@ -65,7 +65,7 @@ const App = () => {
         setSkills(skills);
 
         const balance = await getBalance(contracts, account);
-        setBalance(balance);
+        setBalance(balance.slice(0, -18));
 
         const profEmails = await loadEmails(contracts);
         setProfEmails(profEmails);
@@ -127,7 +127,7 @@ const App = () => {
     if (err) alert("something is wrong");
 
     if (account == data["returnValues"].account)
-      setBalance(data["returnValues"].balance);
+      setBalance(data["returnValues"].balance.slice(0, -18));
   };
 
   const ratingUpdated = (err, data) => {

@@ -30,8 +30,8 @@ const ProfessorBio = (props) => {
   let skillValues = skills ? Object.values(skills) : [];
   let showPieChart = false
 
-  skillValues = [2, 13, 0, 6, 10]; //dummy
-  rating = { preDecimal: '68' } //dummy
+  //skillValues = [2, 13, 0, 6, 10]; //dummy
+  //rating = { preDecimal: '68' } //dummy
 
   skillValues = skillValues.map(Number);
   var maxSkill = Math.max.apply(Math, skillValues);

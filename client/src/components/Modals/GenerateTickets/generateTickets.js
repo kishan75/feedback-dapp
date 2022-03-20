@@ -113,7 +113,6 @@ const GenerateTickets = (props) => {
 
 
   const handleGenTicketsSubmit = () => {
-    props.onLoading(true);
     let updatedErrors = { ...genTicketsErrors };
 
     for (var key in genTicketsDetails)
@@ -133,6 +132,7 @@ const GenerateTickets = (props) => {
     console.log(genTicketsDetails);
     console.log(fastGenTicketsErrors);
 
+    props.onLoading(true);
 
     // Send Email
     const semester = { 0: 'Even', 1: 'Odd' };

@@ -3,12 +3,12 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Link,
   Typography,
   Grid,
   Box,
   Divider,
 } from "@mui/material";
+import { Link } from 'react-router-dom'
 import { BootstrapTooltip } from "./utils/common";
 import { useParams } from "react-router-dom";
 
@@ -16,14 +16,10 @@ export const CourseCard = (props) => {
   return (
     <div>
       <Link
-        href={`/${props.email}/${props.year}/${props.semester}/${props.code}`}
-        underline="none"
+        to={`/${props.email}/${props.year}/${props.semester}/${props.code}`}
       >
         <BootstrapTooltip title="Exapnd this course">
           <Card
-            onClick={() => {
-              window.location.href = `${props.email}/${props.year}/${props.semester}/${props.code}`;
-            }}
             style={{
               // backgroundColor: "white",
               boxShadow: "none",
