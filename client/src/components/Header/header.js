@@ -49,10 +49,6 @@ const Header = (props) => {
   const handleOpenCanteen = () => setOpenCanteen(true);
   const handleCloseCanteen = () => setOpenCanteen(false);
 
-  useEffect(() => {
-    setTokens(1443);
-  }, [tokens]);
-
   const resizeHeaderOnScroll = () => {
     const distanceY = window.pageYOffset || document.documentElement.scrollTop,
       shrinkOn = 10,

@@ -47,15 +47,16 @@ const Canteen = (props) => {
     }
 
     const bhuContract = props.contracts.bhuToken;
+    const feedbackContract = props.contracts.feedbackData;
 
     // Approval to spend:
-    if (bhuContract !== undefined) {
-      bhuContract.methods.approve(bhuContract._address, order.price.toString() + '000000000000000000').send({ from: props.account })
+    if (bhuContract !== undefined || feedbackContract !== undefined) {
+      bhuContract.methods.approve(feedbackContract._address, order.price.toString() + '000000000000000000').send({ from: props.account })
         .then(() => {
           props.onToastChange('TxN INFO: TxN approved by user', 'info', true)
 
           // Transfer commit
-          bhuContract.methods.transferFrom(bhuContract._address, props.account, order.price.toString() + '000000000000000000').send({ from: props.account })
+          bhuContract.methods.transferFrom(feedbackContract._address, props.account, order.price.toString() + '000000000000000000').send({ from: props.account })
             .then(() => {
               props.onToastChange('TxN SUCCESS: Transaction successful', 'success', true)
               setTimeout(() => props.closeModal(), 3500);
@@ -76,7 +77,7 @@ const Canteen = (props) => {
         .finally(() => props.onLoading(false));
 
     } else {
-      props.onToastChange('BHU Contract not deployed', 'error', true)
+      props.onToastChange('BHU or Feedback Contract not deployed', 'error', true)
       props.onLoading(false);
     }
   }
