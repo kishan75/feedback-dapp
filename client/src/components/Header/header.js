@@ -27,7 +27,6 @@ const Header = (props) => {
 
   const [width, setWidth] = useState(window.innerWidth);
   const [breakpoint, setBreakpoint] = useState(breakpoint1);
-  const [tokens, setTokens] = useState(0);
   const [displayTokens, setDisplayTokens] = useState(false);
 
   // For ProfessorRegtry Modal
@@ -151,7 +150,7 @@ const Header = (props) => {
               {width > breakpoint ? <div className="addressFont"> ADDRESS: {props.account}</div> : null}
               {width > breakpoint ? <div className="tokenFont"> BALANCE </div> : null}
               <Avatar sx={{ bgcolor: red[900] }} onClick={() => setDisplayTokens(!displayTokens)}>
-                {displayTokens ? tokens : width > breakpoint ? <CurrencyBitcoinIcon fontSize='large' /> : <CurrencyBitcoinIcon fontSize='small' />}
+                {displayTokens ? props.balance : width > breakpoint ? <CurrencyBitcoinIcon fontSize='large' /> : <CurrencyBitcoinIcon fontSize='small' />}
               </Avatar>
             </li>
           </ul>
@@ -167,7 +166,7 @@ const Header = (props) => {
         </div>,
         <div className="statistics">
           <Avatar sx={{ bgcolor: red[900] }} onClick={() => setDisplayTokens(!displayTokens)}>
-            {displayTokens ? tokens : <CurrencyBitcoinIcon fontSize='large' />}
+            {displayTokens ? props.balance : <CurrencyBitcoinIcon fontSize='large' />}
           </Avatar>
         </div>,
         <Menu right>

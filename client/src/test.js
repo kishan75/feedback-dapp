@@ -1,13 +1,17 @@
-const fs = require("fs");
-path = "/home/kishan/Pictures/Screenshot from 2022-03-12 15-14-49.png";
+const jlkjlk = async () => {
+  return new Promise((resolve, reject) => {
+    // resolve("datsfsdfsa");
+    reject("errfsdfsdfsor");
+  });
+};
 
-const contents = fs.readFileSync(path, { encoding: "base64" });
+let jp = async () => {
+  let [res, err] = await jlkjlk();
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(res);
+  }
+};
 
-// console.log(contents);
-
-var LZUTF8 = require('lzutf8');
-
-var output = LZUTF8.compress(contents);
-
-console.log(output);
-
+jp();

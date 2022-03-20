@@ -344,10 +344,13 @@ const App = () => {
           path=":email/:year/:sem/:courseCode"
           element={
             <Feedbacks
+              contracts={contracts}
+              account={account}
               skills={skills}
               profs={profsDetails}
               showLoader={() => handleLoaderChange}
               courses={courses}
+              toast={handleToastChange}
             />
           }
         />
