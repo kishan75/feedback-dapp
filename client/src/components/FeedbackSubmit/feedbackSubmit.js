@@ -210,7 +210,10 @@ const FeedbackSubmit = (props) => {
           <li key={"2"}> Course: {props.course.name} </li>
           <li key={"3"}> Code: {props.course.code} </li>
           <li key={"4"}> Year: {props.course.year} </li>
-          <li key={"5"}> Semester: {props.course.semester} </li>
+          <li key={"5"}>
+            {" "}
+            Semester: {props.course.semester == 0 ? "Even" : "Odd"}{" "}
+          </li>
           <li key={"6"}> Strength: {props.course.studentCount} </li>
         </ul>
       </div>

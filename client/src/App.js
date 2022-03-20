@@ -14,7 +14,6 @@ import {
 
 // Pages
 import HomePage from "./pages/HomePage/homePage";
-import FeedbackSubmit from "./components/FeedbackSubmit/feedbackSubmit";
 
 // Utils
 import Toast from "./components/utils/toast";
@@ -36,24 +35,31 @@ const App = () => {
   const [courses, setCourses] = useState(null);
 
   const [account, setAccount] = useState(null);
+  const accountRef = React.useRef(account);
+
   const [balance, setBalance] = useState(null);
+
   const [showLoader, setLoader] = useState(true);
   const [toast, setToast] = useState(null);
   const [contracts, setContracts] = useState(null);
 
   const [skills, setSkills] = useState(null);
+  const skillsRef = React.useRef(skills);
+
   const [isProf, setIsProf] = useState(false);
 
   // React useEffects
   useEffect(() => {
     (async () => {
       const account = await setupMetamask();
+      accountRef.current = account;
       setAccount(account);
 
       const contracts = await loadContracts();
       setContracts(contracts);
 
       const skills = await loadSkills(contracts);
+      skillsRef.current = skills;
       setSkills(skills);
 
       const toast = { message: "", type: "", show: false };
@@ -114,25 +120,21 @@ const App = () => {
         contracts.feedbackData.events.balanceUpdated((err, data) =>
           balanceUpdated(err, data)
         );
+        contracts.feedbackData.events.professorCreated((err, data) =>
+          professorCreated(err, data)
+        );
 
         setLoader(false);
       })();
     }
   }, [contracts]);
 
-  useEffect(() => {
-    if (skills && contracts) {
-      contracts.feedbackData.events.professorCreated((err, data) =>
-        professorCreated(err, data)
-      );
-    }
-  }, [skills, contracts]);
-
   const balanceUpdated = (err, data) => {
     if (err) alert("something is wrong");
 
-    if (account == data["returnValues"].account)
+    if (accountRef.current == data["returnValues"].account.toLowerCase()) {
       setBalance(data["returnValues"].balance.slice(0, -18));
+    }
   };
 
   const ratingUpdated = (err, data) => {
@@ -169,7 +171,7 @@ const App = () => {
         profilePicture,
         addressId,
         rating,
-        skillsUpvote: skills.map((skill) => ({
+        skillsUpvote: skillsRef.current.map((skill) => ({
           [skill]: 0,
         })),
       },
@@ -181,7 +183,7 @@ const App = () => {
       [addressId]: email,
     }));
 
-    setIsProf(addressId == account);
+    setIsProf(addressId == accountRef);
   };
 
   const ticketGenerated = (err, data) => {
@@ -208,7 +210,6 @@ const App = () => {
   const feedbackSubmitted = (err, data) => {
     if (err) alert("something is wrong");
     const { email, feedback } = data["returnValues"];
-    console.log(feedback);
     const { code, semester, year, content, skills } = feedback;
 
     setCourses((prev) => ({
