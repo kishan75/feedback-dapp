@@ -22,8 +22,8 @@ import Toast from "./components/utils/toast";
 //CSS
 import "./App.css";
 import Loader from "./components/utils/Loader";
-import { Courses } from "./components/Courses";
-import { Feedbacks } from "./components/feedbacks";
+import { Courses } from "./components/Courses/courses";
+import { Feedbacks } from "./components/Feedbacks/feedbacks";
 
 require("dotenv").config();
 
@@ -251,27 +251,27 @@ const App = () => {
       return prev[email][year]
         ? { ...prev }
         : {
-            ...prev,
-            [email]: {
-              ...prev[email],
-              [year]: {},
-            },
-          };
+          ...prev,
+          [email]: {
+            ...prev[email],
+            [year]: {},
+          },
+        };
     });
 
     setCourses((prev) => {
       return prev[email][year][semester]
         ? { ...prev }
         : {
-            ...prev,
-            [email]: {
-              ...prev[email],
-              [year]: {
-                ...prev[email][year],
-                [semester]: {},
-              },
+          ...prev,
+          [email]: {
+            ...prev[email],
+            [year]: {
+              ...prev[email][year],
+              [semester]: {},
             },
-          };
+          },
+        };
     });
 
     setCourses((prev) => ({
@@ -347,7 +347,20 @@ const App = () => {
           exact
           path=":email/:year"
           element={
-            <Courses showLoader={() => handleLoaderChange} courses={courses} />
+            <Courses
+              showLoader={() => handleLoaderChange}
+              contracts={contracts}
+
+              profsDetails={profsDetails}
+              profsEmails={profEmails}
+              account={account}
+              emailMap={addressToEmail}
+              courses={courses}
+              isProf={isProf}
+              balance={balance}
+              onLoading={handleLoaderChange}
+              onToastChange={handleToastChange}
+            />
           }
         />
         <Route
@@ -362,6 +375,14 @@ const App = () => {
               showLoader={() => handleLoaderChange}
               courses={courses}
               toast={handleToastChange}
+
+              profsDetails={profsDetails}
+              profsEmails={profEmails}
+              emailMap={addressToEmail}
+              isProf={isProf}
+              balance={balance}
+              onLoading={handleLoaderChange}
+              onToastChange={handleToastChange}
             />
           }
         />

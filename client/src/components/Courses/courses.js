@@ -9,19 +9,21 @@ import {
   Divider,
 } from "@mui/material";
 import { Link } from 'react-router-dom'
-import { BootstrapTooltip } from "./utils/common";
+import { BootstrapTooltip } from "../utils/common";
 import { useParams } from "react-router-dom";
+import Header from "../Header/header";
+
+import './courses.scss'
 
 export const CourseCard = (props) => {
   return (
-    <div>
+    <div className="courseCard">
       <Link
         to={`/${props.email}/${props.year}/${props.semester}/${props.code}`}
       >
         <BootstrapTooltip title="Exapnd this course">
           <Card
             style={{
-              // backgroundColor: "white",
               boxShadow: "none",
               border: "4px solid",
               borderColor: "red",
@@ -29,6 +31,7 @@ export const CourseCard = (props) => {
           >
             <CardHeader
               style={{
+                textDecoration: "none",
                 color: "white",
                 fontFamily: "Arial",
                 backgroundColor: "#181818",
@@ -39,6 +42,7 @@ export const CourseCard = (props) => {
             />
             <CardContent
               style={{
+                textDecoration: "none",
                 color: "white",
                 fontFamily: "Arial",
                 backgroundColor: "#181818",
@@ -46,8 +50,11 @@ export const CourseCard = (props) => {
               }}
             >
               <Typography variant="body1">
-                {`code:${props.code}, sem:${props.semester == 0 ? "even" : "odd"
-                  }, students:${props.studentCount}`}
+                <div className='coursesDataParent'>
+                  <div className='courseDataChild'> {`Code: ${props.code}`} </div>
+                  <div className='courseDataChild'> {`Semester: ${props.semester == 0 ? "Even" : "Odd"}`} </div>
+                  <div className='courseDataChild'> {`Students:${props.studentCount}`} </div>
+                </div>
                 <Divider orientation="vertical"></Divider>
               </Typography>
             </CardContent>
@@ -76,6 +83,8 @@ export const Courses = (props) => {
   }, [email, year, props.courses]);
   return (
     <div>
+      <Header {...props} />
+      <h1 className='coursesHead'> COURSES </h1>
       {courses == null ? (
         props.showLoader(true)
       ) : (
