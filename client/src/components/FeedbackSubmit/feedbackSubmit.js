@@ -87,10 +87,10 @@ const FeedbackSubmit = (props) => {
     try {
       props.showLoader(true);
 
-      let isAbusive = await checkAbusive(feedbackDetails.feedback);
-      if (isAbusive) {
+      let contentType = await checkAbusive(feedbackDetails.feedback);
+      if (contentType == "valid" || contentType == "unrelated") {
         props.showLoader(false);
-        props.toast("your content is abusive", "warning", true);
+        props.toast(`your content is ${contentType}`, "warning", true);
         return null;
       }
 
@@ -126,9 +126,20 @@ const FeedbackSubmit = (props) => {
   const checkAbusive = (content) => {
     props.toast("checking abusiveness of content", "info", true);
 
+    var formdata = new FormData();
+    formdata.append("content", content);
+
+    var requestOptions = {
+      method: "POST",
+      body: formdata,
+      redirect: "follow",
+    };
+
     let promise = new Promise((resolve, reject) => {
-      //TODO add model call
-      resolve(false);
+      fetch("http://127.0.0.1:5001/feedback-classify", requestOptions)
+        .then((response) => response.text())
+        .then((result) => resolve(result))
+        .catch((error) => reject(error));
     });
     return promise;
   };
