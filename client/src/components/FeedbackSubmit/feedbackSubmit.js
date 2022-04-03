@@ -90,7 +90,7 @@ const FeedbackSubmit = (props) => {
       let isAbusive = await checkAbusive(feedbackDetails.feedback);
       if (isAbusive) {
         props.showLoader(false);
-        props.toast("your content is abusive", "warning", true);
+        props.toast("Your content is abusive", "warning", true);
         return null;
       }
 
@@ -124,7 +124,7 @@ const FeedbackSubmit = (props) => {
   };
 
   const checkAbusive = (content) => {
-    props.toast("checking abusiveness of content", "info", true);
+    props.toast("Checking abusiveness of content", "info", true);
 
     let promise = new Promise((resolve, reject) => {
       //TODO add model call
@@ -134,7 +134,7 @@ const FeedbackSubmit = (props) => {
   };
 
   const getUpdatedRating = (contents) => {
-    props.toast("calculating updated rating", "success", true);
+    props.toast("Calculating updated rating", "success", true);
 
     let updatedRating = {
       preDecimal: 3,
@@ -154,14 +154,14 @@ const FeedbackSubmit = (props) => {
     _feedback,
     _account
   ) => {
-    props.toast("writing data to contract", "info", true);
+    props.toast("Writing data to contract", "info", true);
 
     let promise = new Promise((resolve, reject) => {
       props.contracts.feedbackData.methods
         .submitFeedback(_email, _ticket, _updatedRating, _feedback)
         .send({ from: _account })
         .then(() => {
-          resolve("feedback submitted");
+          resolve("Feedback submitted");
         })
         .catch((err) => {
           //TODO parse error

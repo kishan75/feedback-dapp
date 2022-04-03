@@ -113,6 +113,7 @@ export const Feedbacks = (props) => {
               })}
             </Grid>
           </Box>,
+          <div className='feedbackExtender'>  </div>
         ]}
     </div>
   );

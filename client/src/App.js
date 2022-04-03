@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Routes, Route } from "react-router-dom";
 import {
   getBalance,
@@ -35,7 +35,7 @@ const App = () => {
   const [courses, setCourses] = useState(null);
 
   const [account, setAccount] = useState(null);
-  const accountRef = React.useRef(account);
+  const accountRef = useRef(account);
 
   const [balance, setBalance] = useState(null);
 
@@ -44,7 +44,7 @@ const App = () => {
   const [contracts, setContracts] = useState(null);
 
   const [skills, setSkills] = useState(null);
-  const skillsRef = React.useRef(skills);
+  const skillsRef = useRef(skills);
 
   const [isProf, setIsProf] = useState(false);
 

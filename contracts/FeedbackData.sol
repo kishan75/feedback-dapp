@@ -467,4 +467,10 @@ contract FeedbackData {
         else bhuToken.transfer(msg.sender, lateFeedbackCost);
         emit balanceUpdated(msg.sender, bhuToken.balanceOf(msg.sender));
     }
+
+    function buyItems(uint256 cost) public {
+        //require(checkBalance(msg.sender) >= 1, "Insufficent tokens");
+        bhuToken.transferFrom(msg.sender, address(this), cost);
+        emit balanceUpdated(msg.sender, bhuToken.balanceOf(msg.sender));
+    }
 }
