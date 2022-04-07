@@ -225,9 +225,6 @@ const App = () => {
               feedbacks: [
                 ...prev[email][year][semester][code].feedbacks,
                 {
-                  code,
-                  semester,
-                  year,
                   content,
                   skills,
                 },
@@ -252,27 +249,27 @@ const App = () => {
       return prev[email][year]
         ? { ...prev }
         : {
-          ...prev,
-          [email]: {
-            ...prev[email],
-            [year]: {},
-          },
-        };
+            ...prev,
+            [email]: {
+              ...prev[email],
+              [year]: {},
+            },
+          };
     });
 
     setCourses((prev) => {
       return prev[email][year][semester]
         ? { ...prev }
         : {
-          ...prev,
-          [email]: {
-            ...prev[email],
-            [year]: {
-              ...prev[email][year],
-              [semester]: {},
+            ...prev,
+            [email]: {
+              ...prev[email],
+              [year]: {
+                ...prev[email][year],
+                [semester]: {},
+              },
             },
-          },
-        };
+          };
     });
 
     setCourses((prev) => ({
@@ -351,7 +348,6 @@ const App = () => {
             <Courses
               showLoader={() => handleLoaderChange}
               contracts={contracts}
-
               profsDetails={profsDetails}
               profsEmails={profEmails}
               account={account}
@@ -376,7 +372,6 @@ const App = () => {
               showLoader={() => handleLoaderChange}
               courses={courses}
               toast={handleToastChange}
-
               profsDetails={profsDetails}
               profsEmails={profEmails}
               emailMap={addressToEmail}
