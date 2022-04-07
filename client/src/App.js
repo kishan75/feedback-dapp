@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Routes, Route } from "react-router-dom";
 import {
   getBalance,
@@ -21,8 +21,8 @@ import Toast from "./components/utils/toast";
 //CSS
 import "./App.css";
 import Loader from "./components/utils/Loader";
-import { Courses } from "./components/Courses";
-import { Feedbacks } from "./components/feedbacks";
+import { Courses } from "./components/Courses/courses";
+import { Feedbacks } from "./components/Feedbacks/feedbacks";
 
 require("dotenv").config();
 
@@ -35,7 +35,7 @@ const App = () => {
   const [courses, setCourses] = useState(null);
 
   const [account, setAccount] = useState(null);
-  const accountRef = React.useRef(account);
+  const accountRef = useRef(account);
 
   const [balance, setBalance] = useState(null);
 
@@ -44,7 +44,7 @@ const App = () => {
   const [contracts, setContracts] = useState(null);
 
   const [skills, setSkills] = useState(null);
-  const skillsRef = React.useRef(skills);
+  const skillsRef = useRef(skills);
 
   const [isProf, setIsProf] = useState(false);
 
@@ -225,9 +225,6 @@ const App = () => {
               feedbacks: [
                 ...prev[email][year][semester][code].feedbacks,
                 {
-                  code,
-                  semester,
-                  year,
                   content,
                   skills,
                 },
@@ -348,7 +345,19 @@ const App = () => {
           exact
           path=":email/:year"
           element={
-            <Courses showLoader={() => handleLoaderChange} courses={courses} />
+            <Courses
+              showLoader={() => handleLoaderChange}
+              contracts={contracts}
+              profsDetails={profsDetails}
+              profsEmails={profEmails}
+              account={account}
+              emailMap={addressToEmail}
+              courses={courses}
+              isProf={isProf}
+              balance={balance}
+              onLoading={handleLoaderChange}
+              onToastChange={handleToastChange}
+            />
           }
         />
         <Route
@@ -363,6 +372,13 @@ const App = () => {
               showLoader={() => handleLoaderChange}
               courses={courses}
               toast={handleToastChange}
+              profsDetails={profsDetails}
+              profsEmails={profEmails}
+              emailMap={addressToEmail}
+              isProf={isProf}
+              balance={balance}
+              onLoading={handleLoaderChange}
+              onToastChange={handleToastChange}
             />
           }
         />

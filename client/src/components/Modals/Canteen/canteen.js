@@ -56,7 +56,7 @@ const Canteen = (props) => {
           props.onToastChange('TxN INFO: TxN approved by user', 'info', true)
 
           // Transfer commit
-          bhuContract.methods.transferFrom(feedbackContract._address, props.account, order.price.toString() + '000000000000000000').send({ from: props.account })
+          feedbackContract.methods.buyItems(order.price.toString() + '000000000000000000').send({ from: props.account })
             .then(() => {
               props.onToastChange('TxN SUCCESS: Transaction successful', 'success', true)
               setTimeout(() => props.closeModal(), 3500);

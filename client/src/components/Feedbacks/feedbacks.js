@@ -13,7 +13,10 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useParams } from "react-router";
-import FeedbackSubmit from "./FeedbackSubmit/feedbackSubmit";
+import FeedbackSubmit from "../FeedbackSubmit/feedbackSubmit";
+import Header from "../Header/header";
+
+import './feedbacks.scss'
 
 export const FeedbackCard = (props) => {
   const [expandAccordian, setAccordian] = useState(false);
@@ -31,19 +34,16 @@ export const FeedbackCard = (props) => {
   }, []);
 
   return (
-    <div>
+    <div className="feedbackCard">
       {{ accordianHeader } && (
         <Card
           onMouseEnter={() => setAccordian(true)}
           onMouseLeave={() => setAccordian(false)}
           style={{
-            backgroundColor: "white",
+            backgroundColor: "#181818",
             boxShadow: "none",
             border: "4px solid",
             borderColor: "red",
-            "&:hover": {
-              backgroundColor: "blue !important",
-            },
           }}
         >
           <CardContent>
@@ -64,6 +64,7 @@ export const FeedbackCard = (props) => {
             {props.skills.map((skill) => {
               return (
                 <Button
+                  color='error'
                   style={{
                     margin: "5px",
                   }}
@@ -91,26 +92,29 @@ export const Feedbacks = (props) => {
   }, [props.courses, email]);
   return (
     <div>
+      <Header {...props} />
       {feedbacks == null
         ? props.showLoader(true)
         : [
-            <FeedbackSubmit
-              {...props}
-              course={props.courses[email][year][sem][courseCode]}
-              prof={props.profs[email]}
-            />,
-            <Box m={4}>
-              <Grid container spacing={4}>
-                {feedbacks.map((feedback, i) => {
-                  return (
-                    <Grid item xs={3} key={i.toString()}>
-                      <FeedbackCard {...feedback}></FeedbackCard>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Box>,
-          ]}
+          <FeedbackSubmit
+            {...props}
+            course={props.courses[email][year][sem][courseCode]}
+            prof={props.profs[email]}
+          />,
+          <h1 className='coursesHead'> FEEDBACKS </h1>,
+          <Box m={4} sx={{ padding: '1rem' }}>
+            <Grid container spacing={4}>
+              {feedbacks.map((feedback, i) => {
+                return (
+                  <Grid item xs={3} key={i.toString()}>
+                    <FeedbackCard {...feedback}></FeedbackCard>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </Box>,
+          <div className='feedbackExtender'>  </div>
+        ]}
     </div>
   );
 };

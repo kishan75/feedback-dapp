@@ -17,6 +17,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 
 import "./feedbackSubmit.scss";
+import { PYTHON_BASE_URL } from "../../constants";
 
 const FeedbackSubmit = (props) => {
   const [feedbackDetails, setFeedbackDetails] = useState({
@@ -88,16 +89,18 @@ const FeedbackSubmit = (props) => {
       props.showLoader(true);
 
       let contentType = await checkAbusive(feedbackDetails.feedback);
-      if (contentType == "valid" || contentType == "unrelated") {
+      if (contentType == "abusive" || contentType == "unrelated") {
         props.showLoader(false);
         props.toast(`your content is ${contentType}`, "warning", true);
         return null;
       }
 
       let updatedRating = await getUpdatedRating([
-        ...props.course.feedbacks,
+        ...props.course.feedbacks.map((feedback) => feedback.content),
         feedbackDetails.feedback,
       ]);
+
+      alert(updatedRating);
 
       let res = await submitToContract(
         props.prof.email,
@@ -124,7 +127,7 @@ const FeedbackSubmit = (props) => {
   };
 
   const checkAbusive = (content) => {
-    props.toast("checking abusiveness of content", "info", true);
+    props.toast("Checking abusiveness of content", "info", true);
 
     var formdata = new FormData();
     formdata.append("content", content);
@@ -136,7 +139,7 @@ const FeedbackSubmit = (props) => {
     };
 
     let promise = new Promise((resolve, reject) => {
-      fetch("http://127.0.0.1:5001/feedback-classify", requestOptions)
+      fetch(`${PYTHON_BASE_URL}feedback-classify`, requestOptions)
         .then((response) => response.text())
         .then((result) => resolve(result))
         .catch((error) => reject(error));
@@ -145,15 +148,23 @@ const FeedbackSubmit = (props) => {
   };
 
   const getUpdatedRating = (contents) => {
-    props.toast("calculating updated rating", "success", true);
+    props.toast("Calculating updated rating", "success", true);
+    console.log(contents);
 
-    let updatedRating = {
-      preDecimal: 3,
-      postDecimal: 4,
+    var formdata = new FormData();
+    formdata.append("content", contents);
+
+    var requestOptions = {
+      method: "POST",
+      body: formdata,
+      redirect: "follow",
     };
+
     let promise = new Promise((resolve, reject) => {
-      //TODO add model call
-      resolve(updatedRating);
+      fetch(`${PYTHON_BASE_URL}feedback-rating`, requestOptions)
+        .then((response) => response.text())
+        .then((result) => resolve(result))
+        .catch((error) => reject(error));
     });
     return promise;
   };
@@ -165,14 +176,14 @@ const FeedbackSubmit = (props) => {
     _feedback,
     _account
   ) => {
-    props.toast("writing data to contract", "info", true);
+    props.toast("Writing data to contract", "info", true);
 
     let promise = new Promise((resolve, reject) => {
       props.contracts.feedbackData.methods
         .submitFeedback(_email, _ticket, _updatedRating, _feedback)
         .send({ from: _account })
         .then(() => {
-          resolve("feedback submitted");
+          resolve("Feedback submitted");
         })
         .catch((err) => {
           //TODO parse error
