@@ -85,49 +85,52 @@ const FeedbackSubmit = (props) => {
     console.log("Ready:", ready);
     console.log(feedbackDetails);
 
-    try {
-      props.showLoader(true);
+    if (ready) {
+      try {
+        props.showLoader(true);
 
-      let contentType = await checkAbusive(feedbackDetails.feedback);
-      if (contentType == "abusive" || contentType == "unrelated") {
+        let contentType = await checkAbusive(feedbackDetails.feedback);
+        if (contentType == "abusive" || contentType == "unrelated") {
+          props.showLoader(false);
+          props.toast(`Your feedback is ${contentType}`, "warning", true);
+          return null;
+        }
+
+        let updatedRating = await getUpdatedRating([
+          ...props.course.feedbacks.map((feedback) => feedback.content),
+          feedbackDetails.feedback,
+        ], feedbackDetails.feedback);
+        props.toast(`Your feedback rates ${updatedRating.rating}/5`, "success", true);
+
+        console.log(updatedRating);
+
+        let res = await submitToContract(
+          props.prof.email,
+          feedbackDetails.ticket,
+          updatedRating.ratings,
+          {
+            code: props.course.code,
+            semester: props.course.semester,
+            year: props.course.year,
+            content: feedbackDetails.feedback,
+            skills: feedbackDetails.skills,
+          },
+          props.account
+        );
+        if (res) {
+          props.showLoader(false);
+          props.toast(res, "success", true);
+        }
+      } catch (err) {
         props.showLoader(false);
-        props.toast(`your content is ${contentType}`, "warning", true);
-        return null;
+        err = getErrorMsg(err);
+        props.toast(err, "error", true);
       }
-
-      let updatedRating = await getUpdatedRating([
-        ...props.course.feedbacks.map((feedback) => feedback.content),
-        feedbackDetails.feedback,
-      ]);
-
-      alert(updatedRating);
-
-      let res = await submitToContract(
-        props.prof.email,
-        feedbackDetails.ticket,
-        updatedRating,
-        {
-          code: props.course.code,
-          semester: props.course.semester,
-          year: props.course.year,
-          content: feedbackDetails.feedback,
-          skills: feedbackDetails.skills,
-        },
-        props.account
-      );
-      if (res) {
-        props.showLoader(false);
-        props.toast(res, "success", true);
-      }
-    } catch (err) {
-      props.showLoader(false);
-      err = getErrorMsg(err);
-      props.toast(err, "error", true);
     }
   };
 
   const checkAbusive = (content) => {
-    props.toast("Checking abusiveness of content", "info", true);
+    props.toast("Performing semantic analysis of feedback...", "info", true);
 
     var formdata = new FormData();
     formdata.append("content", content);
@@ -147,12 +150,14 @@ const FeedbackSubmit = (props) => {
     return promise;
   };
 
-  const getUpdatedRating = (contents) => {
-    props.toast("Calculating updated rating", "success", true);
+  const getUpdatedRating = (contents, myContent) => {
+    props.toast("Calculating updated normalized rating...", "success", true);
     console.log(contents);
 
     var formdata = new FormData();
-    formdata.append("content", contents);
+    for (var i = 0; i < contents.length; i++)
+      formdata.append("contents[]", contents[i]);
+    formdata.append("content", myContent);
 
     var requestOptions = {
       method: "POST",
@@ -160,9 +165,11 @@ const FeedbackSubmit = (props) => {
       redirect: "follow",
     };
 
+    console.log(requestOptions)
+
     let promise = new Promise((resolve, reject) => {
       fetch(`${PYTHON_BASE_URL}feedback-rating`, requestOptions)
-        .then((response) => response.text())
+        .then((response) => response.json())
         .then((result) => resolve(result))
         .catch((error) => reject(error));
     });

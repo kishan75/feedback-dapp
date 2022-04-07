@@ -383,6 +383,7 @@ $contentFadeinAT: 0.5s;
         &:before {
           transition-delay: 0.1s * $i;
           background-image: url("https://feedback-dapp.azurewebsites.net/image-by-id/#{$i+1}");
+          //background-image: url('http://127.0.0.1:5000/image-by-id/#{$i+1}');
         }
       }
     }
