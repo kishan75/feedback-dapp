@@ -5,6 +5,6 @@
   },
   "scripts": {
     "publish": "truffle compile && truffle migrate --reset",
-    "start": "cd client && react-scripts --openssl-legacy-provider start --host 0.0.0.0"
+    "start": "cd client && npm start"
   }
 }
