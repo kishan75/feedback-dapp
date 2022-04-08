@@ -11,12 +11,12 @@ import {
   loadSkillsCount,
   setupMetamask,
 } from "./scripts/loader";
+import { useSnackbar } from "notistack";
 
 // Pages
 import HomePage from "./pages/HomePage/homePage";
 
 // Utils
-import Toast from "./components/utils/toast";
 
 //CSS
 import "./App.css";
@@ -26,7 +26,7 @@ import { Feedbacks } from "./components/Feedbacks/feedbacks";
 
 require("dotenv").config();
 
-const App = () => {
+const App = (props) => {
   const [profEmails, setProfEmails] = useState(null);
   const [addressToEmail, setAddressToEmail] = useState(null);
 
@@ -40,13 +40,14 @@ const App = () => {
   const [balance, setBalance] = useState(null);
 
   const [showLoader, setLoader] = useState(true);
-  const [toast, setToast] = useState(null);
   const [contracts, setContracts] = useState(null);
 
   const [skills, setSkills] = useState(null);
   const skillsRef = useRef(skills);
 
   const [isProf, setIsProf] = useState(false);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   // React useEffects
   useEffect(() => {
@@ -61,9 +62,6 @@ const App = () => {
       const skills = await loadSkills(contracts);
       skillsRef.current = skills;
       setSkills(skills);
-
-      const toast = { message: "", type: "", show: false };
-      setToast(toast);
     })();
   }, []);
 
@@ -244,6 +242,7 @@ const App = () => {
 
   const addCourse = (err, data) => {
     if (err) alert("something is wrong");
+
     const { email, year, course } = data["returnValues"];
     const { name, code, semester, studentCount, ticketGenerated } = course;
 
@@ -302,15 +301,8 @@ const App = () => {
     }));
   };
 
-  // Very toasty
-  const handleToastClose = (_, reason) => {
-    if (reason === "clickaway") return;
-    setToast({ ...toast, show: false });
-  };
-
   const handleToastChange = (message, severity, open) => {
-    console.log(message, severity, open);
-    setToast({ message: message, type: severity, show: open });
+    enqueueSnackbar(message, { variant: severity });
   };
 
   const handleLoaderChange = (show) => {
@@ -320,14 +312,6 @@ const App = () => {
   return (
     <div className="App">
       <Loader show={showLoader} />
-      {toast ? (
-        <Toast
-          onClose={handleToastClose}
-          message={toast.message}
-          show={toast.show}
-          type={toast.type}
-        />
-      ) : null}
       <Routes>
         <Route
           exact
