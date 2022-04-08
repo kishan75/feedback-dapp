@@ -61,6 +61,7 @@ const Sections = (props) => {
         });
       });
     }, 1000)
+    // eslint-disable-next-line
   }, [pathname, props.profsEmails]);
 
   if (n <= 0)

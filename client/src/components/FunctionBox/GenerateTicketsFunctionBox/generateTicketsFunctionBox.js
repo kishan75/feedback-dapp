@@ -1,7 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { DataGrid } from '@mui/x-data-grid';
 
@@ -172,52 +171,6 @@ const generateTicketsFunctionBox = (props) => {
 }
 
 export default generateTicketsFunctionBox;
-
-
-
-const CssTextField = styled(TextField)({
-    '& .MuiInputBase-input': {
-        color: 'white'
-    },
-    '& label': {
-        color: '#666666'
-    },
-    '& label.Mui-focused': {
-        color: 'white',
-    },
-    '& .MuiInput-underline:after': {
-        borderBottomColor: '#ce3333',
-    },
-    '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-            borderColor: '#666666',
-        },
-        '&:hover fieldset': {
-            borderColor: '#ce3333',
-        },
-        '&.Mui-focused fieldset': {
-            borderColor: '#ce3333',
-        },
-    },
-
-    "& .MuiFormLabel-root.Mui-error": {
-        color: "#ffdd00 !important"
-    },
-    '& label.Mui-focused.Mui-error': {
-        color: "white !important",
-    },
-    '& .MuiOutlinedInput-root.Mui-error': {
-        '& fieldset': {
-            borderColor: "#ffdd00 !important",
-        },
-        '&:hover fieldset': {
-            borderColor: "#ffdd00 !important",
-        },
-        '&.Mui-focused fieldset': {
-            borderColor: "#ffdd00 !important",
-        },
-    },
-});
 
 
 const CSSFormControl = styled(FormControl)({

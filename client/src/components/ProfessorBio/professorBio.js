@@ -29,6 +29,10 @@ const ProfessorBio = (props) => {
   const skillKeys = skills ? Object.keys(skills) : [];
   let skillValues = skills ? Object.values(skills).map((val) => Number(val)) : [];
 
+  console.log(props.profDetails)
+  console.log(skills)
+  console.log(skillValues)
+
   let showPieChart = false
 
   //skillValues = [2, 13, 0, 6, 10]; //dummy
@@ -37,7 +41,7 @@ const ProfessorBio = (props) => {
   var maxSkill = Math.max.apply(Math, skillValues);
   var minSkill = Math.min.apply(Math, skillValues);
 
-  if (maxSkill != 0 && maxSkill != minSkill) {
+  if (maxSkill !== 0 && maxSkill !== minSkill) {
     showPieChart = true
     for (var i = 0; i < skillValues.length; i++)
       skillValues[i] = ((skillValues[i] - minSkill) / (maxSkill - minSkill)) * 5;

@@ -30,7 +30,7 @@ const Admin = (props) => {
 	// Asyncs:
 	const writeTicketToBlockChain = async () => {
 		const feedbackData = props.contracts.feedbackData;
-		if (feedbackData != undefined) {
+		if (feedbackData !== undefined) {
 			let result = await feedbackData.methods.generateTokenForProfReg(genProfTicketDetails.password).send({ from: props.account });
 			result = result.events.tokenGenerated.returnValues[0];
 			console.log(result);
@@ -44,7 +44,7 @@ const Admin = (props) => {
 
 	const writePasswordToBlockChain = async () => {
 		const feedbackData = props.contracts.feedbackData;
-		if (feedbackData != undefined) {
+		if (feedbackData !== undefined) {
 			let result = await feedbackData.methods.updatePassword(changePasswordDetails.old, changePasswordDetails.new).send({ from: props.account });
 			result = result.events.tokenGenerated.returnValues[0];
 			console.log(result);
@@ -92,9 +92,9 @@ const Admin = (props) => {
 		const fastgenProfTicketErrors = { ...updatedErrors };
 
 		let ready = true;
-		for (var key in fastgenProfTicketErrors) {
-			if (fastgenProfTicketErrors.hasOwnProperty(key))
-				if (fastgenProfTicketErrors[key] != '')
+		for (var fkey in fastgenProfTicketErrors) {
+			if (fastgenProfTicketErrors.hasOwnProperty(fkey))
+				if (fastgenProfTicketErrors[fkey] !== '')
 					ready = false;
 		}
 
@@ -130,9 +130,9 @@ const Admin = (props) => {
 				}).catch(e => {
 					ready = false;
 					console.log(e);
-					if (e.code == '4001')
+					if (e.code === '4001')
 						props.onToastChange('TxN WARN: Denied by user', 'warning', true);
-					else if (e.code == '-32603')
+					else if (e.code === '-32603')
 						props.onToastChange('TxN ERROR: Invalid password', 'error', true);
 					else
 						props.onToastChange('TxN ERROR: Something went wrong', 'error', true);
@@ -153,9 +153,9 @@ const Admin = (props) => {
 		const fastChangePassworErrors = { ...updatedErrors };
 
 		let ready = true;
-		for (var key in fastChangePassworErrors) {
-			if (fastChangePassworErrors.hasOwnProperty(key))
-				if (fastChangePassworErrors[key] != '')
+		for (var fkey in fastChangePassworErrors) {
+			if (fastChangePassworErrors.hasOwnProperty(fkey))
+				if (fastChangePassworErrors[fkey] !== '')
 					ready = false;
 		}
 
@@ -171,11 +171,11 @@ const Admin = (props) => {
 				}
 				).catch(e => {
 					console.log(e);
-					if (e.code == '4001')
+					if (e.code === '4001')
 						props.onToastChange('TxN WARN: Denied by user', 'warning', true);
 					else if (props.contracts.feedbackData == null)
 						props.onToastChange('INTERNAL-ERROR: Contract not deployed', 'error', true);
-					else if (e.code == '-32603')
+					else if (e.code === '-32603')
 						props.onToastChange('TxN ERROR: Old password is invalid', 'error', true);
 					else
 						props.onToastChange('TxN ERROR: Something went wrong', 'erroor', true);
@@ -189,14 +189,14 @@ const Admin = (props) => {
 	const validateGenProfTicketInput = (field, value, updatedErrors) => {
 		switch (field) {
 			case 'password':
-				if (value.length == 0)
+				if (value.length === 0)
 					updatedErrors[field] = 'Cannot be empty';
 				else
 					updatedErrors[field] = ''
 				break;
 			case 'email':
-				var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-				if (value.length == 0)
+				var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				if (value.length === 0)
 					updatedErrors[field] = 'Cannot be empty';
 				else if (!re.test(value))
 					updatedErrors[field] = 'Invalid email!';
@@ -204,6 +204,8 @@ const Admin = (props) => {
 					updatedErrors[field] = 'Accepted domains are @itbhu.ac.in or @iitbhu.ac.in';
 				else
 					updatedErrors[field] = ''
+				break;
+			default:
 				break;
 		}
 		return updatedErrors;
@@ -213,30 +215,32 @@ const Admin = (props) => {
 	const validateChnagePasswordInput = (field, value, updatedErrors) => {
 		switch (field) {
 			case 'old':
-				if (value.length == 0)
+				if (value.length === 0)
 					updatedErrors[field] = 'Cannot be empty';
 				else
 					updatedErrors[field] = ''
 				break
 			case 'new':
-				if (value.length == 0)
+				if (value.length === 0)
 					updatedErrors[field] = 'Cannot be empty';
 				else if (value.length < 5)
 					updatedErrors[field] = 'Minimum length: 5';
 				else if (value.length > 30)
 					updatedErrors[field] = 'Maximum length: 30';
-				else if (/[a-zA-Z]/g.test(value) == false)
+				else if (/[a-zA-Z]/g.test(value) === false)
 					updatedErrors[field] = 'Should contain at least one alphabet';
-				else if (/\d/.test(value) == false)
+				else if (/\d/.test(value) === false)
 					updatedErrors[field] = 'Should contain at least one digit';
 				else
 					updatedErrors[field] = ''
 				break;
 			case 'confirm':
-				if (value != changePasswordDetails.new)
+				if (value !== changePasswordDetails.new)
 					updatedErrors[field] = 'Should match the new password';
 				else
 					updatedErrors[field] = ''
+				break;
+			default:
 				break;
 		}
 		return updatedErrors;

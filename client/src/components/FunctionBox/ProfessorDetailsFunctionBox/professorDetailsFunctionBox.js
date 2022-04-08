@@ -76,7 +76,6 @@ const professorDetailsFunctionBox = (props) => {
                     value={data.name}
                     onChange={props.handleInputChange}
                     label="NAME"
-                    helperText=""
                     error={errors.name}
                     helperText={errors.name}
                 />
@@ -95,7 +94,6 @@ const professorDetailsFunctionBox = (props) => {
                     onChange={props.handleInputChange}
                     label="EMAIL"
                     type='email'
-                    helperText=""
                     error={errors.email}
                     helperText={errors.email}
                 />

@@ -62,14 +62,14 @@ const Canteen = (props) => {
               setTimeout(() => props.closeModal(), 3500);
             })
             .catch((e) => {
-              if (e.code == '4001')
+              if (e.code === '4001')
                 props.onToastChange('TxN WARN: Denied by user', 'warning', true);
               else
                 props.onToastChange('TxN ERROR: Something went wrong', 'error', true)
             })
         })
         .catch((e) => {
-          if (e.code == '4001')
+          if (e.code === '4001')
             props.onToastChange('TxN WARN: Denied by user', 'warning', true);
           else
             props.onToastChange('TxN ERROR: Something went wrong', 'error', true)

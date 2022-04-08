@@ -8,7 +8,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Stack,
   Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -31,6 +30,7 @@ export const FeedbackCard = (props) => {
     }
     head += "...";
     setAccordianHeader(head);
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -89,6 +89,7 @@ export const Feedbacks = (props) => {
     if (props.courses && email) {
       setFeedbacks(props.courses[email][year][sem][courseCode].feedbacks);
     }
+    // eslint-disable-next-line
   }, [props.courses, email]);
   return (
     <div>

@@ -52,7 +52,7 @@ export const CourseCard = (props) => {
               <Typography variant="body1">
                 <div className='coursesDataParent'>
                   <div className='courseDataChild'> {`Code: ${props.code}`} </div>
-                  <div className='courseDataChild'> {`Semester: ${props.semester == 0 ? "Even" : "Odd"}`} </div>
+                  <div className='courseDataChild'> {`Semester: ${props.semester === 0 ? "Even" : "Odd"}`} </div>
                   <div className='courseDataChild'> {`Students:${props.studentCount}`} </div>
                 </div>
                 <Divider orientation="vertical"></Divider>
@@ -74,7 +74,7 @@ export const Courses = (props) => {
       let courses = Object.values(props.courses[email][year]);
       if (courses.length) {
         courses =
-          courses.length == 2
+          courses.length === 2
             ? [...Object.values(courses[0]), ...Object.values(courses[1])]
             : [...Object.values(courses[0])];
         setCourses(courses);

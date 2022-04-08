@@ -62,7 +62,6 @@ const addCoursesFunctionBox = (props) => {
                     value={data.year}
                     onChange={props.handleInputChange}
                     label="YEAR"
-                    helperText=""
                     error={errors.year}
                     helperText={errors.year}
                 />
@@ -120,7 +119,6 @@ const CourseItem = (props) => {
                 value={props.course.name}
                 onChange={props.handleInputChange}
                 label="COURSE NAME"
-                helperText=""
                 error={errors.name}
                 helperText={errors.name}
             />
@@ -137,7 +135,6 @@ const CourseItem = (props) => {
                 value={props.course.code}
                 onChange={props.handleInputChange}
                 label="CODE"
-                helperText=""
                 error={errors.code}
                 helperText={errors.code}
             />
@@ -171,7 +168,6 @@ const CourseItem = (props) => {
                 value={props.course.students}
                 onChange={props.handleInputChange}
                 label="STUDENTS"
-                helperText=""
                 error={errors.students}
                 helperText={errors.students}
             />

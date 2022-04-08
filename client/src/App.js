@@ -127,12 +127,13 @@ const App = () => {
         setLoader(false);
       })();
     }
+    // eslint-disable-next-line
   }, [contracts]);
 
   const balanceUpdated = (err, data) => {
     if (err) alert("something is wrong");
 
-    if (accountRef.current == data["returnValues"].account.toLowerCase()) {
+    if (accountRef.current === data["returnValues"].account.toLowerCase()) {
       setBalance(
         data["returnValues"].balance === "0"
           ? data["returnValues"].balance
@@ -167,7 +168,7 @@ const App = () => {
     let { name, email, profilePicture, addressId, rating } = professor;
     addressId = addressId.toLowerCase();
     let skillsUpvote = {};
-    skillsRef.current.every((skill) => (skillsUpvote[skill] = skill));
+    skillsRef.current.every((skill) => (skillsUpvote[skill] = '0'));
 
     setProfsDetails((prev) => ({
       ...prev,
@@ -189,7 +190,7 @@ const App = () => {
       [addressId]: email,
     }));
 
-    setIsProf(addressId == accountRef);
+    setIsProf(addressId === accountRef);
   };
 
   const ticketGenerated = (err, data) => {
@@ -255,27 +256,27 @@ const App = () => {
       return prev[email][year]
         ? { ...prev }
         : {
-            ...prev,
-            [email]: {
-              ...prev[email],
-              [year]: {},
-            },
-          };
+          ...prev,
+          [email]: {
+            ...prev[email],
+            [year]: {},
+          },
+        };
     });
 
     setCourses((prev) => {
       return prev[email][year][semester]
         ? { ...prev }
         : {
-            ...prev,
-            [email]: {
-              ...prev[email],
-              [year]: {
-                ...prev[email][year],
-                [semester]: {},
-              },
+          ...prev,
+          [email]: {
+            ...prev[email],
+            [year]: {
+              ...prev[email][year],
+              [semester]: {},
             },
-          };
+          },
+        };
     });
 
     setCourses((prev) => ({

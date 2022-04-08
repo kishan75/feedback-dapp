@@ -77,9 +77,9 @@ const FeedbackSubmit = (props) => {
     const fastFeedbackErrors = { ...updatedErrors };
 
     let ready = true;
-    for (var key in fastFeedbackErrors) {
-      if (fastFeedbackErrors.hasOwnProperty(key))
-        if (fastFeedbackErrors[key] != "") ready = false;
+    for (var fkey in fastFeedbackErrors) {
+      if (fastFeedbackErrors.hasOwnProperty(fkey))
+        if (fastFeedbackErrors[fkey] !== "") ready = false;
     }
 
     console.log("Ready:", ready);
@@ -90,7 +90,7 @@ const FeedbackSubmit = (props) => {
         props.showLoader(true);
 
         let contentType = await checkAbusive(feedbackDetails.feedback);
-        if (contentType == "abusive" || contentType == "unrelated") {
+        if (contentType === "abusive" || contentType === "unrelated") {
           props.showLoader(false);
           props.toast(`Your feedback is ${contentType}`, "warning", true);
           return null;
@@ -130,8 +130,7 @@ const FeedbackSubmit = (props) => {
         }
       } catch (err) {
         props.showLoader(false);
-        err = getErrorMsg(err);
-        props.toast(err, "error", true);
+        props.toast(getErrorMsg(err), "error", true);
       }
     }
   };
@@ -215,7 +214,7 @@ const FeedbackSubmit = (props) => {
   const validateInput = (field, value, updatedErrors) => {
     switch (field) {
       case "feedback":
-        if (value.length == 0) updatedErrors[field] = "Cannot be empty";
+        if (value.length === 0) updatedErrors[field] = "Cannot be empty";
         else if (value.length < 10)
           updatedErrors[field] = "Length should be greater than 10";
         else if (value.length > 5000)
@@ -226,12 +225,14 @@ const FeedbackSubmit = (props) => {
         else updatedErrors[field] = "";
         break;
       case "ticket":
-        if (value.length == 0) updatedErrors[field] = "Cannot be empty";
+        if (value.length === 0) updatedErrors[field] = "Cannot be empty";
         else if (value.length < 10)
           updatedErrors[field] = "Length should be greater than 10";
         else if (value.length > 100)
           updatedErrors[field] = "Length should be smaller than 100";
         else updatedErrors[field] = "";
+        break;
+      default:
         break;
     }
     return updatedErrors;
@@ -248,7 +249,7 @@ const FeedbackSubmit = (props) => {
           <li key={"4"}> Year: {props.course.year} </li>
           <li key={"5"}>
             {" "}
-            Semester: {props.course.semester == 0 ? "Even" : "Odd"}{" "}
+            Semester: {props.course.semester === 0 ? "Even" : "Odd"}{" "}
           </li>
           <li key={"6"}> Strength: {props.course.studentCount} </li>
         </ul>

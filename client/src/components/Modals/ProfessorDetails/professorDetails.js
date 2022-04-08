@@ -32,7 +32,7 @@ const ProfessorDetails = (props) => {
   // Asyncs:
   const writeToBlockChain = async () => {
     const feedbackData = props.contracts.feedbackData;
-    if (feedbackData != undefined) {
+    if (feedbackData !== undefined) {
       let result = await feedbackData.methods
         .createProfessor(
           professorDetails.name,
@@ -85,9 +85,9 @@ const ProfessorDetails = (props) => {
     const fastProfessorErrors = { ...updatedErrors };
 
     let ready = true;
-    for (var key in fastProfessorErrors) {
-      if (fastProfessorErrors.hasOwnProperty(key))
-        if (fastProfessorErrors[key] != "") ready = false;
+    for (var fkey in fastProfessorErrors) {
+      if (fastProfessorErrors.hasOwnProperty(fkey))
+        if (fastProfessorErrors[fkey] !== "") ready = false;
     }
 
     console.log("Ready:", ready);
@@ -133,15 +133,15 @@ const ProfessorDetails = (props) => {
           setTimeout(() => props.closeModal(), 3500);
         })
         .catch((e) => {
-          if (e.code == "INVALID_ARGUMENT")
+          if (e.code === "INVALID_ARGUMENT")
             props.onToastChange(
               "ERROR: Ticket should be in hex",
               "error",
               true
             );
-          else if (e.code == "4001")
+          else if (e.code === "4001")
             props.onToastChange("TxN WARN: Denied by user", "warning", true);
-          else if (e.code == "-32603")
+          else if (e.code === "-32603")
             props.onToastChange("TxN ERROR: Invalid ticket", "error", true);
           else
             props.onToastChange(
@@ -154,19 +154,19 @@ const ProfessorDetails = (props) => {
     }
   };
 
-  const convertBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = (error) => {
-        console.log(error);
-        reject(error);
-      };
-    });
-  };
+  // const convertBase64 = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const fileReader = new FileReader();
+  //     fileReader.readAsDataURL(file);
+  //     fileReader.onload = () => {
+  //       resolve(fileReader.result);
+  //     };
+  //     fileReader.onerror = (error) => {
+  //       console.log(error);
+  //       reject(error);
+  //     };
+  //   });
+  // };
 
   const handleImageFileUpload = async (e) => {
     switch (e.target.name) {
@@ -192,7 +192,8 @@ const ProfessorDetails = (props) => {
   const validateProfessorInput = (field, value, updatedErrors) => {
     switch (field) {
       case "name":
-        if (value.length == 0) updatedErrors[field] = "Cannot be empty";
+        if (value.length === 0)
+          updatedErrors[field] = "Cannot be empty";
         else if (value.length < 5)
           updatedErrors[field] = "Length should be greater than 5";
         else if (value.length > 30)
@@ -201,7 +202,8 @@ const ProfessorDetails = (props) => {
         break;
       case "ticket":
       case "address":
-        if (value.length == 0) updatedErrors[field] = "Cannot be empty";
+        if (value.length === 0)
+          updatedErrors[field] = "Cannot be empty";
         else if (value.length < 10)
           updatedErrors[field] = "Length should be greater than 10";
         else if (value.length > 100)
@@ -210,8 +212,8 @@ const ProfessorDetails = (props) => {
         break;
       case "email":
         var re =
-          /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (value.length == 0) updatedErrors[field] = "Cannot be empty";
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (value.length === 0) updatedErrors[field] = "Cannot be empty";
         else if (!re.test(value)) updatedErrors[field] = "Invalid email!";
         else if (
           !(value.endsWith("@itbhu.ac.in") || value.endsWith("@iitbhu.ac.in"))
@@ -221,9 +223,11 @@ const ProfessorDetails = (props) => {
         else updatedErrors[field] = "";
         break;
       case "file":
-        if (value.length == 0)
+        if (value.length === 0)
           updatedErrors[field] = ""; // Must upload display picture
         else updatedErrors[field] = "";
+        break;
+      default:
         break;
     }
     return updatedErrors;

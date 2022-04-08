@@ -58,6 +58,7 @@ const Sections = (props) => {
       });
       console.log("Homepage Rerendering...")
     }, 1000)
+    // eslint-disable-next-line
   }, [pathname, props.profsEmails]);
 
 

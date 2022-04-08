@@ -32,7 +32,7 @@ const GenerateTickets = (props) => {
     students: []
   });
 
-  // React useEffect
+  // React useEffects
   // Get professor's course data from blockchain
   useEffect(() => {
     console.log(props.courses[props.emailMap[props.account]])
@@ -53,13 +53,14 @@ const GenerateTickets = (props) => {
       courseNameOptions.push(courseDatas[i].name);
 
     setCourseNameOptions(courseNameOptions);
+    // eslint-disable-next-line
   }, []);
 
 
   // Asyncs:
   const writeTicketToBlockChain = async () => {
     const feedbackData = props.contracts.feedbackData;
-    if (feedbackData != undefined) {
+    if (feedbackData !== undefined) {
       let result = await feedbackData.methods.generateTickets(
         props.emailMap[props.account],
         genTicketsDetails.year,
@@ -89,7 +90,7 @@ const GenerateTickets = (props) => {
 
     const semester = { 0: 'Even', 1: 'Odd' };
     for (var i = 0; i < courseDatas.length; i++) {
-      if (courseDatas[i].name == event.target.value) {
+      if (courseDatas[i].name === event.target.value) {
         updatedCourseCodeOptions.code.push(courseDatas[i].code);
         updatedCourseCodeOptions.year.push(courseDatas[i].year);
         updatedCourseCodeOptions.sem.push(semester[courseDatas[i].semester]);
@@ -123,9 +124,9 @@ const GenerateTickets = (props) => {
     const fastGenTicketsErrors = { ...updatedErrors };
 
     let ready = true;
-    for (var key in fastGenTicketsErrors)
-      if (fastGenTicketsErrors.hasOwnProperty(key))
-        if (fastGenTicketsErrors[key] != '')
+    for (var fkey in fastGenTicketsErrors)
+      if (fastGenTicketsErrors.hasOwnProperty(fkey))
+        if (fastGenTicketsErrors[fkey] !== '')
           ready = false;
 
     console.log('Ready:', ready);  // All validation tests passed
@@ -168,7 +169,7 @@ const GenerateTickets = (props) => {
         }).catch(e => {
           ready = false;
           console.log(e);
-          if (e.code == '4001')
+          if (e.code === '4001')
             props.onToastChange('TxN WARN: Denied by user', 'warning', true);
           else
             props.onToastChange('TxN ERROR: Something went wrong', 'error', true);
@@ -189,7 +190,7 @@ const GenerateTickets = (props) => {
           console.log(text);
 
           for (var i = 0; i < text.length; i++)
-            if (text[i].endsWith('@itbhu.ac.in') || text[i].endsWith('@iitbhu.ac.in') && re.test(text[i]))
+            if ((text[i].endsWith('@itbhu.ac.in') || text[i].endsWith('@iitbhu.ac.in')) && re.test(text[i]))
               emails.push(text[i]);
 
           console.log(emails);
@@ -209,7 +210,7 @@ const GenerateTickets = (props) => {
     switch (field) {
       case 'name':
       case 'code':
-        if (value.length == 0)
+        if (value.length === 0)
           updatedErrors[field] = 'Cannot be empty';
         else if (value.length > 50)
           updatedErrors[field] = 'Length should be smaller than 50';
@@ -217,19 +218,19 @@ const GenerateTickets = (props) => {
           updatedErrors[field] = ''
         break;
       case 'emails':
-        if (value.length == 0)
+        if (value.length === 0)
           updatedErrors[field] = 'Please upload a csv file with student emails';
-        else if (value.length != genTicketsDetails.students)
+        else if (value.length !== genTicketsDetails.students)
           updatedErrors[field] = `Number of uploaded emails(${value.length}) should be equal to students(${genTicketsDetails.students})`;
         else
           updatedErrors[field] = ''
         break;
       case 'year':
-        if (value.length == 0)
+        if (value.length === 0)
           updatedErrors[field] = 'Cannot be empty';
         else if (!/^\d+$/.test(value))
           updatedErrors[field] = 'Year should be numerical';
-        else if (value.length != 4)
+        else if (value.length !== 4)
           updatedErrors[field] = 'Length should be exacty 4';
         else if (!(value > 2000))
           updatedErrors[field] = 'Year should be greater than 2000';
@@ -237,22 +238,23 @@ const GenerateTickets = (props) => {
           updatedErrors[field] = ''
         break;
       case 'sem':
-        if (value.length == 0)
+        if (value.length === 0)
           updatedErrors[field] = 'Cannot be empty';
-        else if (!(value == 1 || value == 0))
+        else if (!(value === 1 || value === 0))
           updatedErrors[field] = 'Can only be Even or Odd';
         else
           updatedErrors[field] = ''
         break;
       case 'students':
-        if (value.length == 0)
+        if (value.length === 0)
           updatedErrors[field] = 'Cannot be empty';
         else if (!/^\d+$/.test(value))
           updatedErrors[field] = 'Should be numerical';
         else
           updatedErrors[field] = ''
         break;
-
+      default:
+        break;
     }
     return updatedErrors;
   }
@@ -278,4 +280,4 @@ export default GenerateTickets;
 
 
 
-const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

@@ -42,13 +42,14 @@ const AddCourses = (props) => {
     });
 
     let updatedCourseErrors = [];
-    for (var i = 0; i < addCourseDetails.numCourses; i++)
+    for (var j = 0; j < addCourseDetails.numCourses; j++)
       updatedCourseErrors.push(course);
 
     setAddCourseErrors({
       ...addCourseErrors,
       courses: updatedCourseErrors,
     });
+    // eslint-disable-next-line
   }, [addCourseDetails.numCourses]);
 
   // Validators
@@ -56,7 +57,7 @@ const AddCourses = (props) => {
     switch (field) {
       case "email":
         var re =
-          /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (value.length === 0) updatedErrors[field] = "Cannot be empty";
         else if (!re.test(value)) updatedErrors[field] = "Invalid email!";
         else if (
@@ -104,6 +105,8 @@ const AddCourses = (props) => {
           updatedErrors[field] = "Not more than three digits";
         else updatedErrors[field] = "";
         break;
+      default:
+        break;
     }
     return updatedErrors;
   };
@@ -127,7 +130,7 @@ const AddCourses = (props) => {
           .send({ from: props.account });
 
         console.log(result);
-        if (result == undefined)
+        if (result === undefined)
           props.onToastChange(
             `INTERNAL-ERROR: No response for TxN[${i + 1}, ${code}]`,
             "error",
@@ -197,12 +200,12 @@ const AddCourses = (props) => {
           );
         } else {
           for (var i = 0; i < addCourseDetails.courses.length; i++) {
-            for (var key in addCourseDetails.courses[i]) {
-              if (addCourseDetails.courses[i].hasOwnProperty(key)) {
+            for (var akey in addCourseDetails.courses[i]) {
+              if (addCourseDetails.courses[i].hasOwnProperty(akey)) {
                 let updatedCourseErrors = { ...updatedCourseErrorses[i] };
                 updatedCourseErrors = validateAddCourseInput(
-                  key,
-                  addCourseDetails.courses[i][key],
+                  akey,
+                  addCourseDetails.courses[i][akey],
                   updatedCourseErrors
                 );
                 updatedCourseErrorses[i] = updatedCourseErrors;
@@ -219,16 +222,16 @@ const AddCourses = (props) => {
     };
 
     let ready = true;
-    for (var key in fastaddCourseErrors) {
-      if (fastaddCourseErrors.hasOwnProperty(key)) {
-        if (!Array.isArray(fastaddCourseErrors[key])) {
-          if (fastaddCourseErrors[key] !== "") ready = false;
+    for (var fkey in fastaddCourseErrors) {
+      if (fastaddCourseErrors.hasOwnProperty(fkey)) {
+        if (!Array.isArray(fastaddCourseErrors[fkey])) {
+          if (fastaddCourseErrors[fkey] !== "") ready = false;
         } else {
-          if (fastaddCourseErrors[key].length == 0) ready = false;
-          for (var i = 0; i < fastaddCourseErrors.courses.length; i++)
-            for (var key in fastaddCourseErrors.courses[i])
-              if (fastaddCourseErrors.courses[i].hasOwnProperty(key))
-                if (fastaddCourseErrors.courses[i][key] !== "") ready = false;
+          if (fastaddCourseErrors[fkey].length === 0) ready = false;
+          for (var j = 0; j < fastaddCourseErrors.courses.length; j++)
+            for (var ffkey in fastaddCourseErrors.courses[j])
+              if (fastaddCourseErrors.courses[j].hasOwnProperty(ffkey))
+                if (fastaddCourseErrors.courses[j][ffkey] !== "") ready = false;
         }
       }
     }
