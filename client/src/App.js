@@ -71,7 +71,7 @@ const App = () => {
     if (contracts) {
       (async () => {
         const balance = await getBalance(contracts, account);
-        setBalance(balance.slice(0, -18));
+        setBalance(balance === "0" ? balance : balance.slice(0, -18));
 
         const profEmails = await loadEmails(contracts);
         setProfEmails(profEmails);
@@ -133,7 +133,11 @@ const App = () => {
     if (err) alert("something is wrong");
 
     if (accountRef.current == data["returnValues"].account.toLowerCase()) {
-      setBalance(data["returnValues"].balance.slice(0, -18));
+      setBalance(
+        data["returnValues"].balance === "0"
+          ? data["returnValues"].balance
+          : data["returnValues"].balance.slice(0, -18)
+      );
     }
   };
 
@@ -162,6 +166,8 @@ const App = () => {
     const { professor } = data["returnValues"];
     let { name, email, profilePicture, addressId, rating } = professor;
     addressId = addressId.toLowerCase();
+    let skillsUpvote = {};
+    skillsRef.current.every((skill) => (skillsUpvote[skill] = skill));
 
     setProfsDetails((prev) => ({
       ...prev,
@@ -171,13 +177,13 @@ const App = () => {
         profilePicture,
         addressId,
         rating,
-        skillsUpvote: skillsRef.current.map((skill) => ({
-          [skill]: 0,
-        })),
+        skillsUpvote,
       },
     }));
 
-    setProfEmails((prev) => [...prev, email]);
+    setProfEmails((prev) => {
+      return prev.includes(email) ? [...prev] : [...prev, email];
+    });
     setAddressToEmail((prev) => ({
       ...prev,
       [addressId]: email,

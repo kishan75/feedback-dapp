@@ -11,4 +11,10 @@ export function getErrorMsg(message) {
   return "Something is wrong where error can't detect";
 }
 
-
+export function jsFloatToSolFloat(num) {
+  return {
+    preDecimal: num.toString().split(".")[0],
+    postDecimal:
+      num.toString().split(".").length > 1 ? num.toString().split(".")[1] : 0,
+  };
+}
