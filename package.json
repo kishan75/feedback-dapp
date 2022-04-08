@@ -4,6 +4,7 @@
     "chai-as-promised": "^7.1.1"
   },
   "scripts": {
-    "publish": "truffle compile && truffle migrate --reset"
+    "publish": "truffle compile && truffle migrate --reset",
+    "start": "cd client && react-scripts --openssl-legacy-provider start --host 0.0.0.0"
   }
 }
