@@ -5,7 +5,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import SendIcon from "@mui/icons-material/Send";
 import Button from "@mui/material/Button";
-import { getErrorMsg } from "../../scripts/common";
+import { getErrorMsg, jsFloatToSolFloat } from "../../scripts/common";
 
 // List
 import List from "@mui/material/List";
@@ -96,18 +96,25 @@ const FeedbackSubmit = (props) => {
           return null;
         }
 
-        let updatedRating = await getUpdatedRating([
-          ...props.course.feedbacks.map((feedback) => feedback.content),
-          feedbackDetails.feedback,
-        ], feedbackDetails.feedback);
-        props.toast(`Your feedback rates ${updatedRating.rating}/5`, "success", true);
+        let updatedRating = await getUpdatedRating(
+          [
+            ...props.course.feedbacks.map((feedback) => feedback.content),
+            feedbackDetails.feedback,
+          ],
+          feedbackDetails.feedback
+        );
+        props.toast(
+          `Your feedback rates ${updatedRating.rating}/5`,
+          "success",
+          true
+        );
 
-        console.log(updatedRating);
+        console.log(jsFloatToSolFloat(updatedRating.ratings));
 
         let res = await submitToContract(
           props.prof.email,
           feedbackDetails.ticket,
-          updatedRating.ratings,
+          jsFloatToSolFloat(updatedRating.ratings),
           {
             code: props.course.code,
             semester: props.course.semester,
@@ -165,7 +172,7 @@ const FeedbackSubmit = (props) => {
       redirect: "follow",
     };
 
-    console.log(requestOptions)
+    console.log(requestOptions);
 
     let promise = new Promise((resolve, reject) => {
       fetch(`${PYTHON_BASE_URL}feedback-rating`, requestOptions)
