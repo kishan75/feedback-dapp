@@ -31,7 +31,6 @@ const App = (props) => {
   const [addressToEmail, setAddressToEmail] = useState(null);
 
   const [profsDetails, setProfsDetails] = useState(null);
-  const [skillCount, setSkillCount] = useState(null);
   const [courses, setCourses] = useState(null);
 
   const [account, setAccount] = useState(null);
@@ -85,19 +84,18 @@ const App = (props) => {
         const courses = await loadCourses(contracts, profEmails);
         setCourses(courses);
 
-        const { feedbacks, updatedCourses } = await loadFeedbacks(
+        const { updatedCourses } = await loadFeedbacks(
           contracts,
           profEmails,
           courses
         );
         setCourses(updatedCourses);
 
-        const { skillsUpvote, updatedProfsDetail } = await loadSkillsCount(
+        const { updatedProfsDetail } = await loadSkillsCount(
           contracts,
           profEmails,
           profsDetails
         );
-        setSkillCount(skillsUpvote);
         setProfsDetails(updatedProfsDetail);
 
         contracts.feedbackData.events.courseUpdated((err, data) =>
@@ -166,7 +164,7 @@ const App = (props) => {
     let { name, email, profilePicture, addressId, rating } = professor;
     addressId = addressId.toLowerCase();
     let skillsUpvote = {};
-    skillsRef.current.every((skill) => (skillsUpvote[skill] = '0'));
+    skillsRef.current.every((skill) => (skillsUpvote[skill] = "0"));
 
     setProfsDetails((prev) => ({
       ...prev,
@@ -255,27 +253,27 @@ const App = (props) => {
       return prev[email][year]
         ? { ...prev }
         : {
-          ...prev,
-          [email]: {
-            ...prev[email],
-            [year]: {},
-          },
-        };
+            ...prev,
+            [email]: {
+              ...prev[email],
+              [year]: {},
+            },
+          };
     });
 
     setCourses((prev) => {
       return prev[email][year][semester]
         ? { ...prev }
         : {
-          ...prev,
-          [email]: {
-            ...prev[email],
-            [year]: {
-              ...prev[email][year],
-              [semester]: {},
+            ...prev,
+            [email]: {
+              ...prev[email],
+              [year]: {
+                ...prev[email][year],
+                [semester]: {},
+              },
             },
-          },
-        };
+          };
     });
 
     setCourses((prev) => ({
