@@ -81,6 +81,7 @@ export const Courses = (props) => {
       } else setCourses([]);
     }
   }, [email, year, props.courses]);
+  
   return (
     <div>
       <Header {...props} />

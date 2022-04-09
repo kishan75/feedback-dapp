@@ -1,16 +1,15 @@
 import BHUTokenJSON from "../contracts/BHUToken.json";
 import FeedbackDataJSON from "../contracts/FeedbackData.json";
 import Web3 from "web3";
+import { BHUTOKEN_ADD, FEEDBACKDATA_ADD, NETWORK_ID } from "../constants";
 
 export const loadContracts = async () => {
-  const networkId = await window.web3.eth.net.getId();
+  // const networkId = await window.web3.eth.net.getId();
+  const networkId = NETWORK_ID;
   let bhuTokenNetwork = BHUTokenJSON.networks[networkId];
   var bhuToken = null;
   if (bhuTokenNetwork) {
-    bhuToken = new window.web3.eth.Contract(
-      BHUTokenJSON.abi,
-      bhuTokenNetwork.address
-    );
+    bhuToken = new window.web3.eth.Contract(BHUTokenJSON.abi, BHUTOKEN_ADD);
   } else {
     alert(" BhuToken contract is not deployed on this blockchain");
   }
@@ -19,7 +18,7 @@ export const loadContracts = async () => {
   if (feedbackDataNetwork) {
     feedbackData = new window.web3.eth.Contract(
       FeedbackDataJSON.abi,
-      feedbackDataNetwork.address
+      FEEDBACKDATA_ADD
     );
   } else {
     alert(" Feedback contract is not deployed on this blockchain");

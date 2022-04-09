@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.21 <8.10.0;
 
-import "./Utils.sol";
 import "./BHUToken.sol";
 
 contract FeedbackData {
@@ -12,7 +11,6 @@ contract FeedbackData {
         "Philosophy",
         "StudentLearning"
     ];
-    Utils public util;
 
     struct Feedback {
         string code;
@@ -137,15 +135,7 @@ contract FeedbackData {
         string calldata profilePicture,
         bytes32 secret
     ) public {
-        require(
-            bytes(name).length > 0,
-            "Name can not be blank during professor creation"
-        );
-        require(
-            bytes(email).length > 0,
-            "Email can not be blank during professor creation"
-        );
-        require(msg.sender != address(0 * 0), "user address should exist");
+
         require(_keysForProfReg[secret] == true, "provide valid secret");
 
         professorDetail[email] = Professor({

@@ -1,9 +1,13 @@
 {
   "dependencies": {
+    "@truffle/hdwallet-provider": "^2.0.5",
     "chai": "^4.3.6",
-    "chai-as-promised": "^7.1.1"
+    "chai-as-promised": "^7.1.1",
+    "dotenv": "^16.0.0"
   },
   "scripts": {
-    "publish": "truffle compile && truffle migrate --reset"
+    "publish": "truffle compile && truffle deploy --network ropsten --reset",
+    "serve": "truffle compile && truffle migrate --reset",
+    "start": "cd client && npm start"
   }
 }
