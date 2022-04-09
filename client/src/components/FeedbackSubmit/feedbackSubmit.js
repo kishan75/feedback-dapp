@@ -266,7 +266,7 @@ const FeedbackSubmit = (props) => {
             rows={5}
             value={feedbackDetails.feedback}
             onChange={handleInputChange}
-            error={feedbackErrors.feedback}
+            error={feedbackErrors.feedback.length !== 0}
             helperText={feedbackErrors.feedback}
           />
 
@@ -332,7 +332,7 @@ const FeedbackSubmit = (props) => {
             value={feedbackDetails.ticket}
             onChange={handleInputChange}
             label="UNIQUE TICKET"
-            error={feedbackErrors.ticket}
+            error={feedbackErrors.ticket.length !== 0}
             helperText={feedbackErrors.ticket}
           />
 

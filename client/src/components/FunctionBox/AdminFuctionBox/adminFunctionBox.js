@@ -35,7 +35,7 @@ const adminFunctionBox = (props) => {
                     onChange={props.handleInputChange}
                     label="PROFESSOR EMAIL"
                     type='email'
-                    error={errors.email}
+                    error={errors.email.length !== 0}
                     helperText={errors.email}
                 />
 
@@ -54,7 +54,7 @@ const adminFunctionBox = (props) => {
                     value={data.password}
                     onChange={props.handleInputChange}
                     label="ADMIN PASSWORD"
-                    error={errors.password}
+                    error={errors.password.length !== 0}
                     helperText={errors.password}
                 />
 
@@ -88,7 +88,7 @@ const adminFunctionBox = (props) => {
                     value={data.old}
                     onChange={props.handlePasswordInputChange}
                     label="OLD PASSWORD"
-                    error={errors.old}
+                    error={errors.old.length !== 0}
                     helperText={errors.old}
                 />
 
@@ -107,7 +107,7 @@ const adminFunctionBox = (props) => {
                     value={data.new}
                     onChange={props.handlePasswordInputChange}
                     label="NEW PASSWORD"
-                    error={errors.new}
+                    error={errors.new.length !== 0}
                     helperText={errors.new}
                 />
 
@@ -126,7 +126,7 @@ const adminFunctionBox = (props) => {
                     value={data.confirm}
                     onChange={props.handlePasswordInputChange}
                     label="CONFIRM PASSWORD"
-                    error={errors.confirm}
+                    error={errors.confirm.length !== 0}
                     helperText={errors.confirm}
                 />
 

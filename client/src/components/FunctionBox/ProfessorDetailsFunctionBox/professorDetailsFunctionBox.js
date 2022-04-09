@@ -41,7 +41,7 @@ const professorDetailsFunctionBox = (props) => {
                     disabled
                     //onChange={props.handleInputChange}
                     label="ADDRESS"
-                    error={errors.address}
+                    error={errors.address.length !== 0}
                     helperText={errors.address}
                 />
 
@@ -94,7 +94,7 @@ const professorDetailsFunctionBox = (props) => {
                     onChange={props.handleInputChange}
                     label="EMAIL"
                     type='email'
-                    error={errors.email}
+                    error={errors.email.length !== 0}
                     helperText={errors.email}
                 />
 

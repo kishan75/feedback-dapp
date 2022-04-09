@@ -45,7 +45,7 @@ const addCoursesFunctionBox = (props) => {
                     disabled
                     label="EMAIL"
                     type='email'
-                    error={errors.email}
+                    error={errors.email.length !== 0}
                     helperText={errors.email}
                 />
 
@@ -62,7 +62,7 @@ const addCoursesFunctionBox = (props) => {
                     value={data.year}
                     onChange={props.handleInputChange}
                     label="YEAR"
-                    error={errors.year}
+                    error={errors.year.length !== 0}
                     helperText={errors.year}
                 />
 
@@ -119,7 +119,7 @@ const CourseItem = (props) => {
                 value={props.course.name}
                 onChange={props.handleInputChange}
                 label="COURSE NAME"
-                error={errors.name}
+                error={errors.name.length !== 0}
                 helperText={errors.name}
             />
 
@@ -135,7 +135,7 @@ const CourseItem = (props) => {
                 value={props.course.code}
                 onChange={props.handleInputChange}
                 label="CODE"
-                error={errors.code}
+                error={errors.code.length !== 0}
                 helperText={errors.code}
             />
 
@@ -168,7 +168,7 @@ const CourseItem = (props) => {
                 value={props.course.students}
                 onChange={props.handleInputChange}
                 label="STUDENTS"
-                error={errors.students}
+                error={errors.students.length !== 0}
                 helperText={errors.students}
             />
             <hr className='horizontalRule' />
