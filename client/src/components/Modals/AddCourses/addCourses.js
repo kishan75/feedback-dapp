@@ -265,6 +265,8 @@ const AddCourses = (props) => {
             );
         })
         .finally(() => props.onLoading(false));
+    } else {
+      props.onLoading(false);
     }
   };
 

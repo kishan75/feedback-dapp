@@ -18,3 +18,7 @@ export function jsFloatToSolFloat(num) {
       num.toString().split(".").length > 1 ? num.toString().split(".")[1] : 0,
   };
 }
+
+export function solFloatToJsFloat(num) {
+  return `${num.preDecimal}.${num.postDecimal}`;
+}

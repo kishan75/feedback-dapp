@@ -154,9 +154,12 @@ const App = (props) => {
     if (err) alert("something is wrong");
     const { email, skills } = data["returnValues"];
 
+    let skillCount = {};
+    skills.every((skill) => (skillCount[skill.name] = skill.count));
+
     setProfsDetails((prev) => ({
       ...prev,
-      [email]: { ...prev[email], skillsUpvote: skills },
+      [email]: { ...prev[email], skillsUpvote: skillCount },
     }));
   };
 
@@ -227,13 +230,22 @@ const App = (props) => {
             ...prev[email][year][semester],
             [code]: {
               ...prev[email][year][semester][code],
-              feedbacks: [
-                ...prev[email][year][semester][code].feedbacks,
-                {
-                  content,
-                  skills,
-                },
-              ],
+              feedbacks: prev[email][year][semester][code].feedbacks.findIndex(
+                (feed) =>
+                  JSON.stringify(feed) ==
+                  JSON.stringify({
+                    content,
+                    skills,
+                  })
+              ) == -1
+                ? [
+                  ...prev[email][year][semester][code].feedbacks,
+                  {
+                    content,
+                    skills,
+                  },
+                ]
+                : [...prev[email][year][semester][code].feedbacks],
             },
           },
         },

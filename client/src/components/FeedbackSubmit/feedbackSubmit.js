@@ -219,7 +219,7 @@ const FeedbackSubmit = (props) => {
           updatedErrors[field] = "Length should be greater than 10";
         else if (value.length > 5000)
           updatedErrors[field] = "Length should be less than 5000";
-        else if (!/^[a-zA-Z0-9\s]*$/.test(value))
+        else if (!/^[a-zA-Z.',!0-9\s]*$/.test(value))
           updatedErrors[field] =
             "Feedback should only contain letters and numbers";
         else updatedErrors[field] = "";

@@ -110,8 +110,8 @@ const Header = (props) => {
             </Modal>
             <li>
               {professor ? width > breakpoint ? <Button variant="outlined" color="error" onClick={handleOpenAddCourses}> Add Courses </Button> :
-                <Button color="error" size="small" onClick={handleOpenAddCourses}> Add Courses </Button> : width > breakpoint ? <Button variant="outlined" color="error"> Chat Box </Button> :
-                <Button color="error" size="small"> Chat Box </Button>}
+                <Button color="error" size="small" onClick={handleOpenAddCourses}> Add Courses </Button> : width > breakpoint ? <Button variant="outlined" color="error" onClick={() => props.onToastChange('Sorry, module still in development', 'warning', true)}> Chat Box </Button> :
+                <Button color="error" size="small" onClick={() => props.onToastChange('Sorry, module still in development', 'warning', true)}> Chat Box </Button>}
             </li>
             <Modal
               open={openAddCourses}

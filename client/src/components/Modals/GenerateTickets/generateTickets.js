@@ -114,6 +114,7 @@ const GenerateTickets = (props) => {
 
 
   const handleGenTicketsSubmit = () => {
+    props.onLoading(true);
     let updatedErrors = { ...genTicketsErrors };
 
     for (var key in genTicketsDetails)
@@ -133,9 +134,13 @@ const GenerateTickets = (props) => {
     console.log(genTicketsDetails);
     console.log(fastGenTicketsErrors);
 
-    props.onLoading(true);
-
     // Send Email
+
+    let shuffEmails = genTicketsDetails.emails
+      .map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value)
+
     const semester = { 0: 'Even', 1: 'Odd' };
     if (ready) {
       writeTicketToBlockChain()
@@ -143,29 +148,31 @@ const GenerateTickets = (props) => {
           console.log(res);
 
           // Send mail:
-          // for (var i = 0; i < res.length; i++) {
-          //   let templateParams = {
-          //     from: 'SYSTEM',
-          //     to: genTicketsDetails.emails[i],
-          //     subject: "Registration Ticket",
-          //     reply_to: "feedback.dapp@gmail.com",
-          //     course_name: genTicketsDetails.name,
-          //     course_code: genTicketsDetails.code,
-          //     course_year: genTicketsDetails.year,
-          //     course_sem: semester[genTicketsDetails.sem],
-          //     ticket: res[i]
-          //   }
+          for (var i = 0; i < res.length; i++) {
+            let templateParams = {
+              from: 'SYSTEM',
+              to: shuffEmails[i],
+              subject: "Registration Ticket",
+              reply_to: "feedback.dapp@gmail.com",
+              course_name: genTicketsDetails.name,
+              course_code: genTicketsDetails.code,
+              course_year: genTicketsDetails.year,
+              course_sem: semester[genTicketsDetails.sem],
+              ticket: res[i]
+            }
 
-          //   emailjs.send('service_kqkqbxv', 'template_c496wv7', templateParams)
-          //     .then(function (response) {
-          //       props.onToastChange('TxN SUCCESS: Ticket generated and sent', 'success', true);
-          //       setTimeout(() => props.closeModal(), 3500);
-          //       console.log('Email success: ', response.status, response.text);
-          //     }, function (error) {
-          //       props.onToastChange('ERROR: While sending email', 'error', true);
-          //       console.log('Email fail: ', error);
-          //     })
-          // }
+            emailjs.send('service_kqkqbxv', 'template_c496wv7', templateParams)
+              .then(function (response) {
+                console.log('Email success: ', response.status, response.text);
+              }, function (error) {
+                props.onToastChange('ERROR: While sending email', 'error', true);
+                console.log('Email fail: ', error);
+              })
+          }
+
+          props.onToastChange('TxN SUCCESS: Ticket generated and sent', 'success', true);
+          setTimeout(() => props.closeModal(), 3500);
+
         }).catch(e => {
           ready = false;
           console.log(e);
@@ -174,6 +181,8 @@ const GenerateTickets = (props) => {
           else
             props.onToastChange('TxN ERROR: Something went wrong', 'error', true);
         }).finally(() => props.onLoading(false));
+    } else {
+      props.onLoading(false);
     }
   }
 
@@ -220,7 +229,7 @@ const GenerateTickets = (props) => {
       case 'emails':
         if (value.length === 0)
           updatedErrors[field] = 'Please upload a csv file with student emails';
-        else if (value.length !== genTicketsDetails.students)
+        else if (value.length != genTicketsDetails.students)
           updatedErrors[field] = `Number of uploaded emails(${value.length}) should be equal to students(${genTicketsDetails.students})`;
         else
           updatedErrors[field] = ''

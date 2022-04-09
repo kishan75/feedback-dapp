@@ -151,6 +151,8 @@ const ProfessorDetails = (props) => {
             );
         })
         .finally(() => props.onLoading(false));
+    } else {
+      props.onLoading(false);
     }
   };
 
@@ -224,7 +226,7 @@ const ProfessorDetails = (props) => {
         break;
       case "file":
         if (value.length === 0)
-          updatedErrors[field] = ""; // Must upload display picture
+          updatedErrors[field] = "Must upload display picture";
         else updatedErrors[field] = "";
         break;
       default:

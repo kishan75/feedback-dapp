@@ -8,6 +8,7 @@ import NavigationIcon from '@mui/icons-material/Navigation';
 
 import './professorBio.scss';
 import { Link } from 'react-router-dom';
+import { solFloatToJsFloat } from '../../scripts/common';
 
 const StyledRating = styled(Rating)({
   '& .MuiRating-iconFilled': {
@@ -39,7 +40,7 @@ const ProfessorBio = (props) => {
   //rating = { preDecimal: '68' } //dummy
 
   var maxSkill = Math.max.apply(Math, skillValues);
-  var minSkill = Math.min.apply(Math, skillValues);
+  var minSkill = 0;
 
   if (maxSkill !== 0 && maxSkill !== minSkill) {
     showPieChart = true
@@ -67,7 +68,7 @@ const ProfessorBio = (props) => {
         {rating.preDecimal !== '0' ? <div className="profStatsRank">
           <h1> RATING </h1>
           <PieChart
-            data={[{ value: rating.preDecimal, color: 'red' }]}
+            data={[{ value: solFloatToJsFloat(rating), color: 'red' }]}
             radius={30}
             totalValue={100}
             lineWidth={20}

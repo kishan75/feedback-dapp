@@ -106,27 +106,27 @@ const Admin = (props) => {
 				.then(r => {
 					console.log(r);
 
-					//Send mail [Uncomment below when deploying]
-					// let templateParams = {
-					// 	from: 'SYSTEM',
-					// 	to: genProfTicketDetails.email,
-					// 	subject: "Registration Ticket",
-					// 	reply_to: "feedback.dapp@gmail.com",
-					// 	html: "<b>Respected sir</b>, <br><br>" +
-					// 		"Please use this unique ticket: [ <b>" + r + "</b> ] to get registered. Please do not share this with anyone. <br><br>" +
-					// 		"Best wishes,<br>" +
-					// 		"Feedback-DApp team",
-					// }
+					// Send mail [Uncomment below when deploying]
+					let templateParams = {
+						from: 'SYSTEM',
+						to: genProfTicketDetails.email,
+						subject: "Registration Ticket",
+						reply_to: "feedback.dapp@gmail.com",
+						html: "<b>Respected sir</b>, <br><br>" +
+							"Please use this unique ticket: [ <b>" + r + "</b> ] to get registered. Please do not share this with anyone. <br><br>" +
+							"Best wishes,<br>" +
+							"Feedback-DApp team",
+					}
 
-					// emailjs.send('service_kqkqbxv', 'template_x0xd5h8', templateParams)
-					// 	.then(function (response) {
-					// 		props.onToastChange('TxN SUCCESS: Ticket generated and sent', 'success', true);
-					// 		setTimeout(() => props.closeModal(), 3500);
-					// 		console.log('Email success: ', response.status, response.text);
-					// 	}, function (error) {
-					// 		props.onToastChange('ERROR: While sending email', 'error', true);
-					// 		console.log('Email fail: ', error);
-					// 	});
+					emailjs.send('service_kqkqbxv', 'template_x0xd5h8', templateParams)
+						.then(function (response) {
+							props.onToastChange('TxN SUCCESS: Ticket generated and sent', 'success', true);
+							setTimeout(() => props.closeModal(), 3500);
+							console.log('Email success: ', response.status, response.text);
+						}, function (error) {
+							props.onToastChange('ERROR: While sending email', 'error', true);
+							console.log('Email fail: ', error);
+						});
 				}).catch(e => {
 					ready = false;
 					console.log(e);
@@ -137,6 +137,8 @@ const Admin = (props) => {
 					else
 						props.onToastChange('TxN ERROR: Something went wrong', 'error', true);
 				}).finally(() => props.onLoading(false));
+		} else {
+			props.onLoading(false);
 		}
 	}
 
@@ -182,6 +184,8 @@ const Admin = (props) => {
 				}
 				).finally(() => props.onLoading(false)
 				)
+		} else {
+			props.onLoading(false);
 		}
 	}
 
