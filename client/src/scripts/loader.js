@@ -49,7 +49,7 @@ export const setupMetamask = async () => {
 
   if (accounts.length && accounts[0]) return accounts[0];
   else {
-    alert("please connect to metamask first");
+    alert("Please install Metamask extension and connect to Ropsten Testnet");
     return null;
   }
 };
