@@ -60,6 +60,7 @@ module.exports = {
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
     ropsten: {
+      networkCheckTimeout:10000,
       provider: () =>
         new HDWalletProvider(
           process.env.MNEMONIC,
