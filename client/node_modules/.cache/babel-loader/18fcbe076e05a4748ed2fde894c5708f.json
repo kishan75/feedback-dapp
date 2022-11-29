@@ -1,0 +1,1 @@
+{"ast":null,"code":"module.exports = {\n  trueFunc: function trueFunc() {\n    return true;\n  },\n  falseFunc: function falseFunc() {\n    return false;\n  }\n};","map":null,"metadata":{},"sourceType":"script"}

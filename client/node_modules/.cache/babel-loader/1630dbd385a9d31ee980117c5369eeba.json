@@ -1,0 +1,1 @@
+{"ast":null,"code":"const parse = require('./parse');\n\nconst clean = (version, options) => {\n  const s = parse(version.trim().replace(/^[=v]+/, ''), options);\n  return s ? s.version : null;\n};\n\nmodule.exports = clean;","map":null,"metadata":{},"sourceType":"script"}

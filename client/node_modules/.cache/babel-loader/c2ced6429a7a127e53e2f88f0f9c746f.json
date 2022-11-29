@@ -1,0 +1,1 @@
+{"ast":null,"code":"const SemVer = require('../classes/semver');\n\nconst compareBuild = (a, b, loose) => {\n  const versionA = new SemVer(a, loose);\n  const versionB = new SemVer(b, loose);\n  return versionA.compare(versionB) || versionA.compareBuild(versionB);\n};\n\nmodule.exports = compareBuild;","map":null,"metadata":{},"sourceType":"script"}

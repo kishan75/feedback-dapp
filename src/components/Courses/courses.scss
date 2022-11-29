@@ -1,0 +1,23 @@
+.courseCard{
+  a{
+    text-decoration: none
+  }
+
+  .coursesDataParent{
+    display: flex;
+    justify-content: space-between;
+    .courseDataChild{
+      margin: 0.5rem;
+      font-size: 0.9rem;
+      padding: 0.15rem;
+      background-color: #1f1f1f;
+      border-radius: 10px;
+      border: 1px solid #ff000036;
+    }
+  }
+}
+
+.coursesHead{
+  color: white;
+  margin: 2rem;
+}

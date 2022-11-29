@@ -1,0 +1,1 @@
+{"ast":null,"code":"const parse = require('./parse');\n\nconst prerelease = (version, options) => {\n  const parsed = parse(version, options);\n  return parsed && parsed.prerelease.length ? parsed.prerelease : null;\n};\n\nmodule.exports = prerelease;","map":null,"metadata":{},"sourceType":"script"}

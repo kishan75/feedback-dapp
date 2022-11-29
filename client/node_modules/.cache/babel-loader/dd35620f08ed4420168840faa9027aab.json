@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class EmailJSResponseStatus {\n  constructor(httpResponse) {\n    this.status = httpResponse.status;\n    this.text = httpResponse.responseText;\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}

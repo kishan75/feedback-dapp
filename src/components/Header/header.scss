@@ -1,0 +1,281 @@
+.header {
+  height: 5.5rem; //6.5
+  box-shadow: 0 2px 25px 0 rgba(0, 0, 0, 0.8); //#79e779
+  background-color: #1f1f1f;
+  transition: ease all .8s;
+
+  .wrap {
+    position: relative;
+    height: 100%;
+    // max-width: 1450px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    //width: 420px; //25
+    //height: 110px; //7
+    position: absolute;
+    top: 50%; left: -60px;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    transform: translateY(-50%);
+    transition: ease all .8s;
+    z-index: 3;
+    a{
+      display: block;
+    }
+  }
+
+  img{
+    margin: 0;
+    height: 35%;
+    width: 35%;
+    transition: ease all .8s;
+  }
+
+  .statistics{
+    .MuiAvatar-root{
+      cursor: pointer;
+      font-size: large;
+      margin: -0.2rem;
+      width: 50px;
+      height: 50px;
+    }
+
+    .tokenFont{
+      position: absolute;
+      top: -35%;
+      right: 25%;
+      color: #626262;
+      font-size: 0.5rem;
+    }
+
+    .addressFont{
+      position: absolute;
+      top: 115%;
+      left: -200%;
+      color: #626262;
+      font-size: 0.5rem;
+    }
+  }
+
+  .statistics,
+  .navbar {
+    font-weight: 400;
+    height: 50%;
+    position: absolute;
+    top: 50%; right: 10px;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    transform: translateY(-50%);
+    transition: ease all .8s;
+
+    ul, li{
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    li{
+      height: 100%;
+      padding: 0px 1rem;
+      display: inline-table;
+      list-style-type: none;
+    }
+  }
+
+  .navbar{
+    width: 100%;
+    text-align: center;
+    ul{
+      display: inline-block;
+      margin-left: 4rem;
+    }
+  }
+
+  .bm-burger-button {
+    position: fixed;
+    width: 36px;
+    height: 30px;
+    right: 20px;
+    top: 15px;
+    transition: ease all .8s;
+  }
+  
+  /* Color/shape of burger icon bars */
+  .bm-burger-bars {
+    background: white;
+  }
+  
+  /* Color/shape of burger icon bars on hover*/
+  .bm-burger-bars-hover {
+    background: #ee3535;;
+  }
+  
+  /* Position and sizing of clickable cross button */
+  .bm-cross-button {
+    height: 24px;
+    width: 24px;
+  }
+  
+  /* Color/shape of close button cross */
+  .bm-cross {
+    background: #fff;
+
+    button:hover{
+      color: #ee3535;
+    }
+  }
+  
+  /*
+  Sidebar wrapper styles
+  Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+  */
+  .bm-menu-wrap {
+    position: fixed;
+    height: 100%;
+  }
+  
+  /* General sidebar styles */
+  .bm-menu {
+    background: #1f1f1fef;
+    padding: 2.5em 1.5em 0;
+    font-size: 1.15em;
+  }
+  
+  /* Morph shape necessary with bubble or elastic */
+  .bm-morph-shape {
+    fill: #373a47;
+  }
+  
+  /* Wrapper for item list */
+  .bm-item-list {
+    color: #b8b7ad;
+    padding: 0.8em;
+  }
+  
+  /* Individual item */
+  .bm-item {
+    //padding: 0.5em;
+    margin-bottom: 2em;
+    display: inline-block;
+  }
+  
+  /* Styling of overlay */
+  .bm-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.sticky{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  height: 3rem;
+  transition: ease all .8s;
+
+  img{
+    margin-left: 1rem;
+    height: 25%;
+    width: 25%;
+    transition: ease all .8s;
+  }
+
+  .navbar {
+    top: 40%;
+    transition: ease all .8s;
+  }
+
+  .statistics{
+    .MuiAvatar-root{
+      font-size: small;
+      margin: -0.2rem;
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .bm-burger-button {
+    position: fixed;
+    width: 26px;
+    height: 20px;
+    right: 20px;
+    top: 10px;
+    transition: ease all .8s;
+  }
+}
+
+@media only screen and (max-width: 630px) {
+  .header {
+    height: 3.5rem;
+
+    img{
+      margin-left: 1rem;
+      height: 25%;
+      width: 25%;
+      transition: ease all .8s;
+    }
+
+    .statistics{
+      .MuiAvatar-root{
+        margin-top: 0.1rem;
+        width: 40px;
+        height: 40px;
+      }
+    }
+  }
+
+  .sticky{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    height: 2.5rem;
+    transition: ease all .8s;
+
+    img{
+      margin-left: 1rem;
+      height: 20%;
+      width: 20%;
+      transition: ease all .8s;
+    }
+
+    .statistics{
+      .MuiAvatar-root{
+        margin-top: -0.2rem;
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+
+  .statistics{
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+    height: 20%;
+    width: 20%;
+    transition: ease all .8s;
+    .MuiAvatar-root{
+      position: relative;
+      top: -50%;
+      right: 60%;
+      font-size: small;
+      margin: -0.2rem;
+      width: 20px;
+      height: 20px;
+      transition: ease all .8s;
+    }
+  }
+}
+
+
+.MuiBox-root{
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+.MuiBox-root::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
+}

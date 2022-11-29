@@ -1,0 +1,1 @@
+{"ast":null,"code":"const compareBuild = require('./compare-build');\n\nconst sort = (list, loose) => list.sort((a, b) => compareBuild(a, b, loose));\n\nmodule.exports = sort;","map":null,"metadata":{},"sourceType":"script"}

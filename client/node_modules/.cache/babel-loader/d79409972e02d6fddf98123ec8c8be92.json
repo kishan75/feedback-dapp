@@ -1,0 +1,1 @@
+{"ast":null,"code":"const SemVer = require('../classes/semver');\n\nconst major = (a, loose) => new SemVer(a, loose).major;\n\nmodule.exports = major;","map":null,"metadata":{},"sourceType":"script"}

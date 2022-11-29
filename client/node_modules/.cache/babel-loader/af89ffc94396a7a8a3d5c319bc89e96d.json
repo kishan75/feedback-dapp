@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { init } from './methods/init/init';\nimport { send } from './methods/send/send';\nimport { sendForm } from './methods/sendForm/sendForm';\nexport { init, send, sendForm };\nexport default {\n  init,\n  send,\n  sendForm\n};","map":null,"metadata":{},"sourceType":"module"}
